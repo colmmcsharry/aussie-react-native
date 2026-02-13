@@ -51,7 +51,7 @@ export async function fetchProjectVideos(
   page = 1,
   perPage = 50
 ): Promise<VimeoApiResponse> {
-  const url = `${VIMEO_API_BASE}/me/projects/${PROJECT_ID}/videos?page=${page}&per_page=${perPage}&sort=date&direction=desc`;
+  const url = `${VIMEO_API_BASE}/me/projects/${PROJECT_ID}/videos?page=${page}&per_page=${perPage}&sort=date&direction=desc&fields=uri,name,description,duration,width,height,link,player_embed_url,created_time,modified_time,pictures,tags,stats`;
 
   const response = await fetch(url, {
     headers: {
@@ -109,4 +109,30 @@ export function getEmbedUrl(video: VimeoVideo): string {
 /** Check if a video is portrait orientation */
 export function isPortrait(video: VimeoVideo): boolean {
   return video.height > video.width;
+}
+
+/** Get teacher key from video tags (e.g. tag "teacher-amanda" -> "amanda"). Returns null if none. */
+export function getTeacherKeyFromVideo(video: VimeoVideo): string | null {
+  const tags = video.tags ?? [];
+  const tag = tags.find((t) => t.name.startsWith('teacher-'));
+  return tag ? tag.name.replace('teacher-', '') : null;
+}
+
+/** Group Vimeo videos by teacher key. Videos without a teacher tag are omitted. */
+export function groupVimeoVideosByTeacher(videos: VimeoVideo[]): Record<string, VimeoVideo[]> {
+  const byTeacher: Record<string, VimeoVideo[]> = {};
+  for (const video of videos) {
+    const key = getTeacherKeyFromVideo(video);
+    if (key) {
+      if (!byTeacher[key]) byTeacher[key] = [];
+      byTeacher[key].push(video);
+    }
+  }
+  // Sort each teacher's videos by created_time desc (newest first)
+  for (const key of Object.keys(byTeacher)) {
+    byTeacher[key].sort(
+      (a, b) => new Date(b.created_time).getTime() - new Date(a.created_time).getTime()
+    );
+  }
+  return byTeacher;
 }

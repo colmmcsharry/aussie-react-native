@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
+  FlatList,
+  Linking,
   Pressable,
-  SectionList,
+  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 
 import { TabHeader } from '@/components/tab-header';
 import { ThemedText } from '@/components/themed-text';
@@ -26,17 +29,22 @@ import {
   getEmbedUrl,
   getThumbnail,
   getVideoId,
+  groupVimeoVideosByTeacher,
   type VimeoVideo,
 } from '@/services/vimeo';
+import { teachers, TEACHER_KEYS } from '@/data/teachers';
 
 const LIST_THUMB_WIDTH = 160;
-const LIST_THUMB_HEIGHT = 120; // landscape, same as YouTube so Vimeo thumbnails fill without black bars
+const LIST_THUMB_HEIGHT = 120;
 
-type VideoSection = { title: string; data: (YouTubeVideoEntry | VimeoVideo)[]; isYouTube: boolean };
+type LatestItem =
+  | { type: 'youtube'; entry: YouTubeVideoEntry; sortKey: number }
+  | { type: 'vimeo'; video: VimeoVideo; sortKey: number };
 
 export default function VideosScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [viewMode, setViewMode] = useState<'latest' | 'teachers'>('latest');
   const [youtubeVideos, setYoutubeVideos] = useState<YouTubeVideoEntry[]>([]);
   const [videos, setVideos] = useState<VimeoVideo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,13 +77,34 @@ export default function VideosScreen() {
     loadVideos();
   }, [loadVideos]);
 
+  const vimeoByTeacher = useMemo(
+    () => groupVimeoVideosByTeacher(videos),
+    [videos]
+  );
+
+  const latestList = useMemo((): LatestItem[] => {
+    const list: LatestItem[] = [];
+    youtubeVideos.forEach((entry) => {
+      const sortKey = entry.date ? new Date(entry.date).getTime() : 0;
+      list.push({ type: 'youtube', entry, sortKey });
+    });
+    videos.forEach((video) => {
+      list.push({
+        type: 'vimeo',
+        video,
+        sortKey: new Date(video.created_time).getTime(),
+      });
+    });
+    list.sort((a, b) => b.sortKey - a.sortKey);
+    return list;
+  }, [youtubeVideos, videos]);
+
   const handleVideoPress = useCallback(
     (video: VimeoVideo) => {
-      const id = getVideoId(video);
       router.push({
         pathname: '/video/[id]',
         params: {
-          id,
+          id: getVideoId(video),
           title: video.name,
           embedUrl: getEmbedUrl(video),
           duration: String(video.duration),
@@ -104,65 +133,47 @@ export default function VideosScreen() {
     [router]
   );
 
-  const sections = useMemo((): VideoSection[] => {
-    const s: VideoSection[] = [];
-    if (youtubeVideos.length > 0) {
-      s.push({ title: 'Aussie Slang (YouTube)', data: youtubeVideos, isYouTube: true });
-    }
-    if (videos.length > 0) {
-      s.push({ title: 'Videos', data: videos, isYouTube: false });
-    }
-    return s;
-  }, [youtubeVideos, videos]);
+  const openLink = useCallback((url: string) => {
+    Linking.openURL(url);
+  }, []);
 
-  const renderYouTubeItem = useCallback(
-    ({ item }: { item: YouTubeVideoEntry }) => (
-      <View style={styles.videoCard}>
-        <Pressable
-          onPress={() => handleYouTubePress(item)}
-          style={({ pressed }) => [styles.row, styles.youtubeRow, { opacity: pressed ? 0.6 : 1 }]}
-        >
-          <View style={styles.listThumbWrap}>
-            <Image
-              source={{ uri: getYouTubeThumbnail(item.youtubeId) }}
-              style={styles.listThumb}
-              contentFit="cover"
-              transition={200}
-            />
+  const renderLatestItem = useCallback(
+    ({ item }: { item: LatestItem }) => {
+      if (item.type === 'youtube') {
+        const { entry } = item;
+        return (
+          <View style={styles.videoCard}>
+            <Pressable
+              onPress={() => handleYouTubePress(entry)}
+              style={({ pressed }) => [styles.row, { opacity: pressed ? 0.6 : 1 }]}
+            >
+              <View style={styles.listThumbWrap}>
+                <Image
+                  source={{ uri: getYouTubeThumbnail(entry.youtubeId) }}
+                  style={styles.listThumb}
+                  contentFit="cover"
+                  transition={200}
+                />
+              </View>
+              <View style={styles.info}>
+                <ThemedText style={styles.title} numberOfLines={2}>{entry.title}</ThemedText>
+                {entry.channelName ? (
+                  <ThemedText style={[styles.meta, { color: subtextColor }]}>
+                    {entry.channelName}
+                  </ThemedText>
+                ) : null}
+              </View>
+            </Pressable>
           </View>
-          <View style={styles.info}>
-            <ThemedText style={styles.title} numberOfLines={2}>
-              {item.title}
-            </ThemedText>
-            {item.description ? (
-              <ThemedText
-                style={[styles.description, { color: subtextColor }]}
-                numberOfLines={2}
-              >
-                {item.description}
-              </ThemedText>
-            ) : null}
-            {item.channelName ? (
-              <ThemedText style={[styles.meta, { color: subtextColor }]}>
-                {item.channelName}
-              </ThemedText>
-            ) : null}
-          </View>
-        </Pressable>
-      </View>
-    ),
-    [subtextColor, handleYouTubePress]
-  );
-
-  const renderVimeoItem = useCallback(
-    ({ item }: { item: VimeoVideo }) => {
-      const thumbnail = getThumbnail(item, 960);
-      const duration = formatDuration(item.duration);
-
+        );
+      }
+      const { video } = item;
+      const thumbnail = getThumbnail(video, 960);
+      const duration = formatDuration(video.duration);
       return (
         <View style={styles.videoCard}>
           <Pressable
-            onPress={() => handleVideoPress(item)}
+            onPress={() => handleVideoPress(video)}
             style={({ pressed }) => [styles.row, { opacity: pressed ? 0.6 : 1 }]}
           >
             <View style={styles.listThumbWrap}>
@@ -177,36 +188,16 @@ export default function VideosScreen() {
               </View>
             </View>
             <View style={styles.info}>
-              <ThemedText style={styles.title} numberOfLines={2}>
-                {item.name}
-              </ThemedText>
-              {item.description ? (
-                <ThemedText
-                  style={[styles.description, { color: subtextColor }]}
-                  numberOfLines={2}
-                >
-                  {item.description}
-                </ThemedText>
-              ) : null}
+              <ThemedText style={styles.title} numberOfLines={2}>{video.name}</ThemedText>
               <ThemedText style={[styles.meta, { color: subtextColor }]}>
-                {item.stats.plays} {item.stats.plays === 1 ? 'view' : 'views'}
+                {video.stats.plays} {video.stats.plays === 1 ? 'view' : 'views'}
               </ThemedText>
             </View>
           </Pressable>
         </View>
       );
     },
-    [subtextColor, handleVideoPress]
-  );
-
-  const renderItem = useCallback(
-    ({ item, section }: { item: YouTubeVideoEntry | VimeoVideo; section: VideoSection }) => {
-      if (section.isYouTube) {
-        return renderYouTubeItem({ item: item as YouTubeVideoEntry });
-      }
-      return renderVimeoItem({ item: item as VimeoVideo });
-    },
-    [renderYouTubeItem, renderVimeoItem]
+    [subtextColor, handleYouTubePress, handleVideoPress]
   );
 
   if (loading) {
@@ -233,126 +224,182 @@ export default function VideosScreen() {
   return (
     <ThemedView style={styles.container}>
       <TabHeader title="Videos" />
-      <SectionList
-        sections={sections}
-        keyExtractor={(item) =>
-          'youtubeId' in item
-            ? (item as YouTubeVideoEntry).youtubeId
-            : getVideoId(item as VimeoVideo)
-        }
-        renderItem={renderItem}
-        renderSectionHeader={({ section }) => (
-          <View
-            style={[
-              styles.sectionHeader,
-              sections[0] === section && styles.sectionHeaderFirst,
-            ]}
-          >
-            <ThemedText style={[styles.sectionTitle, { color: subtextColor }]}>
-              {section.title}
-            </ThemedText>
-            <ThemedText style={[styles.sectionCount, { color: subtextColor }]}>
-              {section.data.length} {section.data.length === 1 ? 'video' : 'videos'}
-            </ThemedText>
-          </View>
-        )}
-        contentContainerStyle={[
-          styles.listContent,
-          { paddingTop: 16, paddingBottom: insets.bottom + 90 },
-        ]}
-        ListEmptyComponent={
-          !loading ? (
+      <View style={styles.toggleRow}>
+        <Pressable
+          style={[styles.toggleBtn, viewMode === 'latest' && styles.toggleBtnActive]}
+          onPress={() => setViewMode('latest')}
+        >
+          <ThemedText style={[styles.toggleText, viewMode === 'latest' && styles.toggleTextActive]}>
+            Latest
+          </ThemedText>
+        </Pressable>
+        <Pressable
+          style={[styles.toggleBtn, viewMode === 'teachers' && styles.toggleBtnActive]}
+          onPress={() => setViewMode('teachers')}
+        >
+          <ThemedText style={[styles.toggleText, viewMode === 'teachers' && styles.toggleTextActive]}>
+            Teachers
+          </ThemedText>
+        </Pressable>
+      </View>
+
+      {viewMode === 'latest' ? (
+        <FlatList
+          data={latestList}
+          keyExtractor={(item) =>
+            item.type === 'youtube' ? item.entry.youtubeId : getVideoId(item.video)
+          }
+          renderItem={renderLatestItem}
+          contentContainerStyle={[
+            styles.listContent,
+            { paddingTop: 12, paddingBottom: insets.bottom + 90 },
+          ]}
+          ListEmptyComponent={
             <ThemedText style={[styles.headerSubtitle, { color: subtextColor }]}>
               No videos yet.
             </ThemedText>
-          ) : null
-        }
-        stickySectionHeadersEnabled={false}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
-        showsVerticalScrollIndicator={false}
-      />
+          }
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={[
+            styles.listContent,
+            { paddingTop: 12, paddingBottom: insets.bottom + 90 },
+          ]}
+          showsVerticalScrollIndicator={false}
+        >
+          {TEACHER_KEYS.map((key) => {
+            const profile = teachers[key];
+            const teacherVideos = vimeoByTeacher[key] ?? [];
+            const thumbIndex = Math.min(
+              profile.thumbnailFromVimeoIndex ?? 0,
+              Math.max(0, teacherVideos.length - 1)
+            );
+            const thumbnailUri =
+              teacherVideos.length > 0
+                ? getThumbnail(teacherVideos[thumbIndex], 400)
+                : null;
+            return (
+              <Pressable
+                key={key}
+                style={({ pressed }) => [styles.teacherCard, pressed && { opacity: 0.9 }]}
+                onPress={() => router.push(`/videos/teacher/${key}`)}
+              >
+                <View style={styles.teacherRow}>
+                  <View style={styles.teacherThumbWrap}>
+                    {thumbnailUri ? (
+                      <Image
+                        source={{ uri: thumbnailUri }}
+                        style={[styles.teacherThumb, styles.teacherThumbZoom]}
+                        contentFit="cover"
+                      />
+                    ) : (
+                      <View style={[styles.teacherThumb, styles.teacherThumbPlaceholder]}>
+                        <Ionicons name="person" size={40} color="#999" />
+                      </View>
+                    )}
+                  </View>
+                  <View style={styles.teacherInfo}>
+                    <ThemedText style={styles.teacherName}>{profile.name}</ThemedText>
+                    <View style={styles.socialsRow}>
+                      {profile.instagram && (
+                        <Pressable
+                          style={styles.socialBtn}
+                          onPress={(e) => { e.stopPropagation(); openLink(profile.instagram!); }}
+                        >
+                          <Ionicons name="logo-instagram" size={22} color="#E4405F" />
+                        </Pressable>
+                      )}
+                      {profile.youtube && (
+                        <Pressable
+                          style={styles.socialBtn}
+                          onPress={(e) => { e.stopPropagation(); openLink(profile.youtube!); }}
+                        >
+                          <Ionicons name="logo-youtube" size={22} color="#FF0000" />
+                        </Pressable>
+                      )}
+                      {profile.tiktok && (
+                        <Pressable
+                          style={styles.socialBtn}
+                          onPress={(e) => { e.stopPropagation(); openLink(profile.tiktok!); }}
+                        >
+                          <Ionicons name="logo-tiktok" size={22} color="#000" />
+                        </Pressable>
+                      )}
+                      {profile.spotify && (
+                        <Pressable
+                          style={styles.socialBtn}
+                          onPress={(e) => { e.stopPropagation(); openLink(profile.spotify!); }}
+                        >
+                          <Ionicons name="musical-notes" size={22} color="#1DB954" />
+                        </Pressable>
+                      )}
+                    </View>
+                    <ThemedText
+                      style={[styles.teacherBio, { color: subtextColor }]}
+                      numberOfLines={3}
+                    >
+                      {profile.bio}
+                    </ThemedText>
+                  </View>
+                </View>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
+      )}
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 32,
   },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    opacity: 0.7,
-  },
-  errorTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  errorDetail: {
-    fontSize: 14,
-    opacity: 0.6,
-    textAlign: 'center',
-    marginBottom: 24,
-  },
-  retryButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    backgroundColor: '#194F89',
-    borderRadius: 8,
-  },
-  retryText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  listContent: {
+  loadingText: { marginTop: 16, fontSize: 16, opacity: 0.7 },
+  errorTitle: { fontSize: 20, fontWeight: '600', marginBottom: 8 },
+  errorDetail: { fontSize: 14, opacity: 0.6, textAlign: 'center', marginBottom: 24 },
+  retryButton: { paddingHorizontal: 24, paddingVertical: 12, backgroundColor: '#194F89', borderRadius: 8 },
+  retryText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  toggleRow: {
+    flexDirection: 'row',
     paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 4,
+    gap: 8,
     backgroundColor: '#F0F4F8',
   },
+  toggleBtn: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    backgroundColor: 'rgba(0,0,0,0.06)',
+  },
+  toggleBtnActive: { backgroundColor: '#194F89' },
+  toggleText: { fontSize: 15, fontWeight: '600', color: '#333' },
+  toggleTextActive: { color: '#fff' },
+  scroll: { flex: 1 },
+  listContent: { paddingHorizontal: 16, backgroundColor: '#F0F4F8' },
+  headerSubtitle: { fontSize: 15, marginBottom: 16 },
   videoCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 12,
     marginBottom: 12,
   },
-  headerSubtitle: {
-    fontSize: 15,
-    marginBottom: 16,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'baseline',
-    marginBottom: 8,
-    marginTop: 16,
-  },
-  sectionHeaderFirst: {
-    marginTop: 0,
-  },
-  sectionTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  sectionCount: {
-    fontSize: 13,
-  },
-
-  /* ---- Row ---- */
   row: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    paddingVertical: 12,
+    paddingVertical: 0,
   },
-
-  /* ---- Thumbnail ---- */
   listThumbWrap: {
     width: LIST_THUMB_WIDTH,
     height: LIST_THUMB_HEIGHT,
@@ -360,20 +407,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#1a1a1a',
   },
-  listThumb: {
-    width: '100%',
-    height: '100%',
-  },
-  /** Zoom Vimeo thumbnails so baked-in black bars are cropped; container clips with overflow: hidden */
+  listThumb: { width: '100%', height: '100%' },
   vimeoThumbZoom: {
     position: 'absolute',
     width: LIST_THUMB_WIDTH * 2.4,
     height: LIST_THUMB_HEIGHT * 2.4,
     left: (LIST_THUMB_WIDTH - LIST_THUMB_WIDTH * 2.4) / 2,
     top: (LIST_THUMB_HEIGHT - LIST_THUMB_HEIGHT * 2.4) / 2,
-  },
-  youtubeRow: {
-    marginBottom: 4,
   },
   durationBadge: {
     position: 'absolute',
@@ -384,31 +424,38 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 1,
   },
-  durationText: {
-    color: '#fff',
-    fontSize: 11,
-    fontWeight: '600',
-  },
+  durationText: { color: '#fff', fontSize: 11, fontWeight: '600' },
+  info: { flex: 1, marginLeft: 14, paddingTop: 2 },
+  title: { fontSize: 16, fontWeight: '600', lineHeight: 22 },
+  meta: { fontSize: 13, marginTop: 4 },
 
-  /* ---- Info ---- */
-  info: {
-    flex: 1,
-    marginLeft: 14,
-    paddingTop: 2,
+  teacherCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 12,
   },
-  title: {
-    fontSize: 16,
-    fontWeight: '600',
-    lineHeight: 22,
+  teacherRow: { flexDirection: 'row', alignItems: 'flex-start' },
+  teacherThumbWrap: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#e0e0e0',
   },
-  description: {
-    fontSize: 14,
-    lineHeight: 19,
-    marginTop: 4,
+  teacherThumb: { width: '100%', height: '100%' },
+  /** Zoom so Vimeo letterboxing is cropped (same idea as list thumbnails) */
+  teacherThumbZoom: {
+    position: 'absolute',
+    width: 80 * 2.4,
+    height: 80 * 2.4,
+    left: (80 - 80 * 2.4) / 2,
+    top: (80 - 80 * 2.4) / 2,
   },
-  meta: {
-    fontSize: 13,
-    marginTop: 6,
-  },
-
+  teacherThumbPlaceholder: { justifyContent: 'center', alignItems: 'center' },
+  teacherInfo: { flex: 1, marginLeft: 14 },
+  teacherName: { fontSize: 18, fontWeight: '700', marginBottom: 6 },
+  socialsRow: { flexDirection: 'row', gap: 8, marginBottom: 6 },
+  socialBtn: { padding: 2 },
+  teacherBio: { fontSize: 14, lineHeight: 20 },
 });
