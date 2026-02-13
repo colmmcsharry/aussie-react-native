@@ -1,0 +1,112 @@
+const VIMEO_API_BASE = 'https://api.vimeo.com';
+const ACCESS_TOKEN = process.env.EXPO_PUBLIC_VIMEO_ACCESS_TOKEN;
+const PROJECT_ID = process.env.EXPO_PUBLIC_VIMEO_PROJECT_ID;
+
+// ---------- Types ----------
+
+export interface VimeoThumbnail {
+  width: number;
+  height: number;
+  link: string;
+  link_with_play_button: string;
+}
+
+export interface VimeoVideo {
+  uri: string;
+  name: string;
+  description: string | null;
+  duration: number;
+  width: number;
+  height: number;
+  link: string;
+  player_embed_url: string;
+  created_time: string;
+  modified_time: string;
+  pictures: {
+    sizes: VimeoThumbnail[];
+  };
+  tags: Array<{
+    name: string;
+    tag: string;
+  }>;
+  stats: {
+    plays: number;
+  };
+}
+
+export interface VimeoApiResponse {
+  total: number;
+  page: number;
+  per_page: number;
+  paging: {
+    next: string | null;
+    previous: string | null;
+  };
+  data: VimeoVideo[];
+}
+
+// ---------- API ----------
+
+export async function fetchProjectVideos(
+  page = 1,
+  perPage = 50
+): Promise<VimeoApiResponse> {
+  const url = `${VIMEO_API_BASE}/me/projects/${PROJECT_ID}/videos?page=${page}&per_page=${perPage}&sort=date&direction=desc`;
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/vnd.vimeo.*+json;version=3.4',
+    },
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Vimeo API error ${response.status}: ${text}`);
+  }
+
+  return response.json();
+}
+
+// ---------- Helpers ----------
+
+/** Extract the numeric video ID from a Vimeo URI like "/videos/123456" */
+export function getVideoId(video: VimeoVideo): string {
+  return video.uri.split('/').pop() || '';
+}
+
+/** Get the best thumbnail for a given target width */
+export function getThumbnail(video: VimeoVideo, targetWidth = 640): string {
+  const sizes = video.pictures.sizes;
+  // Find the smallest thumbnail that's >= targetWidth, or fall back to the largest
+  const match =
+    sizes.find((s) => s.width >= targetWidth) || sizes[sizes.length - 1];
+  return match?.link || '';
+}
+
+/** Format seconds into m:ss or h:mm:ss */
+export function formatDuration(totalSeconds: number): string {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  if (hours > 0) {
+    return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
+  }
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+/** Build the embed URL with playback-friendly params */
+export function getEmbedUrl(video: VimeoVideo): string {
+  const base = video.player_embed_url;
+  const separator = base.includes('?') ? '&' : '?';
+  return `${base}${separator}autoplay=1&playsinline=1&title=0&byline=0&portrait=0&transparent=0`;
+}
+
+/** Check if a video is portrait orientation */
+export function isPortrait(video: VimeoVideo): boolean {
+  return video.height > video.width;
+}
