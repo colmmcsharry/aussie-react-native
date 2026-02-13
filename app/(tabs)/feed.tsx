@@ -22,7 +22,7 @@ import { quizzes, type QuizQuestion } from '@/data/quiz-data';
 import { quizImageMap } from '@/data/quiz-assets';
 import { loadFavourites, toggleFavourite } from '@/services/favourites';
 
-const HEADER_GREEN = '#0a7ea4';
+const ACCENT_BLUE = '#194F89'; // Australian blue
 
 const AUSSIE_QUOTES: { text: string; author: string }[] = [
   { text: "She'll be right, mate.", author: 'Australian Proverb' },
@@ -151,7 +151,7 @@ export default function FeedScreen() {
               </Text>
             </View>
             <View style={styles.cardContent}>
-              <Text style={[styles.slangTerm, { color: HEADER_GREEN }]}>
+              <Text style={[styles.slangTerm, { color: ACCENT_BLUE }]}>
                 {slangOfTheDay?.buttonTitle ?? 'Loading...'}
               </Text>
               <Text style={[styles.slangHint, { color: colors.icon }]}>
@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   optionSelected: {
-    borderColor: HEADER_GREEN,
+    borderColor: ACCENT_BLUE,
     backgroundColor: 'rgba(10, 126, 164, 0.12)',
   },
   optionCorrect: {
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   actionButton: {
-    backgroundColor: HEADER_GREEN,
+    backgroundColor: ACCENT_BLUE,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',

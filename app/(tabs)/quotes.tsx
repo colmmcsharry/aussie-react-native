@@ -5,22 +5,23 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Pressable,
   TextInput,
   Platform,
   Dimensions,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
 import { getCategories, searchQuotes, SlangCategory, SlangEntry } from '@/data/slang';
 import { slangImageMap } from '@/data/image-map';
-import { playAudio, stopAudio } from '@/services/audio';
+import { playAudio, playAudioSlow, stopAudio } from '@/services/audio';
 import { loadFavourites, toggleFavourite } from '@/services/favourites';
 
-const HEADER_GREEN = '#0a7ea4'; // teal/green header
+const ACCENT_BLUE = '#194F89'; // Australian blue
 const GRID_GAP = 12;
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CONTENT_PAD = 32; // 16*2
@@ -45,6 +46,7 @@ function SlangCard({
 }) {
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [playing, setPlaying] = useState(false);
+  const [playingSlow, setPlayingSlow] = useState(false);
   const [imageAspectRatio, setImageAspectRatio] = useState<number | null>(null);
 
   const handleImageLoad = useCallback((e: { source: { width: number; height: number } }) => {
@@ -61,11 +63,23 @@ function SlangCard({
       stopAudio();
       setPlaying(false);
     } else {
+      setPlayingSlow(false);
       setPlaying(true);
       playAudio(entry.audioFile);
       setTimeout(() => setPlaying(false), 3000);
     }
   }, [entry.audioFile, playing]);
+
+  const handlePlaySlow = useCallback(() => {
+    if (playingSlow) {
+      stopAudio();
+      setPlayingSlow(false);
+    } else {
+      setPlayingSlow(true);
+      stopAudio();
+      playAudioSlow(entry.audioFile, () => setPlayingSlow(false));
+    }
+  }, [entry.audioFile, playingSlow]);
 
   const hasImage = entry.image && slangImageMap[entry.image];
 
@@ -92,35 +106,71 @@ function SlangCard({
           {entry.explanation}
         </Text>
 
-        {/* Action row: heart, play, optional third (reference has snail/slow) */}
+        {/* Action row: 3 main buttons (heart, play, slow) + smaller separate expand/collapse */}
         <View style={styles.cardActionsRow}>
-          <TouchableOpacity onPress={() => onToggleFav(entry.id)} style={styles.actionBtn}>
+          <View style={styles.cardActionsMain}>
+            <Pressable
+              onPress={() => onToggleFav(entry.id)}
+              style={({ pressed }) => [
+                styles.actionBtn,
+                pressed && styles.actionBtnPressed,
+              ]}
+            >
             <Ionicons
               name={isFav ? 'heart' : 'heart-outline'}
-              size={24}
-              color={isFav ? '#FF3B57' : colors.icon}
+              size={30}
+              color={isFav ? '#FF3B57' : ACCENT_BLUE}
             />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.actionBtn, styles.actionBtnPlay, { backgroundColor: playing ? '#FF6B35' : HEADER_GREEN }]}
-            onPress={handlePlay}
+            </Pressable>
+            <Pressable
+              onPress={handlePlay}
+              style={({ pressed }) => [
+                styles.actionBtn,
+                playing && styles.actionBtnActive,
+                pressed && styles.actionBtnPressed,
+              ]}
+            >
+              <Ionicons
+                name={playing ? 'stop' : 'volume-high'}
+                size={28}
+                color={playing ? '#fff' : ACCENT_BLUE}
+              />
+            </Pressable>
+            <Pressable
+              onPress={handlePlaySlow}
+              style={({ pressed }) => [
+                styles.actionBtn,
+                playingSlow && styles.actionBtnActive,
+                pressed && styles.actionBtnPressed,
+              ]}
+            >
+              {playingSlow ? (
+                <Ionicons name="stop" size={28} color="#fff" />
+              ) : (
+                <MaterialCommunityIcons name="snail" size={28} color={ACCENT_BLUE} />
+              )}
+            </Pressable>
+          </View>
+          <Pressable
+            onPress={toggleExpand}
+            style={({ pressed }) => [
+              styles.actionBtnExpand,
+              pressed && styles.actionBtnPressed,
+            ]}
           >
-            <Ionicons name={playing ? 'stop' : 'volume-high'} size={22} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={toggleExpand} style={styles.actionBtn}>
             <Ionicons
               name={expanded ? 'chevron-up' : 'chevron-down'}
               size={22}
-              color={HEADER_GREEN}
+              color={ACCENT_BLUE}
             />
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {expanded && (
           <View style={styles.cardBody}>
             {entry.notes.length > 0 && (
               <View style={styles.notesSection}>
-                <Text style={[styles.sectionLabel, { color: HEADER_GREEN }]}>Notes</Text>
+                <Text style={[styles.sectionLabel, { color: ACCENT_BLUE }]}>Notes</Text>
                 {entry.notes.map((note, i) => (
                   <View key={i} style={styles.noteRow}>
                     <Text style={[styles.noteText, { color: colors.text }]}>{note}</Text>
@@ -130,7 +180,7 @@ function SlangCard({
             )}
             {entry.examples.length > 0 && (
               <View style={styles.examplesSection}>
-                <Text style={[styles.sectionLabel, { color: HEADER_GREEN }]}>Examples</Text>
+                <Text style={[styles.sectionLabel, { color: ACCENT_BLUE }]}>Examples</Text>
                 {entry.examples.map((ex, i) => (
                   <View key={i} style={styles.exampleRow}>
                     <Text style={[styles.exampleQuote, { color: colors.text }]}>"{ex}"</Text>
@@ -232,7 +282,7 @@ export default function QuotesScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Green header — fixed height, left slot same width in all states */}
-      <View style={[styles.header, { paddingTop: insets.top + 8, backgroundColor: HEADER_GREEN }]}>
+      <View style={[styles.header, { paddingTop: insets.top + 8, backgroundColor: ACCENT_BLUE }]}>
         <View style={styles.headerRow}>
           <View style={styles.headerLeftSlot}>
             {selectedCategory !== null || showSearch || showFavsOnly ? (
@@ -507,18 +557,51 @@ const styles = StyleSheet.create({
   cardActionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    justifyContent: 'space-between',
+  },
+  cardActionsMain: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
   },
   actionBtn: {
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: 'rgba(0,0,0,0.06)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 3,
+      },
+      android: { elevation: 3 },
+    }),
+  },
+  actionBtnPressed: {
+    transform: [{ scale: 0.92 }],
+    ...Platform.select({
+      ios: { shadowOpacity: 0.06, shadowRadius: 1 },
+      android: { elevation: 1 },
+    }),
+  },
+  actionBtnActive: {
+    backgroundColor: ACCENT_BLUE,
+  },
+  actionBtnExpand: {
     width: 44,
     height: 44,
     borderRadius: 22,
     backgroundColor: 'rgba(0,0,0,0.06)',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  actionBtnPlay: {
-    backgroundColor: HEADER_GREEN,
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.12, shadowRadius: 2 },
+      android: { elevation: 2 },
+    }),
   },
   cardBody: {
     marginTop: 16,

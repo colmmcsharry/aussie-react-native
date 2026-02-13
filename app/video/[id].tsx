@@ -168,14 +168,14 @@ const styles = StyleSheet.create({
     minWidth: 70,
   },
   backIcon: {
-    color: '#0a7ea4',
+    color: '#194F89',
     fontSize: 32,
     lineHeight: 32,
     fontWeight: '300',
     marginRight: 2,
   },
   backText: {
-    color: '#0a7ea4',
+    color: '#194F89',
     fontSize: 17,
   },
   headerTitleWrap: {

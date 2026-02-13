@@ -10,14 +10,14 @@ import {
   Platform,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Colors } from '@/constants/theme';
 import type { SlangEntry } from '@/data/slang';
 import { slangImageMap } from '@/data/image-map';
-import { playAudio, stopAudio } from '@/services/audio';
+import { playAudio, playAudioSlow, stopAudio } from '@/services/audio';
 
-const HEADER_GREEN = '#0a7ea4';
+const ACCENT_BLUE = '#194F89'; // Australian blue
 
 type SlangDetailModalProps = {
   visible: boolean;
@@ -37,6 +37,7 @@ export function SlangDetailModal({
   colors,
 }: SlangDetailModalProps) {
   const [playing, setPlaying] = useState(false);
+  const [playingSlow, setPlayingSlow] = useState(false);
   const [imageAspectRatio, setImageAspectRatio] = useState<number | null>(null);
 
   const handleImageLoad = useCallback((e: { source: { width: number; height: number } }) => {
@@ -50,11 +51,24 @@ export function SlangDetailModal({
       stopAudio();
       setPlaying(false);
     } else {
+      setPlayingSlow(false);
       setPlaying(true);
       playAudio(entry.audioFile);
       setTimeout(() => setPlaying(false), 3000);
     }
   }, [entry, playing]);
+
+  const handlePlaySlow = useCallback(() => {
+    if (!entry) return;
+    if (playingSlow) {
+      stopAudio();
+      setPlayingSlow(false);
+    } else {
+      setPlaying(false);
+      setPlayingSlow(true);
+      playAudioSlow(entry.audioFile, () => setPlayingSlow(false));
+    }
+  }, [entry, playingSlow]);
 
   if (!entry) return null;
 
@@ -105,32 +119,52 @@ export function SlangDetailModal({
                 </Text>
 
                 <View style={styles.cardActionsRow}>
-                  <TouchableOpacity
+                  <Pressable
                     onPress={() => onToggleFav(entry.id)}
-                    style={[styles.actionBtn, { backgroundColor: '#FFF9E6', borderWidth: 1, borderColor: HEADER_GREEN }]}
+                    style={({ pressed }) => [
+                      styles.actionBtn,
+                      pressed && styles.actionBtnPressed,
+                    ]}
                   >
                     <Ionicons
                       name={isFav ? 'heart' : 'heart-outline'}
-                      size={24}
-                      color={isFav ? '#FF3B57' : HEADER_GREEN}
+                      size={30}
+                      color={isFav ? '#FF3B57' : ACCENT_BLUE}
                     />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.actionBtn, styles.actionBtnPlay, { backgroundColor: playing ? '#FF6B35' : HEADER_GREEN }]}
+                  </Pressable>
+                  <Pressable
                     onPress={handlePlay}
+                    style={({ pressed }) => [
+                      styles.actionBtn,
+                      playing && styles.actionBtnActive,
+                      pressed && styles.actionBtnPressed,
+                    ]}
                   >
-                    <Ionicons name={playing ? 'stop' : 'volume-high'} size={22} color="#fff" />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.actionBtn, { backgroundColor: '#FFF9E6', borderWidth: 1, borderColor: HEADER_GREEN }]}
+                    <Ionicons
+                      name={playing ? 'stop' : 'volume-high'}
+                      size={28}
+                      color={playing ? '#fff' : ACCENT_BLUE}
+                    />
+                  </Pressable>
+                  <Pressable
+                    onPress={handlePlaySlow}
+                    style={({ pressed }) => [
+                      styles.actionBtn,
+                      playingSlow && styles.actionBtnActive,
+                      pressed && styles.actionBtnPressed,
+                    ]}
                   >
-                    <Ionicons name="play-circle-outline" size={24} color={HEADER_GREEN} />
-                  </TouchableOpacity>
+                    {playingSlow ? (
+                      <Ionicons name="stop" size={28} color="#fff" />
+                    ) : (
+                      <MaterialCommunityIcons name="snail" size={28} color={ACCENT_BLUE} />
+                    )}
+                  </Pressable>
                 </View>
 
                 {entry.notes.length > 0 && (
                   <View style={styles.notesSection}>
-                    <Text style={[styles.sectionLabel, { color: HEADER_GREEN }]}>Notes</Text>
+                    <Text style={[styles.sectionLabel, { color: ACCENT_BLUE }]}>Notes</Text>
                     {entry.notes.map((note, i) => (
                       <View key={i} style={styles.noteRow}>
                         <Text style={[styles.noteText, { color: colors.text }]}>{note}</Text>
@@ -140,7 +174,7 @@ export function SlangDetailModal({
                 )}
                 {entry.examples.length > 0 && (
                   <View style={styles.examplesSection}>
-                    <Text style={[styles.sectionLabel, { color: HEADER_GREEN }]}>Examples</Text>
+                    <Text style={[styles.sectionLabel, { color: ACCENT_BLUE }]}>Examples</Text>
                     {entry.examples.map((ex, i) => (
                       <View key={i} style={styles.exampleRow}>
                         <Text style={[styles.exampleQuote, { color: colors.text }]}>"{ex}"</Text>
@@ -217,16 +251,34 @@ const styles = StyleSheet.create({
   cardActionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 16,
   },
   actionBtn: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 58,
+    height: 58,
+    borderRadius: 29,
     alignItems: 'center',
     justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 3,
+      },
+      android: { elevation: 3 },
+    }),
   },
-  actionBtnPlay: {},
+  actionBtnPressed: {
+    transform: [{ scale: 0.92 }],
+    ...Platform.select({
+      ios: { shadowOpacity: 0.06, shadowRadius: 1 },
+      android: { elevation: 1 },
+    }),
+  },
+  actionBtnActive: {
+    backgroundColor: ACCENT_BLUE,
+  },
   notesSection: {
     marginTop: 16,
     marginBottom: 14,

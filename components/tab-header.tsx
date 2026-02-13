@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const HEADER_GREEN = '#0a7ea4';
+const ACCENT_BLUE = '#194F89'; // Australian blue
 
 type TabHeaderProps = {
   title: string;
@@ -17,7 +17,7 @@ export function TabHeader({ title, left, right }: TabHeaderProps) {
     <View
       style={[
         styles.header,
-        { paddingTop: insets.top + 8, backgroundColor: HEADER_GREEN },
+        { paddingTop: insets.top + 8, backgroundColor: ACCENT_BLUE },
       ]}
     >
       <View style={styles.headerRow}>
