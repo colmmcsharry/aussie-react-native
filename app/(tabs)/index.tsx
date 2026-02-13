@@ -1,282 +1,265 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  SectionList,
-  StyleSheet,
   View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Pressable,
+  Platform,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 
 import { TabHeader } from '@/components/tab-header';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { useThemeColor } from '@/hooks/use-theme-color';
-import {
-  fetchAussieYouTubeVideos,
-  getYouTubeProxyEmbedUrl,
-  getYouTubeThumbnail,
-  type YouTubeVideoEntry,
-} from '@/services/youtube-gist';
-import {
-  fetchProjectVideos,
-  formatDuration,
-  getEmbedUrl,
-  getThumbnail,
-  getVideoId,
-  type VimeoVideo,
-} from '@/services/vimeo';
+import { SlangDetailModal } from '@/components/slang-detail-modal';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Colors } from '@/constants/theme';
+import { getCategories } from '@/data/slang';
+import { quizzes, type QuizQuestion } from '@/data/quiz-data';
+import { quizImageMap } from '@/data/quiz-assets';
+import { loadFavourites, toggleFavourite } from '@/services/favourites';
 
-const LIST_THUMB_WIDTH = 160;
-const LIST_THUMB_HEIGHT = 120; // landscape, same as YouTube so Vimeo thumbnails fill without black bars
+const ACCENT_BLUE = '#194F89'; // Australian blue
 
-type VideoSection = { title: string; data: (YouTubeVideoEntry | VimeoVideo)[]; isYouTube: boolean };
+// Matches slang-src/pages/feed.vue aussieQuotes (full text, no abbreviations)
+const AUSSIE_QUOTES: { text: string; author: string }[] = [
+  { text: "She'll be right, mate.", author: 'Australian Proverb' },
+  { text: "We're not here for a long time, we're here for a good time.", author: 'Australian Saying' },
+  { text: "You can't keep a good bloke down.", author: 'Australian Saying' },
+  { text: "Don't worry about the world ending today. It's already tomorrow in Australia.", author: 'Charles M. Schulz' },
+  { text: "I spend my time improving the things I can change, not worrying about the things I can't.", author: 'Melanie Perkins' },
+  { text: 'The world is changing very fast. Big will not beat small anymore. It will be the fast beating the slow.', author: 'Rupert Murdoch' },
+  { text: 'God Bless America. God Save The Queen. God defend New Zealand and thank Christ for Australia.', author: 'Russell Crowe' },
+  { text: "There's an expression in Australia that's called 'Go Bush,' which means to get out of the city and relax. I try and 'go bush' to places where there's no cell reception. But, I don't get to do that often, so for the most part, it's just a state of mind.", author: 'Cate Blanchett' },
+  { text: "You know what happens when you don't take a risk? Nothing.", author: 'Mel Gibson' },
+  { text: "People who say, 'There's nothing to fear from spiders' have clearly never been to Australia.", author: 'Cate Blanchett' },
+  { text: "Even the Australians don't know how beautiful their own country is.", author: 'Brian Cox' },
+  { text: "Australia is an outdoor country. People only go inside to use the toilet. And that's only a recent development.", author: 'Barry Humphries' },
+  { text: "If you're an Australian, you're born with the knowledge that everything is trying to kill you. The snakes, the spiders, the sharks... even the plants have a go.", author: 'AnonymousAustralian' },
+  { text: "I'm a bit like a shark. I just keep moving. If I stop, I'll die.", author: 'Crocodile Dundee' },
+  { text: "Australia is a nation of 23 million people, mostly of whom live in a narrow strip of land along the coast and spend their time trying to convince the rest of the world that they live in the Outback.", author: 'Bill Bryson' },
+  { text: "Tall poppies get cut down.", author: 'Australian Proverb' },
+  { text: "If you're not having fun, you're doing it wrong.", author: 'Australian Saying' },
+];
 
-export default function VideosScreen() {
-  const router = useRouter();
+function pickRandom<T>(arr: T[]): T | null {
+  if (arr.length === 0) return null;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+export default function FeedScreen() {
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
-  const [youtubeVideos, setYoutubeVideos] = useState<YouTubeVideoEntry[]>([]);
-  const [videos, setVideos] = useState<VimeoVideo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-  const subtextColor = useThemeColor({ light: '#687076', dark: '#9BA1A6' }, 'icon');
-  const separatorColor = useThemeColor({ light: '#e8e8e8', dark: '#2a2a2a' }, 'icon');
+  const allSlang = useMemo(() => getCategories().flatMap((c) => c.quotes), []);
+  const allQuizQuestions = useMemo(
+    () => quizzes.flatMap((q) => q.questions),
+    []
+  );
 
-  const loadVideos = useCallback(async () => {
-    setError(null);
-    const [ytResult, vimeoResult] = await Promise.allSettled([
-      fetchAussieYouTubeVideos(),
-      fetchProjectVideos(1, 50),
-    ]);
-    if (ytResult.status === 'fulfilled') setYoutubeVideos(ytResult.value);
-    if (vimeoResult.status === 'fulfilled') setVideos(vimeoResult.value.data);
-    if (ytResult.status === 'rejected' && vimeoResult.status === 'rejected') {
-      setError(vimeoResult.reason?.message ?? 'Failed to load videos');
-    }
-    setLoading(false);
-    setRefreshing(false);
-  }, []);
+  const [slangOfTheDay] = useState(() => pickRandom(allSlang));
+  const [showSlangModal, setShowSlangModal] = useState(false);
+  const [favourites, setFavourites] = useState<Set<string>>(new Set());
+  const [quizQuestion, setQuizQuestion] = useState<QuizQuestion | null>(() =>
+    pickRandom(allQuizQuestions)
+  );
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [hasAnswered, setHasAnswered] = useState(false);
+  const [aussieQuote] = useState(() => pickRandom(AUSSIE_QUOTES) ?? AUSSIE_QUOTES[0]);
 
   useEffect(() => {
-    loadVideos();
-  }, [loadVideos]);
+    loadFavourites().then(setFavourites);
+  }, []);
 
-  const handleRefresh = useCallback(() => {
-    setRefreshing(true);
-    loadVideos();
-  }, [loadVideos]);
+  const handleToggleFav = useCallback(async (id: string) => {
+    const isFav = await toggleFavourite(id);
+    setFavourites((prev) => {
+      const next = new Set(prev);
+      if (isFav) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }, []);
 
-  const handleVideoPress = useCallback(
-    (video: VimeoVideo) => {
-      const id = getVideoId(video);
-      router.push({
-        pathname: '/video/[id]',
-        params: {
-          id,
-          title: video.name,
-          embedUrl: getEmbedUrl(video),
-          duration: String(video.duration),
-          isPortrait: video.height > video.width ? '1' : '0',
-        },
-      });
+  const isCorrect = useMemo(() => {
+    if (!quizQuestion || selectedAnswer === null) return false;
+    return quizQuestion.answers[selectedAnswer] === quizQuestion.correctAnswer;
+  }, [quizQuestion, selectedAnswer]);
+
+  const selectAnswer = useCallback(
+    (index: number) => {
+      if (hasAnswered || !quizQuestion) return;
+      setSelectedAnswer(index);
+      setHasAnswered(true);
     },
-    [router]
+    [hasAnswered, quizQuestion]
   );
 
-  const handleYouTubePress = useCallback(
-    (entry: YouTubeVideoEntry) => {
-      router.push({
-        pathname: '/video/[id]',
-        params: {
-          id: entry.youtubeId,
-          title: entry.title,
-          embedUrl: getYouTubeProxyEmbedUrl(entry.youtubeId, {
-            cc_load_policy: entry.cc_load_policy,
-          }),
-          isPortrait: '0',
-          source: 'youtube',
-        },
-      });
-    },
-    [router]
-  );
-
-  const sections = useMemo((): VideoSection[] => {
-    const s: VideoSection[] = [];
-    if (youtubeVideos.length > 0) {
-      s.push({ title: 'Aussie Slang (YouTube)', data: youtubeVideos, isYouTube: true });
-    }
-    if (videos.length > 0) {
-      s.push({ title: 'Videos', data: videos, isYouTube: false });
-    }
-    return s;
-  }, [youtubeVideos, videos]);
-
-  const renderYouTubeItem = useCallback(
-    ({ item }: { item: YouTubeVideoEntry }) => (
-      <Pressable
-        onPress={() => handleYouTubePress(item)}
-        style={({ pressed }) => [styles.row, styles.youtubeRow, { opacity: pressed ? 0.6 : 1 }]}
-      >
-        <View style={styles.listThumbWrap}>
-          <Image
-            source={{ uri: getYouTubeThumbnail(item.youtubeId) }}
-            style={styles.listThumb}
-            contentFit="cover"
-            transition={200}
-          />
-        </View>
-        <View style={styles.info}>
-          <ThemedText style={styles.title} numberOfLines={2}>
-            {item.title}
-          </ThemedText>
-          {item.description ? (
-            <ThemedText
-              style={[styles.description, { color: subtextColor }]}
-              numberOfLines={2}
-            >
-              {item.description}
-            </ThemedText>
-          ) : null}
-          {item.channelName ? (
-            <ThemedText style={[styles.meta, { color: subtextColor }]}>
-              {item.channelName}
-            </ThemedText>
-          ) : null}
-        </View>
-      </Pressable>
-    ),
-    [subtextColor, handleYouTubePress]
-  );
-
-  const renderVimeoItem = useCallback(
-    ({ item, index, section }: { item: VimeoVideo; index: number; section: VideoSection }) => {
-      const isLast = index === section.data.length - 1;
-      const thumbnail = getThumbnail(item, 960);
-      const duration = formatDuration(item.duration);
-
-      return (
-        <Pressable
-          onPress={() => handleVideoPress(item)}
-          style={({ pressed }) => [styles.row, { opacity: pressed ? 0.6 : 1 }]}
-        >
-          <View style={styles.listThumbWrap}>
-            <Image
-              source={{ uri: thumbnail }}
-              style={[styles.listThumb, styles.vimeoThumbZoom]}
-              contentFit="cover"
-              transition={200}
-            />
-            <View style={styles.durationBadge}>
-              <ThemedText style={styles.durationText}>{duration}</ThemedText>
-            </View>
-          </View>
-          <View style={styles.info}>
-            <ThemedText style={styles.title} numberOfLines={2}>
-              {item.name}
-            </ThemedText>
-            {item.description ? (
-              <ThemedText
-                style={[styles.description, { color: subtextColor }]}
-                numberOfLines={2}
-              >
-                {item.description}
-              </ThemedText>
-            ) : null}
-            <ThemedText style={[styles.meta, { color: subtextColor }]}>
-              {item.stats.plays} {item.stats.plays === 1 ? 'view' : 'views'}
-            </ThemedText>
-          </View>
-          {!isLast && (
-            <View
-              style={[styles.separator, { backgroundColor: separatorColor }]}
-            />
-          )}
-        </Pressable>
-      );
-    },
-    [subtextColor, separatorColor, handleVideoPress]
-  );
-
-  const renderItem = useCallback(
-    ({ item, index, section }: { item: YouTubeVideoEntry | VimeoVideo; index: number; section: VideoSection }) => {
-      if (section.isYouTube) {
-        return renderYouTubeItem({ item: item as YouTubeVideoEntry });
+  const getAnswerStyle = useCallback(
+    (index: number) => {
+      if (!hasAnswered) {
+        return selectedAnswer === index ? styles.optionSelected : null;
       }
-      return renderVimeoItem({ item: item as VimeoVideo, index, section });
+      const answer = quizQuestion!.answers[index];
+      if (answer === quizQuestion!.correctAnswer) return styles.optionCorrect;
+      if (selectedAnswer === index) return styles.optionIncorrect;
+      return null;
     },
-    [renderYouTubeItem, renderVimeoItem]
+    [hasAnswered, selectedAnswer, quizQuestion]
   );
 
-  if (loading) {
-    return (
-      <ThemedView style={styles.centered}>
-        <ActivityIndicator size="large" />
-        <ThemedText style={styles.loadingText}>Loading videos...</ThemedText>
-      </ThemedView>
-    );
-  }
+  const goToSlang = useCallback(() => {
+    router.push('/(tabs)/quotes');
+  }, [router]);
 
-  if (error && youtubeVideos.length === 0 && videos.length === 0) {
-    return (
-      <ThemedView style={styles.centered}>
-        <ThemedText style={styles.errorTitle}>Something went wrong</ThemedText>
-        <ThemedText style={styles.errorDetail}>{error}</ThemedText>
-        <Pressable style={styles.retryButton} onPress={() => { setLoading(true); loadVideos(); }}>
-          <ThemedText style={styles.retryText}>Try Again</ThemedText>
-        </Pressable>
-      </ThemedView>
-    );
-  }
+  const goToQuiz = useCallback(() => {
+    router.push('/(tabs)/quiz');
+  }, [router]);
 
   return (
-    <ThemedView style={styles.container}>
-      <TabHeader title="Videos" />
-      <SectionList
-        sections={sections}
-        keyExtractor={(item) =>
-          'youtubeId' in item
-            ? (item as YouTubeVideoEntry).youtubeId
-            : getVideoId(item as VimeoVideo)
-        }
-        renderItem={renderItem}
-        renderSectionHeader={({ section }) => (
-          <View
-            style={[
-              styles.sectionHeader,
-              sections[0] === section && styles.sectionHeaderFirst,
-            ]}
-          >
-            <ThemedText style={[styles.sectionTitle, { color: subtextColor }]}>
-              {section.title}
-            </ThemedText>
-            <ThemedText style={[styles.sectionCount, { color: subtextColor }]}>
-              {section.data.length} {section.data.length === 1 ? 'video' : 'videos'}
-            </ThemedText>
-          </View>
-        )}
-        contentContainerStyle={[
-          styles.listContent,
-          { paddingTop: 16, paddingBottom: insets.bottom + 90 },
-        ]}
-        ListEmptyComponent={
-          !loading ? (
-            <ThemedText style={[styles.headerSubtitle, { color: subtextColor }]}>
-              No videos yet.
-            </ThemedText>
-          ) : null
-        }
-        stickySectionHeadersEnabled={false}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
-        showsVerticalScrollIndicator={false}
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <TabHeader title="Feed" />
+      <SlangDetailModal
+        visible={showSlangModal}
+        entry={slangOfTheDay}
+        isFav={slangOfTheDay ? favourites.has(slangOfTheDay.id) : false}
+        onToggleFav={handleToggleFav}
+        onClose={() => setShowSlangModal(false)}
+        colors={colors}
       />
-    </ThemedView>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: insets.bottom + 90 },
+        ]}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Slang of the Day */}
+        <View style={[styles.card, styles.slangCard]}>
+          <Pressable
+            style={({ pressed }) => [pressed && styles.cardPressed]}
+            onPress={() => slangOfTheDay && setShowSlangModal(true)}
+          >
+            <View style={styles.cardHeader}>
+              <Ionicons name="book-outline" size={28} color="#333" />
+              <Text style={[styles.cardTitle, { color: colors.text }]}>
+                Slang of the Day
+              </Text>
+            </View>
+            <View style={styles.cardContent}>
+              <Text style={[styles.slangTerm, { color: ACCENT_BLUE }]}>
+                {slangOfTheDay?.buttonTitle ?? 'Loading...'}
+              </Text>
+              <Text style={[styles.slangHint, { color: colors.icon }]}>
+                Tap to see full explanation →
+              </Text>
+            </View>
+          </Pressable>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={goToSlang}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.actionButtonText}>See All Aussie Slang →</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Question of the Day */}
+        <View style={[styles.card, styles.quizCard]}>
+          <View style={styles.cardHeader}>
+            <Ionicons name="help-circle-outline" size={28} color="#333" />
+            <Text style={[styles.cardTitle, { color: colors.text }]}>
+              Question of the Day
+            </Text>
+          </View>
+          {quizQuestion && (
+            <View style={styles.cardContent}>
+              <Text style={[styles.quizQuestionText, { color: colors.text }]}>
+                {quizQuestion.text}
+              </Text>
+              {quizQuestion.image && quizImageMap[quizQuestion.image] && (
+                <Image
+                  source={quizImageMap[quizQuestion.image]}
+                  style={styles.quizImage}
+                  contentFit="cover"
+                />
+              )}
+              <View style={styles.optionsWrap}>
+                {quizQuestion.answers.map((answer, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.optionButton,
+                      { borderColor: colors.icon + '40', backgroundColor: colors.background },
+                      getAnswerStyle(index),
+                    ]}
+                    onPress={() => selectAnswer(index)}
+                    disabled={hasAnswered}
+                    activeOpacity={0.7}
+                  >
+                    <Text
+                      style={[
+                        styles.optionText,
+                        { color: colors.text },
+                        getAnswerStyle(index) === styles.optionCorrect && styles.optionTextCorrect,
+                        getAnswerStyle(index) === styles.optionIncorrect && styles.optionTextIncorrect,
+                      ]}
+                    >
+                      {['A', 'B', 'C', 'D'][index]}. {answer}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              {hasAnswered && (
+                <View style={styles.resultWrap}>
+                  <Text
+                    style={[
+                      styles.resultText,
+                      isCorrect ? styles.correctMsg : styles.incorrectMsg,
+                    ]}
+                  >
+                    {isCorrect
+                      ? '✓ Correct!'
+                      : `✗ Wrong! The answer was: ${quizQuestion.correctAnswer}`}
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={goToQuiz}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.actionButtonText}>See All Quizzes →</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Aussie Quote of the Day */}
+        <View style={[styles.card, styles.quoteCard]}>
+          <View style={styles.cardHeader}>
+            <Ionicons name="chatbox-ellipses-outline" size={28} color="#333" />
+            <Text style={[styles.cardTitle, { color: colors.text }]}>
+              Aussie Quote of the Day
+            </Text>
+          </View>
+          <View style={styles.cardContent}>
+            <Text style={[styles.quoteText, { color: colors.text }]}>
+              {`"${aussieQuote.text}"`}
+            </Text>
+            <Text style={[styles.quoteAuthor, { color: colors.icon }]}>
+              — {aussieQuote.author}
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -284,136 +267,145 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  centered: {
+  scroll: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 32,
   },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    opacity: 0.7,
-  },
-  errorTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  errorDetail: {
-    fontSize: 14,
-    opacity: 0.6,
-    textAlign: 'center',
-    marginBottom: 24,
-  },
-  retryButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    backgroundColor: '#194F89',
-    borderRadius: 8,
-  },
-  retryText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  listContent: {
+  scrollContent: {
     paddingHorizontal: 16,
+    paddingTop: 16,
+    gap: 20,
   },
-  headerSubtitle: {
-    fontSize: 15,
-    marginBottom: 16,
+  card: {
+    borderRadius: 20,
+    padding: 20,
+    overflow: 'hidden',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 12,
+      },
+      android: { elevation: 4 },
+    }),
   },
-  sectionHeader: {
+  cardPressed: {
+    opacity: 0.95,
+  },
+  slangCard: {
+    backgroundColor: '#fffbe8',
+  },
+  quizCard: {
+    backgroundColor: '#e8ffe8',
+  },
+  quoteCard: {
+    backgroundColor: '#e8f4ff',
+  },
+  cardHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'baseline',
-    marginBottom: 8,
-    marginTop: 16,
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 14,
   },
-  sectionHeaderFirst: {
-    marginTop: 0,
-  },
-  sectionTitle: {
-    fontSize: 17,
+  cardTitle: {
+    fontSize: 18,
     fontWeight: '700',
   },
-  sectionCount: {
-    fontSize: 13,
-  },
-
-  /* ---- Row ---- */
-  row: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    paddingVertical: 12,
-  },
-
-  /* ---- Thumbnail ---- */
-  listThumbWrap: {
-    width: LIST_THUMB_WIDTH,
-    height: LIST_THUMB_HEIGHT,
-    borderRadius: 10,
-    overflow: 'hidden',
-    backgroundColor: '#1a1a1a',
-  },
-  listThumb: {
-    width: '100%',
-    height: '100%',
-  },
-  /** Zoom Vimeo thumbnails so baked-in black bars are cropped; container clips with overflow: hidden */
-  vimeoThumbZoom: {
-    position: 'absolute',
-    width: LIST_THUMB_WIDTH * 2.4,
-    height: LIST_THUMB_HEIGHT * 2.4,
-    left: (LIST_THUMB_WIDTH - LIST_THUMB_WIDTH * 2.4) / 2,
-    top: (LIST_THUMB_HEIGHT - LIST_THUMB_HEIGHT * 2.4) / 2,
-  },
-  youtubeRow: {
+  cardContent: {
     marginBottom: 4,
   },
-  durationBadge: {
-    position: 'absolute',
-    top: 6,
-    left: 6,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-    borderRadius: 4,
-    paddingHorizontal: 5,
-    paddingVertical: 1,
+  slangTerm: {
+    fontSize: 26,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 4,
   },
-  durationText: {
-    color: '#fff',
-    fontSize: 11,
-    fontWeight: '600',
+  slangHint: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 14,
   },
-
-  /* ---- Info ---- */
-  info: {
-    flex: 1,
-    marginLeft: 14,
-    paddingTop: 2,
-  },
-  title: {
+  quizQuestionText: {
     fontSize: 16,
     fontWeight: '600',
+    marginBottom: 12,
     lineHeight: 22,
   },
-  description: {
-    fontSize: 14,
-    lineHeight: 19,
-    marginTop: 4,
+  quizImage: {
+    width: '100%',
+    height: 180,
+    borderRadius: 12,
+    marginBottom: 12,
+    backgroundColor: '#f0f0f0',
   },
-  meta: {
-    fontSize: 13,
-    marginTop: 6,
+  optionsWrap: {
+    gap: 10,
+    marginBottom: 8,
   },
-
-  /* ---- Separator ---- */
-  separator: {
-    position: 'absolute',
-    bottom: 0,
-    left: LIST_THUMB_WIDTH + 14,
-    right: 0,
-    height: StyleSheet.hairlineWidth,
+  optionButton: {
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    borderWidth: 2,
+  },
+  optionSelected: {
+    borderColor: ACCENT_BLUE,
+    backgroundColor: 'rgba(10, 126, 164, 0.12)',
+  },
+  optionCorrect: {
+    borderColor: '#4CAF50',
+    backgroundColor: '#e8f5e9',
+  },
+  optionIncorrect: {
+    borderColor: '#f44336',
+    backgroundColor: '#ffebee',
+  },
+  optionText: {
+    fontSize: 15,
+  },
+  optionTextCorrect: {
+    fontWeight: '600',
+    color: '#2e7d32',
+  },
+  optionTextIncorrect: {
+    fontWeight: '600',
+    color: '#c62828',
+  },
+  resultWrap: {
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  resultText: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  correctMsg: {
+    color: '#4CAF50',
+  },
+  incorrectMsg: {
+    color: '#f44336',
+  },
+  quoteText: {
+    fontSize: 17,
+    fontStyle: 'italic',
+    lineHeight: 24,
+    marginBottom: 8,
+  },
+  quoteAuthor: {
+    fontSize: 15,
+    fontWeight: '600',
+    textAlign: 'right',
+  },
+  actionButton: {
+    backgroundColor: ACCENT_BLUE,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  actionButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
   },
 });
