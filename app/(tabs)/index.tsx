@@ -1,48 +1,90 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Pressable,
   Platform,
-} from 'react-native';
-import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { TabHeader } from '@/components/tab-header';
-import { SlangDetailModal } from '@/components/slang-detail-modal';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors } from '@/constants/theme';
-import { getCategories } from '@/data/slang';
-import { quizzes, type QuizQuestion } from '@/data/quiz-data';
-import { quizImageMap } from '@/data/quiz-assets';
-import { loadFavourites, toggleFavourite } from '@/services/favourites';
+import { SlangDetailModal } from "@/components/slang-detail-modal";
+import { TabHeader } from "@/components/tab-header";
+import { Colors } from "@/constants/theme";
+import { quizImageMap } from "@/data/quiz-assets";
+import { quizzes, type QuizQuestion } from "@/data/quiz-data";
+import { getCategories } from "@/data/slang";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { loadFavourites, toggleFavourite } from "@/services/favourites";
 
-const ACCENT_BLUE = '#194F89'; // Australian blue
+const ACCENT_BLUE = "#194F89"; // Australian blue
 
 // Matches slang-src/pages/feed.vue aussieQuotes (full text, no abbreviations)
 const AUSSIE_QUOTES: { text: string; author: string }[] = [
-  { text: "She'll be right, mate.", author: 'Australian Proverb' },
-  { text: "We're not here for a long time, we're here for a good time.", author: 'Australian Saying' },
-  { text: "You can't keep a good bloke down.", author: 'Australian Saying' },
-  { text: "Don't worry about the world ending today. It's already tomorrow in Australia.", author: 'Charles M. Schulz' },
-  { text: "I spend my time improving the things I can change, not worrying about the things I can't.", author: 'Melanie Perkins' },
-  { text: 'The world is changing very fast. Big will not beat small anymore. It will be the fast beating the slow.', author: 'Rupert Murdoch' },
-  { text: 'God Bless America. God Save The Queen. God defend New Zealand and thank Christ for Australia.', author: 'Russell Crowe' },
-  { text: "There's an expression in Australia that's called 'Go Bush,' which means to get out of the city and relax. I try and 'go bush' to places where there's no cell reception. But, I don't get to do that often, so for the most part, it's just a state of mind.", author: 'Cate Blanchett' },
-  { text: "You know what happens when you don't take a risk? Nothing.", author: 'Mel Gibson' },
-  { text: "People who say, 'There's nothing to fear from spiders' have clearly never been to Australia.", author: 'Cate Blanchett' },
-  { text: "Even the Australians don't know how beautiful their own country is.", author: 'Brian Cox' },
-  { text: "Australia is an outdoor country. People only go inside to use the toilet. And that's only a recent development.", author: 'Barry Humphries' },
-  { text: "If you're an Australian, you're born with the knowledge that everything is trying to kill you. The snakes, the spiders, the sharks... even the plants have a go.", author: 'AnonymousAustralian' },
-  { text: "I'm a bit like a shark. I just keep moving. If I stop, I'll die.", author: 'Crocodile Dundee' },
-  { text: "Australia is a nation of 23 million people, mostly of whom live in a narrow strip of land along the coast and spend their time trying to convince the rest of the world that they live in the Outback.", author: 'Bill Bryson' },
-  { text: "Tall poppies get cut down.", author: 'Australian Proverb' },
-  { text: "If you're not having fun, you're doing it wrong.", author: 'Australian Saying' },
+  { text: "She'll be right, mate.", author: "Australian Proverb" },
+  {
+    text: "We're not here for a long time, we're here for a good time.",
+    author: "Australian Saying",
+  },
+  { text: "You can't keep a good bloke down.", author: "Australian Saying" },
+  {
+    text: "Don't worry about the world ending today. It's already tomorrow in Australia.",
+    author: "Charles M. Schulz",
+  },
+  {
+    text: "I spend my time improving the things I can change, not worrying about the things I can't.",
+    author: "Melanie Perkins",
+  },
+  {
+    text: "The world is changing very fast. Big will not beat small anymore. It will be the fast beating the slow.",
+    author: "Rupert Murdoch",
+  },
+  {
+    text: "God Bless America. God Save The Queen. God defend New Zealand and thank Christ for Australia.",
+    author: "Russell Crowe",
+  },
+  {
+    text: "There's an expression in Australia that's called 'Go Bush,' which means to get out of the city and relax. I try and 'go bush' to places where there's no cell reception. But, I don't get to do that often, so for the most part, it's just a state of mind.",
+    author: "Cate Blanchett",
+  },
+  {
+    text: "You know what happens when you don't take a risk? Nothing.",
+    author: "Mel Gibson",
+  },
+  {
+    text: "People who say, 'There's nothing to fear from spiders' have clearly never been to Australia.",
+    author: "Cate Blanchett",
+  },
+  {
+    text: "Even the Australians don't know how beautiful their own country is.",
+    author: "Brian Cox",
+  },
+  {
+    text: "Australia is an outdoor country. People only go inside to use the toilet. And that's only a recent development.",
+    author: "Barry Humphries",
+  },
+  {
+    text: "If you're an Australian, you're born with the knowledge that everything is trying to kill you. The snakes, the spiders, the sharks... even the plants have a go.",
+    author: "AnonymousAustralian",
+  },
+  {
+    text: "I'm a bit like a shark. I just keep moving. If I stop, I'll die.",
+    author: "Crocodile Dundee",
+  },
+  {
+    text: "Australia is a nation of 23 million people, mostly of whom live in a narrow strip of land along the coast and spend their time trying to convince the rest of the world that they live in the Outback.",
+    author: "Bill Bryson",
+  },
+  { text: "Tall poppies get cut down.", author: "Australian Proverb" },
+  {
+    text: "If you're not having fun, you're doing it wrong.",
+    author: "Australian Saying",
+  },
 ];
 
 function pickRandom<T>(arr: T[]): T | null {
@@ -52,25 +94,27 @@ function pickRandom<T>(arr: T[]): T | null {
 
 export default function FeedScreen() {
   const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
+  const colors = Colors[colorScheme ?? "light"];
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
   const allSlang = useMemo(() => getCategories().flatMap((c) => c.quotes), []);
   const allQuizQuestions = useMemo(
     () => quizzes.flatMap((q) => q.questions),
-    []
+    [],
   );
 
   const [slangOfTheDay] = useState(() => pickRandom(allSlang));
   const [showSlangModal, setShowSlangModal] = useState(false);
   const [favourites, setFavourites] = useState<Set<string>>(new Set());
   const [quizQuestion, setQuizQuestion] = useState<QuizQuestion | null>(() =>
-    pickRandom(allQuizQuestions)
+    pickRandom(allQuizQuestions),
   );
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [hasAnswered, setHasAnswered] = useState(false);
-  const [aussieQuote] = useState(() => pickRandom(AUSSIE_QUOTES) ?? AUSSIE_QUOTES[0]);
+  const [aussieQuote] = useState(
+    () => pickRandom(AUSSIE_QUOTES) ?? AUSSIE_QUOTES[0],
+  );
 
   useEffect(() => {
     loadFavourites().then(setFavourites);
@@ -97,7 +141,7 @@ export default function FeedScreen() {
       setSelectedAnswer(index);
       setHasAnswered(true);
     },
-    [hasAnswered, quizQuestion]
+    [hasAnswered, quizQuestion],
   );
 
   const getAnswerStyle = useCallback(
@@ -110,15 +154,15 @@ export default function FeedScreen() {
       if (selectedAnswer === index) return styles.optionIncorrect;
       return null;
     },
-    [hasAnswered, selectedAnswer, quizQuestion]
+    [hasAnswered, selectedAnswer, quizQuestion],
   );
 
   const goToSlang = useCallback(() => {
-    router.push('/(tabs)/quotes');
+    router.push("/(tabs)/quotes");
   }, [router]);
 
   const goToQuiz = useCallback(() => {
-    router.push('/(tabs)/quiz');
+    router.push("/(tabs)/quiz");
   }, [router]);
 
   return (
@@ -154,7 +198,7 @@ export default function FeedScreen() {
             </View>
             <View style={styles.cardContent}>
               <Text style={[styles.slangTerm, { color: ACCENT_BLUE }]}>
-                {slangOfTheDay?.buttonTitle ?? 'Loading...'}
+                {slangOfTheDay?.buttonTitle ?? "Loading..."}
               </Text>
               <Text style={[styles.slangHint, { color: colors.icon }]}>
                 Tap to see full explanation →
@@ -196,7 +240,10 @@ export default function FeedScreen() {
                     key={index}
                     style={[
                       styles.optionButton,
-                      { borderColor: colors.icon + '40', backgroundColor: colors.background },
+                      {
+                        borderColor: colors.icon + "40",
+                        backgroundColor: colors.background,
+                      },
                       getAnswerStyle(index),
                     ]}
                     onPress={() => selectAnswer(index)}
@@ -207,11 +254,13 @@ export default function FeedScreen() {
                       style={[
                         styles.optionText,
                         { color: colors.text },
-                        getAnswerStyle(index) === styles.optionCorrect && styles.optionTextCorrect,
-                        getAnswerStyle(index) === styles.optionIncorrect && styles.optionTextIncorrect,
+                        getAnswerStyle(index) === styles.optionCorrect &&
+                          styles.optionTextCorrect,
+                        getAnswerStyle(index) === styles.optionIncorrect &&
+                          styles.optionTextIncorrect,
                       ]}
                     >
-                      {['A', 'B', 'C', 'D'][index]}. {answer}
+                      {["A", "B", "C", "D"][index]}. {answer}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -225,7 +274,7 @@ export default function FeedScreen() {
                     ]}
                   >
                     {isCorrect
-                      ? '✓ Correct!'
+                      ? "✓ Correct!"
                       : `✗ Wrong! The answer was: ${quizQuestion.correctAnswer}`}
                   </Text>
                 </View>
@@ -278,10 +327,10 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 20,
     padding: 20,
-    overflow: 'hidden',
+    overflow: "hidden",
     ...Platform.select({
       ios: {
-        shadowColor: '#000',
+        shadowColor: "#000",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 12,
@@ -293,50 +342,50 @@ const styles = StyleSheet.create({
     opacity: 0.95,
   },
   slangCard: {
-    backgroundColor: '#fffbe8',
+    backgroundColor: "#fffbe8",
   },
   quizCard: {
-    backgroundColor: '#e8ffe8',
+    backgroundColor: "#e8ffe8",
   },
   quoteCard: {
-    backgroundColor: '#e8f4ff',
+    backgroundColor: "#e8f4ff",
   },
   cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
     marginBottom: 14,
   },
   cardTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   cardContent: {
     marginBottom: 4,
   },
   slangTerm: {
     fontSize: 26,
-    fontWeight: '700',
-    textAlign: 'center',
+    fontWeight: "700",
+    textAlign: "center",
     marginBottom: 4,
   },
   slangHint: {
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 14,
   },
   quizQuestionText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 12,
     lineHeight: 22,
   },
   quizImage: {
-    width: '100%',
+    width: "100%",
     height: 180,
     borderRadius: 12,
     marginBottom: 12,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
   },
   optionsWrap: {
     gap: 10,
@@ -350,26 +399,26 @@ const styles = StyleSheet.create({
   },
   optionSelected: {
     borderColor: ACCENT_BLUE,
-    backgroundColor: 'rgba(10, 126, 164, 0.12)',
+    backgroundColor: "rgba(10, 126, 164, 0.12)",
   },
   optionCorrect: {
-    borderColor: '#4CAF50',
-    backgroundColor: '#e8f5e9',
+    borderColor: "#4CAF50",
+    backgroundColor: "#e8f5e9",
   },
   optionIncorrect: {
-    borderColor: '#f44336',
-    backgroundColor: '#ffebee',
+    borderColor: "#f44336",
+    backgroundColor: "#ffebee",
   },
   optionText: {
     fontSize: 15,
   },
   optionTextCorrect: {
-    fontWeight: '600',
-    color: '#2e7d32',
+    fontWeight: "600",
+    color: "#2e7d32",
   },
   optionTextIncorrect: {
-    fontWeight: '600',
-    color: '#c62828',
+    fontWeight: "600",
+    color: "#c62828",
   },
   resultWrap: {
     marginTop: 8,
@@ -377,35 +426,35 @@ const styles = StyleSheet.create({
   },
   resultText: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   correctMsg: {
-    color: '#4CAF50',
+    color: "#4CAF50",
   },
   incorrectMsg: {
-    color: '#f44336',
+    color: "#f44336",
   },
   quoteText: {
     fontSize: 17,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     lineHeight: 24,
     marginBottom: 8,
   },
   quoteAuthor: {
     fontSize: 15,
-    fontWeight: '600',
-    textAlign: 'right',
+    fontWeight: "600",
+    textAlign: "right",
   },
   actionButton: {
     backgroundColor: ACCENT_BLUE,
     paddingVertical: 14,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 8,
   },
   actionButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });
