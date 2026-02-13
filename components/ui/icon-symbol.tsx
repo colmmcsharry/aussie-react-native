@@ -21,6 +21,7 @@ const MAPPING = {
   'questionmark.circle.fill': 'quiz',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
+  'newspaper.fill': 'article',
 } as IconMapping;
 
 /**
