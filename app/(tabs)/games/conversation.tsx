@@ -150,13 +150,9 @@ function SwipeableCardStack({
             { width: CARD_WIDTH, height: CARD_WIDTH, transform: [{ scale: 0.96 }] },
           ]}
         >
-          <ScrollView
-            style={styles.cardScroll}
-            contentContainerStyle={styles.cardScrollContent}
-            showsVerticalScrollIndicator={false}
-          >
-            <QuestionText question={nextQuestion} />
-          </ScrollView>
+          <View style={styles.cardScroll} pointerEvents="none">
+            <QuestionText question={nextQuestion} numberOfLines={8} />
+          </View>
         </View>
       )}
       {/* Top card - swipeable */}
@@ -169,13 +165,9 @@ function SwipeableCardStack({
             topCardAnimatedStyle,
           ]}
         >
-          <ScrollView
-            style={styles.cardScroll}
-            contentContainerStyle={styles.cardScrollContent}
-            showsVerticalScrollIndicator={false}
-          >
-            <QuestionText question={currentQuestion} />
-          </ScrollView>
+          <View style={styles.cardScroll} pointerEvents="none">
+            <QuestionText question={currentQuestion} numberOfLines={8} />
+          </View>
           <View style={styles.swipeHint}>
             <Ionicons name="swap-horizontal" size={28} color="#9ca3af" />
             <Text style={styles.swipeHintText}>Swipe any direction</Text>
@@ -224,18 +216,18 @@ export default function ConversationGameScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: CONTENT_BG }]}>
-      <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Conversations</Text>
-        <View style={styles.headerRight} />
-      </View>
+      <TouchableOpacity
+        onPress={() => router.back()}
+        style={[styles.backBtnFloating, { top: insets.top + 8 }]}
+        hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+      >
+        <Ionicons name="arrow-back" size={24} color="#11181C" />
+      </TouchableOpacity>
 
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingBottom: insets.bottom + 24 },
+          { paddingTop: insets.top + 48, paddingBottom: insets.bottom + 24 },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -306,10 +298,20 @@ export default function ConversationGameScreen() {
   );
 }
 
-function QuestionText({ question }: { question: string }) {
+function QuestionText({
+  question,
+  numberOfLines,
+}: {
+  question: string;
+  numberOfLines?: number;
+}) {
   const parts = useHighlightedQuestion(question);
   return (
-    <Text style={styles.cardQuestion}>
+    <Text
+      style={styles.cardQuestion}
+      numberOfLines={numberOfLines}
+      ellipsizeMode="tail"
+    >
       {parts.map((p, i) =>
         p.highlight ? (
           <Text key={i} style={styles.cardQuestionHighlight}>
@@ -327,30 +329,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingBottom: 14,
-    backgroundColor: ACCENT_BLUE,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-  backBtn: {
+  backBtnFloating: {
+    position: 'absolute',
+    left: 16,
+    zIndex: 20,
     width: 44,
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: -8,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#fff',
-  },
-  headerRight: {
-    width: 44,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    borderRadius: 22,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: { elevation: 3 },
+    }),
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -418,11 +415,8 @@ const styles = StyleSheet.create({
   },
   cardScroll: {
     flex: 1,
-  },
-  cardScrollContent: {
-    flexGrow: 1,
     justifyContent: 'center',
-    paddingVertical: 8,
+    overflow: 'hidden',
   },
   cardBehind: {
     top: CARD_STACK_OFFSET * 2,
