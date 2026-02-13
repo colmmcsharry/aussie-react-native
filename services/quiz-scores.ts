@@ -41,7 +41,7 @@ export async function getAllScores(): Promise<Record<number, number>> {
 }
 
 export function getScoreColor(score: number): string {
-  if (score <= 4) return '#c64a4a';
-  if (score <= 7) return '#f5a623';
-  return '#28a428';
+  if (score <= 4) return 'rgb(198, 113, 113)';
+  if (score <= 7) return 'rgb(249, 195, 108)';
+  return 'rgb(106, 155, 115)';
 }

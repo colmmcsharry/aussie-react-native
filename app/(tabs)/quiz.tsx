@@ -59,7 +59,7 @@ export default function QuizMenuScreen() {
             <View
               style={[
                 styles.progressFill,
-                { width: `${progressPct}%`, backgroundColor: '#28a428' },
+                { width: `${progressPct}%`, backgroundColor: 'rgb(106, 155, 115)' },
               ]}
             />
           </View>

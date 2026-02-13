@@ -142,11 +142,15 @@ function ResultsView({
         >
           {score} / {totalQuestions}
         </Animated.Text>
-        <Image
-          source={resultCharacterImages[tier]}
-          style={styles.ratingCharacter}
-          contentFit="contain"
-        />
+        {tier === 'meh' ? (
+          <Text style={styles.ratingEmoji}>😐</Text>
+        ) : (
+          <Image
+            source={resultCharacterImages[tier]}
+            style={styles.ratingCharacter}
+            contentFit="contain"
+          />
+        )}
         <Image
           source={resultStampImages[stampKey]}
           style={styles.ratingStamp}
@@ -384,7 +388,7 @@ export default function QuizGameplay() {
                   styles.progressBarFill,
                   {
                     width: (showResults ? 1 : currentIndex / totalQuestions) * PROGRESS_BAR_WIDTH,
-                    backgroundColor: 'rgb(40, 164, 40)',
+                    backgroundColor: 'rgb(106, 155, 115)',
                   },
                 ]}
               />
@@ -588,6 +592,10 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: '800',
     marginBottom: 4,
+  },
+  ratingEmoji: {
+    fontSize: 64,
+    marginBottom: 8,
   },
   ratingCharacter: {
     width: 100,
