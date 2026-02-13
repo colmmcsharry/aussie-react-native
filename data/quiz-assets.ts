@@ -30,3 +30,19 @@ export const resultSounds = {
   decent: require('@/assets/audio/didgeridoo.m4a'),
   perfect: require('@/assets/audio/aussie-oi-chant.mp3'),
 };
+
+// Result character images (sad, meh, aussie man, aussie man gold)
+export const resultCharacterImages: Record<'sad' | 'meh' | 'good' | 'legend', number> = {
+  sad: require('@/assets/quiz-results/sad.png'),
+  meh: require('@/assets/quiz-results/meh.png'),
+  good: require('@/assets/quiz-results/aussieman.png'),
+  legend: require('@/assets/quiz-results/aussiemanGold.png'),
+};
+
+// Result stamp images (green badges: DRONGO, NOTBAD, GOOD ON YA / FAIR, LEGEND)
+export const resultStampImages: Record<'DRONGO' | 'NOTBAD' | 'FAIR' | 'legend', number> = {
+  DRONGO: require('@/assets/quiz-results/DRONGO.png'),
+  NOTBAD: require('@/assets/quiz-results/NOTBAD.png'),
+  FAIR: require('@/assets/quiz-results/FAIR.png'),
+  legend: require('@/assets/quiz-results/legend.png'),
+};

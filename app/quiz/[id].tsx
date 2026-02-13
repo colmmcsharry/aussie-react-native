@@ -30,7 +30,13 @@ import { createAudioPlayer, AudioPlayer } from 'expo-audio';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
 import { getQuiz, QuizQuestion } from '@/data/quiz-data';
-import { quizImageMap, quizAudioMap, resultSounds } from '@/data/quiz-assets';
+import {
+  quizImageMap,
+  quizAudioMap,
+  resultSounds,
+  resultCharacterImages,
+  resultStampImages,
+} from '@/data/quiz-assets';
 import { saveQuizScore, getScoreColor } from '@/services/quiz-scores';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -104,19 +110,22 @@ function ResultsView({
     };
   }, [score]);
 
-  const getRatingText = () => {
-    if (score < 5) return 'Drongo!';
-    if (score < 8) return 'Not Bad!';
-    if (score < 10) return 'Fair Dinkum!';
-    return 'Legend!';
+  const getRatingTier = (): 'sad' | 'meh' | 'good' | 'legend' => {
+    if (score < 5) return 'sad';
+    if (score < 8) return 'meh';
+    if (score < 10) return 'good';
+    return 'legend';
   };
 
-  const getRatingEmoji = () => {
-    if (score < 5) return '😢';
-    if (score < 8) return '😐';
-    if (score < 10) return '😊';
-    return '🏆';
+  const getStampKey = (): keyof typeof resultStampImages => {
+    if (score < 5) return 'DRONGO';
+    if (score < 8) return 'NOTBAD';
+    if (score < 10) return 'FAIR';
+    return 'legend';
   };
+
+  const tier = getRatingTier();
+  const stampKey = getStampKey();
 
   return (
     <Animated.View style={[styles.resultsContainer, { opacity: fadeAnim }]}>
@@ -133,15 +142,16 @@ function ResultsView({
         >
           {score} / {totalQuestions}
         </Animated.Text>
-        <Text style={styles.ratingEmoji}>{getRatingEmoji()}</Text>
-        <Text
-          style={[
-            styles.ratingText,
-            { color: getScoreColor(score) },
-          ]}
-        >
-          {getRatingText()}
-        </Text>
+        <Image
+          source={resultCharacterImages[tier]}
+          style={styles.ratingCharacter}
+          contentFit="contain"
+        />
+        <Image
+          source={resultStampImages[stampKey]}
+          style={styles.ratingStamp}
+          contentFit="contain"
+        />
       </View>
 
       {/* Review answers */}
@@ -579,13 +589,14 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginBottom: 4,
   },
-  ratingEmoji: {
-    fontSize: 64,
+  ratingCharacter: {
+    width: 100,
+    height: 100,
     marginBottom: 8,
   },
-  ratingText: {
-    fontSize: 24,
-    fontWeight: '800',
+  ratingStamp: {
+    width: 160,
+    height: 56,
   },
   reviewSection: {
     gap: 8,
