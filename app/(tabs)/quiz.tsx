@@ -85,12 +85,9 @@ export default function QuizMenuScreen() {
                 <Text style={[styles.quizName, { color: colors.text }]}>
                   {quiz.name}
                 </Text>
-                <Text style={[styles.quizCount, { color: colors.icon }]}>
-                  {quiz.questions.length} questions
-                </Text>
 
-                {/* Score badge */}
-                {hasScore && (
+                {/* Score badge or spacer (left of "X questions" so that text stays in same spot) */}
+                {hasScore ? (
                   <View
                     style={[
                       styles.scoreBadge,
@@ -101,7 +98,13 @@ export default function QuizMenuScreen() {
                       {score}/{quiz.questions.length}
                     </Text>
                   </View>
+                ) : (
+                  <View style={styles.scoreBadgePlaceholder} />
                 )}
+
+                <Text style={[styles.quizCount, { color: colors.icon }]}>
+                  {quiz.questions.length} questions
+                </Text>
 
                 <Ionicons
                   name="chevron-forward"
@@ -175,7 +178,7 @@ const styles = StyleSheet.create({
   },
   quizCount: {
     fontSize: 12,
-    marginRight: 12,
+    marginRight: 18,
   },
   scoreBadge: {
     width: 50,
@@ -183,7 +186,12 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
+    marginRight: 14,
+  },
+  scoreBadgePlaceholder: {
+    width: 50,
+    height: 50,
+    marginRight: 14,
   },
   scoreText: {
     color: '#fff',
@@ -191,6 +199,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   chevron: {
-    marginLeft: 4,
+    marginLeft: 10,
   },
 });
