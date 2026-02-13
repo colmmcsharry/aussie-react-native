@@ -37,6 +37,13 @@ import { teachers, TEACHER_KEYS } from '@/data/teachers';
 const LIST_THUMB_WIDTH = 160;
 const LIST_THUMB_HEIGHT = 120;
 
+function formatUploadDate(dateStr: string | undefined): string {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
 type LatestItem =
   | { type: 'youtube'; entry: YouTubeVideoEntry; sortKey: number }
   | { type: 'vimeo'; video: VimeoVideo; sortKey: number };
@@ -157,9 +164,9 @@ export default function VideosScreen() {
               </View>
               <View style={styles.info}>
                 <ThemedText style={styles.title} numberOfLines={2}>{entry.title}</ThemedText>
-                {entry.channelName ? (
+                {formatUploadDate(entry.date) ? (
                   <ThemedText style={[styles.meta, { color: subtextColor }]}>
-                    {entry.channelName}
+                    {formatUploadDate(entry.date)}
                   </ThemedText>
                 ) : null}
               </View>
@@ -189,9 +196,11 @@ export default function VideosScreen() {
             </View>
             <View style={styles.info}>
               <ThemedText style={styles.title} numberOfLines={2}>{video.name}</ThemedText>
-              <ThemedText style={[styles.meta, { color: subtextColor }]}>
-                {video.stats.plays} {video.stats.plays === 1 ? 'view' : 'views'}
-              </ThemedText>
+              {formatUploadDate(video.created_time) ? (
+                <ThemedText style={[styles.meta, { color: subtextColor }]}>
+                  {formatUploadDate(video.created_time)}
+                </ThemedText>
+              ) : null}
             </View>
           </Pressable>
         </View>
