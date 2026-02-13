@@ -8,6 +8,8 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+
+const CONTENT_BG = '#F0F4F8';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -231,7 +233,7 @@ export default function VideosScreen() {
   }
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={[styles.container, { backgroundColor: CONTENT_BG }]}>
       <TabHeader title="Videos" />
       <View style={styles.toggleRow}>
         <Pressable
@@ -367,7 +369,7 @@ export default function VideosScreen() {
           })}
         </ScrollView>
       )}
-    </ThemedView>
+    </View>
   );
 }
 

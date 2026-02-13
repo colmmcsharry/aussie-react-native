@@ -279,9 +279,10 @@ export default function QuotesScreen() {
     [favourites, handleToggleFav, colors]
   );
 
+  const containerBg = showGrid ? colors.background : '#F0F4F8';
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Green header — fixed height, left slot same width in all states */}
+    <View style={[styles.container, { backgroundColor: containerBg }]}>
+      {/* Blue header — fixed height, left slot same width in all states */}
       <View style={[styles.header, { paddingTop: insets.top + 8, backgroundColor: ACCENT_BLUE }]}>
         <View style={styles.headerRow}>
           <View style={styles.headerLeftSlot}>
