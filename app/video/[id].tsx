@@ -24,12 +24,13 @@ import { ThemedText } from '@/components/themed-text';
  *  - Proper viewport meta tag in the injected HTML.
  */
 export default function VideoPlayerScreen() {
-  const { id, title, embedUrl, isPortrait } = useLocalSearchParams<{
+  const { id, title, embedUrl, isPortrait, source } = useLocalSearchParams<{
     id: string;
     title: string;
     embedUrl: string;
-    duration: string;
+    duration?: string;
     isPortrait: string;
+    source?: string;
   }>();
 
   const router = useRouter();
@@ -144,7 +145,9 @@ export default function VideoPlayerScreen() {
       {/* Video info below the player */}
       <View style={[styles.infoSection, { paddingBottom: insets.bottom + 16 }]}>
         <ThemedText style={styles.infoTitle}>{title}</ThemedText>
-        <ThemedText style={styles.infoId}>vimeo.com/{id}</ThemedText>
+        <ThemedText style={styles.infoId}>
+          {source === 'youtube' ? `youtube.com/watch?v=${id}` : `vimeo.com/${id}`}
+        </ThemedText>
       </View>
     </View>
   );

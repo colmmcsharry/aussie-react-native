@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
   Pressable,
+  SectionList,
   StyleSheet,
   View,
 } from 'react-native';
@@ -15,6 +16,12 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import {
+  fetchAussieYouTubeVideos,
+  getYouTubeProxyEmbedUrl,
+  getYouTubeThumbnail,
+  type YouTubeVideoEntry,
+} from '@/services/youtube-gist';
+import {
   fetchProjectVideos,
   formatDuration,
   getEmbedUrl,
@@ -25,10 +32,14 @@ import {
 
 const THUMB_WIDTH = 108;
 const THUMB_HEIGHT = 192; // 9:16 ratio, 20% larger
+const YT_THUMB_HEIGHT = 120; // landscape thumbnail
+
+type VideoSection = { title: string; data: (YouTubeVideoEntry | VimeoVideo)[]; isYouTube: boolean };
 
 export default function VideosScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [youtubeVideos, setYoutubeVideos] = useState<YouTubeVideoEntry[]>([]);
   const [videos, setVideos] = useState<VimeoVideo[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -38,16 +49,18 @@ export default function VideosScreen() {
   const separatorColor = useThemeColor({ light: '#e8e8e8', dark: '#2a2a2a' }, 'icon');
 
   const loadVideos = useCallback(async () => {
-    try {
-      setError(null);
-      const response = await fetchProjectVideos(1, 50);
-      setVideos(response.data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load videos');
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
+    setError(null);
+    const [ytResult, vimeoResult] = await Promise.allSettled([
+      fetchAussieYouTubeVideos(),
+      fetchProjectVideos(1, 50),
+    ]);
+    if (ytResult.status === 'fulfilled') setYoutubeVideos(ytResult.value);
+    if (vimeoResult.status === 'fulfilled') setVideos(vimeoResult.value.data);
+    if (ytResult.status === 'rejected' && vimeoResult.status === 'rejected') {
+      setError(vimeoResult.reason?.message ?? 'Failed to load videos');
     }
+    setLoading(false);
+    setRefreshing(false);
   }, []);
 
   useEffect(() => {
@@ -76,21 +89,83 @@ export default function VideosScreen() {
     [router]
   );
 
-  const renderVideo = useCallback(
-    ({ item, index }: { item: VimeoVideo; index: number }) => {
+  const handleYouTubePress = useCallback(
+    (entry: YouTubeVideoEntry) => {
+      router.push({
+        pathname: '/video/[id]',
+        params: {
+          id: entry.youtubeId,
+          title: entry.title,
+          embedUrl: getYouTubeProxyEmbedUrl(entry.youtubeId, {
+            cc_load_policy: entry.cc_load_policy,
+          }),
+          isPortrait: '0',
+          source: 'youtube',
+        },
+      });
+    },
+    [router]
+  );
+
+  const sections = useMemo((): VideoSection[] => {
+    const s: VideoSection[] = [];
+    if (youtubeVideos.length > 0) {
+      s.push({ title: 'Aussie Slang (YouTube)', data: youtubeVideos, isYouTube: true });
+    }
+    if (videos.length > 0) {
+      s.push({ title: 'Videos', data: videos, isYouTube: false });
+    }
+    return s;
+  }, [youtubeVideos, videos]);
+
+  const renderYouTubeItem = useCallback(
+    ({ item }: { item: YouTubeVideoEntry }) => (
+      <Pressable
+        onPress={() => handleYouTubePress(item)}
+        style={({ pressed }) => [styles.row, styles.youtubeRow, { opacity: pressed ? 0.6 : 1 }]}
+      >
+        <View style={styles.ytThumbWrap}>
+          <Image
+            source={{ uri: getYouTubeThumbnail(item.youtubeId) }}
+            style={styles.ytThumb}
+            contentFit="cover"
+            transition={200}
+          />
+        </View>
+        <View style={styles.info}>
+          <ThemedText style={styles.title} numberOfLines={2}>
+            {item.title}
+          </ThemedText>
+          {item.description ? (
+            <ThemedText
+              style={[styles.description, { color: subtextColor }]}
+              numberOfLines={2}
+            >
+              {item.description}
+            </ThemedText>
+          ) : null}
+          {item.channelName ? (
+            <ThemedText style={[styles.meta, { color: subtextColor }]}>
+              {item.channelName}
+            </ThemedText>
+          ) : null}
+        </View>
+      </Pressable>
+    ),
+    [subtextColor, handleYouTubePress]
+  );
+
+  const renderVimeoItem = useCallback(
+    ({ item, index, section }: { item: VimeoVideo; index: number; section: VideoSection }) => {
+      const isLast = index === section.data.length - 1;
       const thumbnail = getThumbnail(item, 960);
       const duration = formatDuration(item.duration);
-      const isLast = index === videos.length - 1;
 
       return (
         <Pressable
           onPress={() => handleVideoPress(item)}
-          style={({ pressed }) => [
-            styles.row,
-            { opacity: pressed ? 0.6 : 1 },
-          ]}
+          style={({ pressed }) => [styles.row, { opacity: pressed ? 0.6 : 1 }]}
         >
-          {/* Portrait thumbnail */}
           <View style={styles.thumbWrap}>
             <Image
               source={{ uri: thumbnail }}
@@ -98,13 +173,10 @@ export default function VideosScreen() {
               contentFit="cover"
               transition={200}
             />
-            {/* Duration badge */}
             <View style={styles.durationBadge}>
               <ThemedText style={styles.durationText}>{duration}</ThemedText>
             </View>
           </View>
-
-          {/* Info */}
           <View style={styles.info}>
             <ThemedText style={styles.title} numberOfLines={2}>
               {item.name}
@@ -121,8 +193,6 @@ export default function VideosScreen() {
               {item.stats.plays} {item.stats.plays === 1 ? 'view' : 'views'}
             </ThemedText>
           </View>
-
-          {/* Separator */}
           {!isLast && (
             <View
               style={[styles.separator, { backgroundColor: separatorColor }]}
@@ -131,7 +201,17 @@ export default function VideosScreen() {
         </Pressable>
       );
     },
-    [subtextColor, separatorColor, handleVideoPress, videos.length]
+    [subtextColor, separatorColor, handleVideoPress]
+  );
+
+  const renderItem = useCallback(
+    ({ item, index, section }: { item: YouTubeVideoEntry | VimeoVideo; index: number; section: VideoSection }) => {
+      if (section.isYouTube) {
+        return renderYouTubeItem({ item: item as YouTubeVideoEntry });
+      }
+      return renderVimeoItem({ item: item as VimeoVideo, index, section });
+    },
+    [renderYouTubeItem, renderVimeoItem]
   );
 
   if (loading) {
@@ -143,12 +223,12 @@ export default function VideosScreen() {
     );
   }
 
-  if (error) {
+  if (error && youtubeVideos.length === 0 && videos.length === 0) {
     return (
       <ThemedView style={styles.centered}>
         <ThemedText style={styles.errorTitle}>Something went wrong</ThemedText>
         <ThemedText style={styles.errorDetail}>{error}</ThemedText>
-        <Pressable style={styles.retryButton} onPress={loadVideos}>
+        <Pressable style={styles.retryButton} onPress={() => { setLoading(true); loadVideos(); }}>
           <ThemedText style={styles.retryText}>Try Again</ThemedText>
         </Pressable>
       </ThemedView>
@@ -158,19 +238,41 @@ export default function VideosScreen() {
   return (
     <ThemedView style={styles.container}>
       <TabHeader title="Videos" />
-      <FlatList
-        data={videos}
-        renderItem={renderVideo}
-        keyExtractor={(item) => getVideoId(item)}
+      <SectionList
+        sections={sections}
+        keyExtractor={(item) =>
+          'youtubeId' in item
+            ? (item as YouTubeVideoEntry).youtubeId
+            : getVideoId(item as VimeoVideo)
+        }
+        renderItem={renderItem}
+        renderSectionHeader={({ section }) => (
+          <View
+            style={[
+              styles.sectionHeader,
+              sections[0] === section && styles.sectionHeaderFirst,
+            ]}
+          >
+            <ThemedText style={[styles.sectionTitle, { color: subtextColor }]}>
+              {section.title}
+            </ThemedText>
+            <ThemedText style={[styles.sectionCount, { color: subtextColor }]}>
+              {section.data.length} {section.data.length === 1 ? 'video' : 'videos'}
+            </ThemedText>
+          </View>
+        )}
         contentContainerStyle={[
           styles.listContent,
           { paddingTop: 16, paddingBottom: insets.bottom + 90 },
         ]}
-        ListHeaderComponent={
-          <ThemedText style={[styles.headerSubtitle, { color: subtextColor }]}>
-            {videos.length} {videos.length === 1 ? 'video' : 'videos'}
-          </ThemedText>
+        ListEmptyComponent={
+          !loading ? (
+            <ThemedText style={[styles.headerSubtitle, { color: subtextColor }]}>
+              No videos yet.
+            </ThemedText>
+          ) : null
         }
+        stickySectionHeadersEnabled={false}
         refreshing={refreshing}
         onRefresh={handleRefresh}
         showsVerticalScrollIndicator={false}
@@ -223,6 +325,23 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 16,
   },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    marginBottom: 8,
+    marginTop: 16,
+  },
+  sectionHeaderFirst: {
+    marginTop: 0,
+  },
+  sectionTitle: {
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  sectionCount: {
+    fontSize: 13,
+  },
 
   /* ---- Row ---- */
   row: {
@@ -240,6 +359,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#1a1a1a',
   },
   thumb: {
+    width: '100%',
+    height: '100%',
+  },
+  youtubeRow: {
+    marginBottom: 4,
+  },
+  ytThumbWrap: {
+    width: 160,
+    height: YT_THUMB_HEIGHT,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#1a1a1a',
+  },
+  ytThumb: {
     width: '100%',
     height: '100%',
   },

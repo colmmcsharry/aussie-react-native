@@ -24,6 +24,7 @@ import { loadFavourites, toggleFavourite } from '@/services/favourites';
 
 const ACCENT_BLUE = '#194F89'; // Australian blue
 
+// Matches slang-src/pages/feed.vue aussieQuotes (full text, no abbreviations)
 const AUSSIE_QUOTES: { text: string; author: string }[] = [
   { text: "She'll be right, mate.", author: 'Australian Proverb' },
   { text: "We're not here for a long time, we're here for a good time.", author: 'Australian Saying' },
@@ -32,13 +33,14 @@ const AUSSIE_QUOTES: { text: string; author: string }[] = [
   { text: "I spend my time improving the things I can change, not worrying about the things I can't.", author: 'Melanie Perkins' },
   { text: 'The world is changing very fast. Big will not beat small anymore. It will be the fast beating the slow.', author: 'Rupert Murdoch' },
   { text: 'God Bless America. God Save The Queen. God defend New Zealand and thank Christ for Australia.', author: 'Russell Crowe' },
-  { text: "There's an expression in Australia that's called 'Go Bush,' which means to get out of the city and relax.", author: 'Cate Blanchett' },
+  { text: "There's an expression in Australia that's called 'Go Bush,' which means to get out of the city and relax. I try and 'go bush' to places where there's no cell reception. But, I don't get to do that often, so for the most part, it's just a state of mind.", author: 'Cate Blanchett' },
   { text: "You know what happens when you don't take a risk? Nothing.", author: 'Mel Gibson' },
   { text: "People who say, 'There's nothing to fear from spiders' have clearly never been to Australia.", author: 'Cate Blanchett' },
   { text: "Even the Australians don't know how beautiful their own country is.", author: 'Brian Cox' },
   { text: "Australia is an outdoor country. People only go inside to use the toilet. And that's only a recent development.", author: 'Barry Humphries' },
-  { text: "If you're an Australian, you're born with the knowledge that everything is trying to kill you.", author: 'Anonymous' },
+  { text: "If you're an Australian, you're born with the knowledge that everything is trying to kill you. The snakes, the spiders, the sharks... even the plants have a go.", author: 'AnonymousAustralian' },
   { text: "I'm a bit like a shark. I just keep moving. If I stop, I'll die.", author: 'Crocodile Dundee' },
+  { text: "Australia is a nation of 23 million people, mostly of whom live in a narrow strip of land along the coast and spend their time trying to convince the rest of the world that they live in the Outback.", author: 'Bill Bryson' },
   { text: "Tall poppies get cut down.", author: 'Australian Proverb' },
   { text: "If you're not having fun, you're doing it wrong.", author: 'Australian Saying' },
 ];
