@@ -216,7 +216,7 @@ function ResultsView({
 
       {/* Back button */}
       <TouchableOpacity
-        style={styles.backToQuizzesBtn}
+        style={[styles.backToQuizzesBtn, { backgroundColor: colors.tint }]}
         onPress={onBack}
         activeOpacity={0.7}
       >
@@ -656,7 +656,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   backToQuizzesBtn: {
-    backgroundColor: '#28a428',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
