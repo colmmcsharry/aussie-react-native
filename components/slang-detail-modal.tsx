@@ -259,6 +259,7 @@ const styles = StyleSheet.create({
     borderRadius: 29,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.06)',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -266,14 +267,18 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.15,
         shadowRadius: 3,
       },
-      android: { elevation: 3 },
+      android: {
+        elevation: 0,
+        borderWidth: 1,
+        borderColor: 'rgba(0,0,0,0.08)',
+      },
     }),
   },
   actionBtnPressed: {
     transform: [{ scale: 0.92 }],
     ...Platform.select({
       ios: { shadowOpacity: 0.06, shadowRadius: 1 },
-      android: { elevation: 1 },
+      android: {},
     }),
   },
   actionBtnActive: {

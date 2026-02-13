@@ -30,9 +30,8 @@ import {
   type VimeoVideo,
 } from '@/services/vimeo';
 
-const THUMB_WIDTH = 108;
-const THUMB_HEIGHT = 192; // 9:16 ratio, 20% larger
-const YT_THUMB_HEIGHT = 120; // landscape thumbnail
+const LIST_THUMB_WIDTH = 160;
+const LIST_THUMB_HEIGHT = 120; // landscape, same as YouTube so Vimeo thumbnails fill without black bars
 
 type VideoSection = { title: string; data: (YouTubeVideoEntry | VimeoVideo)[]; isYouTube: boolean };
 
@@ -124,10 +123,10 @@ export default function VideosScreen() {
         onPress={() => handleYouTubePress(item)}
         style={({ pressed }) => [styles.row, styles.youtubeRow, { opacity: pressed ? 0.6 : 1 }]}
       >
-        <View style={styles.ytThumbWrap}>
+        <View style={styles.listThumbWrap}>
           <Image
             source={{ uri: getYouTubeThumbnail(item.youtubeId) }}
-            style={styles.ytThumb}
+            style={styles.listThumb}
             contentFit="cover"
             transition={200}
           />
@@ -166,10 +165,10 @@ export default function VideosScreen() {
           onPress={() => handleVideoPress(item)}
           style={({ pressed }) => [styles.row, { opacity: pressed ? 0.6 : 1 }]}
         >
-          <View style={styles.thumbWrap}>
+          <View style={styles.listThumbWrap}>
             <Image
               source={{ uri: thumbnail }}
-              style={styles.thumb}
+              style={styles.listThumb}
               contentFit="cover"
               transition={200}
             />
@@ -351,30 +350,19 @@ const styles = StyleSheet.create({
   },
 
   /* ---- Thumbnail ---- */
-  thumbWrap: {
-    width: THUMB_WIDTH,
-    height: THUMB_HEIGHT,
+  listThumbWrap: {
+    width: LIST_THUMB_WIDTH,
+    height: LIST_THUMB_HEIGHT,
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#1a1a1a',
   },
-  thumb: {
+  listThumb: {
     width: '100%',
     height: '100%',
   },
   youtubeRow: {
     marginBottom: 4,
-  },
-  ytThumbWrap: {
-    width: 160,
-    height: YT_THUMB_HEIGHT,
-    borderRadius: 10,
-    overflow: 'hidden',
-    backgroundColor: '#1a1a1a',
-  },
-  ytThumb: {
-    width: '100%',
-    height: '100%',
   },
   durationBadge: {
     position: 'absolute',
@@ -416,7 +404,7 @@ const styles = StyleSheet.create({
   separator: {
     position: 'absolute',
     bottom: 0,
-    left: THUMB_WIDTH + 14, // aligns with the text column
+    left: LIST_THUMB_WIDTH + 14,
     right: 0,
     height: StyleSheet.hairlineWidth,
   },
