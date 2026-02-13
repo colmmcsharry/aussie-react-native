@@ -354,6 +354,12 @@ export default function VideosScreen() {
                     >
                       {profile.bio}
                     </ThemedText>
+                    <View style={styles.teacherVideosRow}>
+                      <ThemedText style={styles.teacherVideosCount}>
+                        {teacherVideos.length + (profile.youtubeVideos?.length ?? 0)} video{(teacherVideos.length + (profile.youtubeVideos?.length ?? 0)) === 1 ? '' : 's'}
+                      </ThemedText>
+                      <Ionicons name="chevron-forward" size={20} color="#194F89" />
+                    </View>
                   </View>
                 </View>
               </Pressable>
@@ -466,5 +472,15 @@ const styles = StyleSheet.create({
   teacherName: { fontSize: 18, fontWeight: '700', marginBottom: 6 },
   socialsRow: { flexDirection: 'row', gap: 8, marginBottom: 6 },
   socialBtn: { padding: 2 },
-  teacherBio: { fontSize: 14, lineHeight: 20 },
+  teacherBio: { fontSize: 14, lineHeight: 20, marginBottom: 8 },
+  teacherVideosRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  teacherVideosCount: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#194F89',
+  },
 });

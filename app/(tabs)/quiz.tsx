@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     paddingVertical: 18,
     paddingHorizontal: 16,
+    minHeight: 86,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
