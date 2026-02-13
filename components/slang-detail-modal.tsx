@@ -54,7 +54,7 @@ export function SlangDetailModal({
       setPlayingSlow(false);
       setPlaying(true);
       playAudio(entry.audioFile);
-      setTimeout(() => setPlaying(false), 3000);
+      setTimeout(() => setPlaying(false), 1000);
     }
   }, [entry, playing]);
 
