@@ -168,7 +168,7 @@ export default function VideosScreen() {
           <View style={styles.listThumbWrap}>
             <Image
               source={{ uri: thumbnail }}
-              style={styles.listThumb}
+              style={[styles.listThumb, styles.vimeoThumbZoom]}
               contentFit="cover"
               transition={200}
             />
@@ -360,6 +360,14 @@ const styles = StyleSheet.create({
   listThumb: {
     width: '100%',
     height: '100%',
+  },
+  /** Zoom Vimeo thumbnails so baked-in black bars are cropped; container clips with overflow: hidden */
+  vimeoThumbZoom: {
+    position: 'absolute',
+    width: LIST_THUMB_WIDTH * 2.4,
+    height: LIST_THUMB_HEIGHT * 2.4,
+    left: (LIST_THUMB_WIDTH - LIST_THUMB_WIDTH * 2.4) / 2,
+    top: (LIST_THUMB_HEIGHT - LIST_THUMB_HEIGHT * 2.4) / 2,
   },
   youtubeRow: {
     marginBottom: 4,
