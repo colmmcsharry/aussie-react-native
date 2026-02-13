@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     paddingVertical: 18,
     paddingHorizontal: 16,
+    overflow: 'hidden',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -160,7 +161,9 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
       },
       android: {
-        elevation: 1,
+        elevation: 0,
+        borderWidth: 1,
+        borderColor: 'rgba(0,0,0,0.06)',
       },
     }),
   },

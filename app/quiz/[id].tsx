@@ -558,6 +558,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 24,
     marginBottom: 20,
+    overflow: 'hidden',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -592,6 +593,7 @@ const styles = StyleSheet.create({
   reviewCard: {
     borderRadius: 14,
     padding: 14,
+    overflow: 'hidden',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
