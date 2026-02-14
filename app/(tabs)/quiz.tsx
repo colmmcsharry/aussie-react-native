@@ -49,7 +49,7 @@ export default function QuizMenuScreen() {
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingTop: 16, paddingBottom: insets.bottom + 90 },
+          { paddingTop: 28, paddingBottom: insets.bottom + 90 },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -130,7 +130,8 @@ const styles = StyleSheet.create({
   },
   progressSection: {
     alignItems: 'center',
-    marginBottom: 24,
+    marginTop: 8,
+    marginBottom: 28,
   },
   progressBar: {
     width: 200,
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   quizGrid: {
-    gap: 12,
+    gap: 20,
   },
   quizButton: {
     flexDirection: 'row',
