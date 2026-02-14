@@ -40,11 +40,11 @@ function shuffleArray<T>(arr: T[]): T[] {
 // Actual device readings (phone on forehead, portrait locked):
 //   Neutral:         gamma ≈ -90°
 //   Tilt UP (skip):  gamma goes from -90 toward -2  → detect in (-50, -10)
-//   Tilt DOWN (point): gamma goes from -90 toward -180 → trigger around -120
-const SKIP_GAMMA_MIN = -50;
-const SKIP_GAMMA_MAX = -10;
-const POINT_GAMMA_MIN = -140;
-const POINT_GAMMA_MAX = -100;
+//   Tilt DOWN (point): gamma goes from -90 toward -180 → trigger a bit further (-135ish) to avoid accidental lean
+const SKIP_GAMMA_MIN = -58;
+const SKIP_GAMMA_MAX = -15;
+const POINT_GAMMA_MIN = -165;
+const POINT_GAMMA_MAX = -125;
 const DEBOUNCE_MS = 800;
 
 export default function HeadsUpGameScreen() {
