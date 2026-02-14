@@ -16,6 +16,12 @@ const GAMES = [
     description: 'Choose from a list of topics and discuss',
     icon: 'chatbubbles' as const,
   },
+  {
+    id: 'neverever',
+    title: 'Never Have I Ever…',
+    description: 'Read the card aloud — whoever has done it, drinks!',
+    icon: 'beer' as const,
+  },
 ];
 
 export default function GamesScreen() {

@@ -10,6 +10,12 @@ export default function GamesLayout() {
           animation: 'slide_from_right',
         }}
       />
+      <Stack.Screen
+        name="neverever"
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
     </Stack>
   );
 }
