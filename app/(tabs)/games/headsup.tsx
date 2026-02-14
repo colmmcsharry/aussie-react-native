@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   TouchableOpacity,
   Pressable,
@@ -235,7 +236,7 @@ export default function HeadsUpGameScreen() {
           setGameStarted(false);
           return 0;
         }
-        if (t === 5) playClockTicking(0.5);
+        if (t === 6) playClockTicking(0.5);
         return t - 1;
       });
     }, 1000);
@@ -452,12 +453,12 @@ export default function HeadsUpGameScreen() {
 
             {showFeedback === 'correct' && (
               <View style={styles.feedbackOverlay}>
-                <Ionicons name="checkmark-circle" size={120} color="#4CAF50" />
+                <Image source={require('@/assets/check-mark.png')} style={styles.feedbackImage} resizeMode="contain" />
               </View>
             )}
             {showFeedback === 'skip' && (
               <View style={[styles.feedbackOverlay, styles.feedbackSkip]}>
-                <Ionicons name="close-circle" size={120} color="#c64a4a" />
+                <Image source={require('@/assets/xmark.png')} style={styles.feedbackImage} resizeMode="contain" />
               </View>
             )}
 
@@ -517,7 +518,8 @@ export default function HeadsUpGameScreen() {
             </View>
           </View>
           <TouchableOpacity onPress={backToMenu} style={styles.backToMenuBtn}>
-            <Text style={styles.backToMenuText}>Play again</Text>
+            <Ionicons name="arrow-back" size={22} color="#fff" style={styles.backToMenuIcon} />
+            <Text style={styles.backToMenuText}>Go back</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -598,6 +600,10 @@ const styles = StyleSheet.create({
   },
   feedbackSkip: {
     backgroundColor: 'rgba(198, 74, 74, 0.4)',
+  },
+  feedbackImage: {
+    width: 200,
+    height: 200,
   },
   menuWrapper: {
     width: '100%',
@@ -821,7 +827,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   resultTitle: {
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: '700',
     color: 'rgb(28, 149, 83)',
     marginBottom: 8,
@@ -835,11 +841,16 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   backToMenuBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: ACCENT_BLUE,
     paddingVertical: 14,
     borderRadius: 12,
-    alignItems: 'center',
     marginTop: 8,
+  },
+  backToMenuIcon: {
+    marginRight: 8,
   },
   backToMenuText: {
     color: '#fff',
