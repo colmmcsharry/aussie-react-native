@@ -1,10 +1,27 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+
+function createTabButton(path: string) {
+  return function TabButton(
+    props: React.ComponentProps<typeof HapticTab>,
+  ) {
+    const router = useRouter();
+    return (
+      <HapticTab
+        {...props}
+        onPress={() => {
+          router.replace(path as any);
+          props.onPress?.();
+        }}
+      />
+    );
+  };
+}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -14,13 +31,13 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Feed',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="newspaper.fill" color={color} />,
+          tabBarButton: createTabButton('/'),
         }}
       />
       <Tabs.Screen
@@ -28,6 +45,7 @@ export default function TabLayout() {
         options={{
           title: 'Slang',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="text.book.closed.fill" color={color} />,
+          tabBarButton: createTabButton('/quotes'),
         }}
       />
       <Tabs.Screen
@@ -35,6 +53,7 @@ export default function TabLayout() {
         options={{
           title: 'Quiz',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="questionmark.circle.fill" color={color} />,
+          tabBarButton: createTabButton('/quiz'),
         }}
       />
       <Tabs.Screen
@@ -42,6 +61,7 @@ export default function TabLayout() {
         options={{
           title: 'Videos',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="play.rectangle.fill" color={color} />,
+          tabBarButton: createTabButton('/videos'),
         }}
       />
       <Tabs.Screen
@@ -49,6 +69,7 @@ export default function TabLayout() {
         options={{
           title: 'Games',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="gamecontroller.fill" color={color} />,
+          tabBarButton: createTabButton('/games'),
         }}
       />
       <Tabs.Screen
@@ -56,6 +77,7 @@ export default function TabLayout() {
         options={{
           title: 'Explore',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarButton: createTabButton('/explore'),
         }}
       />
     </Tabs>

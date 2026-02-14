@@ -10,6 +10,7 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -238,6 +239,16 @@ export default function QuotesScreen() {
   const [showSearch, setShowSearch] = useState(false);
   const [favourites, setFavourites] = useState<Set<string>>(new Set());
   const [showFavsOnly, setShowFavsOnly] = useState(false);
+
+  // When user taps Slang tab, reset to main categories view
+  useFocusEffect(
+    useCallback(() => {
+      setSelectedCategory(null);
+      setSearchQuery('');
+      setShowSearch(false);
+      setShowFavsOnly(false);
+    }, [])
+  );
 
   useEffect(() => {
     loadFavourites().then(setFavourites);

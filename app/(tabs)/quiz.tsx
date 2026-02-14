@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -32,11 +32,13 @@ export default function QuizMenuScreen() {
   const router = useRouter();
 
   const [scores, setScores] = useState<Record<number, number>>({});
+  const scrollRef = useRef<ScrollView>(null);
 
-  // Refresh scores when screen gains focus (e.g. after completing a quiz)
+  // When tab is focused: refresh scores and scroll to top
   useFocusEffect(
     useCallback(() => {
       getAllScores().then(setScores);
+      scrollRef.current?.scrollTo({ y: 0, animated: false });
     }, [])
   );
 
@@ -47,6 +49,7 @@ export default function QuizMenuScreen() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <TabHeader title="Quiz" />
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={[
           styles.scrollContent,
           { paddingTop: 28, paddingBottom: insets.bottom + 90 },

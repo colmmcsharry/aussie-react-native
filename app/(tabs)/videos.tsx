@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -8,6 +8,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CONTENT_BG = '#F0F4F8';
 import { Image } from 'expo-image';
@@ -59,6 +60,14 @@ export default function VideosScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const listRef = useRef<FlatList<LatestItem> | null>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      setViewMode('latest');
+      listRef.current?.scrollToOffset({ offset: 0, animated: false });
+    }, [])
+  );
 
   const subtextColor = useThemeColor({ light: '#687076', dark: '#9BA1A6' }, 'icon');
 
@@ -256,6 +265,7 @@ export default function VideosScreen() {
 
       {viewMode === 'latest' ? (
         <FlatList
+          ref={listRef}
           data={latestList}
           keyExtractor={(item) =>
             item.type === 'youtube' ? item.entry.youtubeId : getVideoId(item.video)

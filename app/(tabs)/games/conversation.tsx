@@ -255,7 +255,7 @@ export default function ConversationGameScreen() {
   return (
     <View style={[styles.container, { backgroundColor: CONTENT_BG }]}>
       <TouchableOpacity
-        onPress={() => router.back()}
+        onPress={() => router.replace('/games')}
         style={[styles.backBtnFloating, { top: insets.top + 12 }]}
         hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
       >
