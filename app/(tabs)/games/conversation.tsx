@@ -18,6 +18,7 @@ import Animated, {
   runOnJS,
   Easing,
 } from 'react-native-reanimated';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -31,6 +32,8 @@ import {
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = Math.min(SCREEN_WIDTH - 32, 400);
+const CARD_EXTRA_HEIGHT = 110;
+const CARD_HEIGHT = CARD_WIDTH + CARD_EXTRA_HEIGHT;
 const CARD_STACK_OFFSET = 10;
 const SWIPE_THRESHOLD = 80;
 const ROTATION_FACTOR = 0.12;
@@ -45,6 +48,18 @@ function shuffleArray<T>(array: T[]): T[] {
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
+}
+
+/** Splits "Question text (word = definition)" into main text and explanation for bottom of card */
+function parseQuestion(question: string): { mainText: string; explanation: string | null } {
+  const m = question.match(/\s*\(([^)]+)\)\s*$/);
+  if (m) {
+    return {
+      mainText: question.slice(0, question.length - m[0].length).trim(),
+      explanation: '(' + m[1] + ')',
+    };
+  }
+  return { mainText: question, explanation: null };
 }
 
 function useHighlightedQuestion(question: string) {
@@ -79,10 +94,14 @@ function SwipeableCardStack({
   currentQuestion,
   nextQuestion,
   onSwipe,
+  usedCount,
+  remainingCount,
 }: {
   currentQuestion: string;
   nextQuestion: string | null;
   onSwipe: () => void;
+  usedCount: number;
+  remainingCount: number;
 }) {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
@@ -147,11 +166,11 @@ function SwipeableCardStack({
           style={[
             styles.card,
             styles.cardBehind,
-            { width: CARD_WIDTH, height: CARD_WIDTH, transform: [{ scale: 0.96 }] },
+            { width: CARD_WIDTH, height: CARD_HEIGHT, transform: [{ scale: 0.96 }] },
           ]}
         >
           <View style={styles.cardScroll} pointerEvents="none">
-            <QuestionText question={nextQuestion} numberOfLines={8} />
+            <CardQuestionContent question={nextQuestion} />
           </View>
         </View>
       )}
@@ -161,16 +180,35 @@ function SwipeableCardStack({
           style={[
             styles.card,
             styles.cardTop,
-            { width: CARD_WIDTH, height: CARD_WIDTH },
+            { width: CARD_WIDTH, height: CARD_HEIGHT },
             topCardAnimatedStyle,
           ]}
         >
           <View style={styles.cardScroll} pointerEvents="none">
-            <QuestionText question={currentQuestion} numberOfLines={8} />
+            <CardQuestionContent question={currentQuestion} />
+          </View>
+          <View style={styles.cardFooter}>
+            <View style={styles.statsRow}>
+              <Text style={styles.statsText}>
+                cards used: <Text style={styles.statsUsed}>{usedCount}</Text>
+                {' '}| remaining:{' '}
+                <Text style={styles.statsLeft}>{remainingCount}</Text>
+              </Text>
+            </View>
+            <Pressable
+              style={styles.nextBtn}
+              onPress={onSwipe}
+              android_ripple={undefined}
+            >
+              <Text style={styles.nextBtnText}>🎲 Next</Text>
+            </Pressable>
           </View>
           <View style={styles.swipeHint}>
-            <Ionicons name="swap-horizontal" size={28} color="#9ca3af" />
-            <Text style={styles.swipeHintText}>Swipe any direction</Text>
+            <Image
+              source={require('@/assets/swipe.png')}
+              style={styles.swipeImage}
+              contentFit="contain"
+            />
           </View>
         </Animated.View>
       </GestureDetector>
@@ -218,7 +256,7 @@ export default function ConversationGameScreen() {
     <View style={[styles.container, { backgroundColor: CONTENT_BG }]}>
       <TouchableOpacity
         onPress={() => router.back()}
-        style={[styles.backBtnFloating, { top: insets.top + 8 }]}
+        style={[styles.backBtnFloating, { top: insets.top + 12 }]}
         hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
       >
         <Ionicons name="arrow-back" size={24} color="#11181C" />
@@ -227,7 +265,7 @@ export default function ConversationGameScreen() {
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingTop: insets.top + 48, paddingBottom: insets.bottom + 24 },
+          { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 24 },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -270,29 +308,11 @@ export default function ConversationGameScreen() {
               currentQuestion={currentQuestion!}
               nextQuestion={shuffledPool[currentIndex + 1] ?? null}
               onSwipe={goNext}
+              usedCount={usedCount}
+              remainingCount={remainingCount}
             />
           ) : null}
         </View>
-
-        {shuffledPool.length > 0 && (
-          <View style={styles.statsRow}>
-            <Text style={styles.statsText}>
-              cards used: <Text style={styles.statsUsed}>{usedCount}</Text>
-              {' '}| remaining:{' '}
-              <Text style={styles.statsLeft}>{remainingCount}</Text>
-            </Text>
-          </View>
-        )}
-
-        {currentQuestion && (
-          <Pressable
-            style={styles.nextBtn}
-            onPress={goNext}
-            android_ripple={undefined}
-          >
-            <Text style={styles.nextBtnText}>🎲 Next</Text>
-          </Pressable>
-        )}
       </ScrollView>
     </View>
   );
@@ -322,6 +342,22 @@ function QuestionText({
         )
       )}
     </Text>
+  );
+}
+
+function CardQuestionContent({ question }: { question: string }) {
+  const { mainText, explanation } = parseQuestion(question);
+  return (
+    <>
+      <View style={styles.cardMainTextWrap}>
+        <QuestionText question={mainText} numberOfLines={8} />
+      </View>
+      {explanation != null && (
+        <Text style={styles.cardExplanation} numberOfLines={1} ellipsizeMode="tail">
+          {explanation}
+        </Text>
+      )}
+    </>
   );
 }
 
@@ -357,14 +393,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#687076',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   topicWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     gap: 10,
-    marginBottom: 28,
+    marginBottom: 18,
   },
   topicBtn: {
     paddingVertical: 8,
@@ -390,13 +426,13 @@ const styles = StyleSheet.create({
   },
   cardStackContainer: {
     position: 'relative',
-    minHeight: CARD_WIDTH + 24,
+    minHeight: CARD_HEIGHT + 24,
     alignItems: 'center',
   },
   card: {
     position: 'absolute',
     width: CARD_WIDTH,
-    height: CARD_WIDTH,
+    height: CARD_HEIGHT,
     backgroundColor: '#fff',
     borderRadius: 16,
     padding: 24,
@@ -415,8 +451,20 @@ const styles = StyleSheet.create({
   },
   cardScroll: {
     flex: 1,
-    justifyContent: 'center',
     overflow: 'hidden',
+    marginTop: 16,
+  },
+  cardMainTextWrap: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  cardExplanation: {
+    fontSize: 14,
+    color: '#6b8fd4',
+    textAlign: 'center',
+    paddingTop: 12,
+    paddingBottom: 16,
+    paddingHorizontal: 16,
   },
   cardBehind: {
     top: CARD_STACK_OFFSET * 2,
@@ -424,21 +472,25 @@ const styles = StyleSheet.create({
   cardTop: {
     top: 0,
   },
+  cardFooter: {
+    paddingTop: 24,
+    gap: 18,
+  },
   swipeHint: {
     alignItems: 'center',
-    paddingTop: 8,
-    gap: 6,
+    justifyContent: 'center',
+    paddingTop: 24,
+    paddingBottom: 12,
   },
-  swipeHintText: {
-    fontSize: 12,
-    color: '#9ca3af',
-    fontWeight: '600',
+  swipeImage: {
+    width: 80,
+    height: 40,
   },
   cardQuestion: {
-    fontSize: 18,
+    fontSize: 21,
     fontWeight: '700',
     color: '#11181C',
-    lineHeight: 26,
+    lineHeight: 30,
     textAlign: 'center',
   },
   cardQuestionHighlight: {
@@ -454,7 +506,7 @@ const styles = StyleSheet.create({
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 16,
+    paddingVertical: 4,
   },
   statsText: {
     fontSize: 14,
@@ -470,10 +522,9 @@ const styles = StyleSheet.create({
   },
   nextBtn: {
     alignSelf: 'center',
-    marginTop: 24,
     backgroundColor: ACCENT_BLUE,
-    paddingVertical: 14,
-    paddingHorizontal: 32,
+    paddingVertical: 12,
+    paddingHorizontal: 28,
     borderRadius: 12,
   },
   nextBtnText: {
