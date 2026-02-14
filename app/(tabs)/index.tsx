@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 16,
-    paddingTop: 16,
+    paddingTop: 24,
     gap: 20,
   },
   card: {

@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 16,
     padding: 18,
-    marginBottom: 14,
+    marginBottom: 18,
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.06)',
     ...Platform.select({
