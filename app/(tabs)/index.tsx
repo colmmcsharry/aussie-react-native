@@ -1,8 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Image } from "expo-image";
 import { useFocusEffect } from "@react-navigation/native";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Platform,
   Pressable,
@@ -22,6 +28,13 @@ import { quizzes, type QuizQuestion } from "@/data/quiz-data";
 import { getCategories } from "@/data/slang";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { loadFavourites, toggleFavourite } from "@/services/favourites";
+import {
+  fetchAussieYouTubeVideos,
+  getYouTubeProxyEmbedUrl,
+  getYouTubeThumbnail,
+  type YouTubeVideoEntry,
+} from "@/services/youtube-gist";
+import { getSortableTimestamp } from "@/utils/date";
 
 const ACCENT_BLUE = "#194F89"; // Australian blue
 
@@ -71,7 +84,7 @@ const AUSSIE_QUOTES: { text: string; author: string }[] = [
   },
   {
     text: "If you're an Australian, you're born with the knowledge that everything is trying to kill you. The snakes, the spiders, the sharks... even the plants have a go.",
-    author: "AnonymousAustralian",
+    author: "Anonymous",
   },
   {
     text: "I'm a bit like a shark. I just keep moving. If I stop, I'll die.",
@@ -116,12 +129,27 @@ export default function FeedScreen() {
   const [aussieQuote] = useState(
     () => pickRandom(AUSSIE_QUOTES) ?? AUSSIE_QUOTES[0],
   );
+  const [videoOfTheDay, setVideoOfTheDay] = useState<YouTubeVideoEntry | null>(
+    null,
+  );
   const scrollRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    fetchAussieYouTubeVideos()
+      .then((list) => {
+        if (list.length === 0) return;
+        const sorted = [...list].sort(
+          (a, b) => getSortableTimestamp(b.date) - getSortableTimestamp(a.date),
+        );
+        setVideoOfTheDay(sorted[0]);
+      })
+      .catch(() => {});
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
       scrollRef.current?.scrollTo({ y: 0, animated: false });
-    }, [])
+    }, []),
   );
 
   useEffect(() => {
@@ -173,6 +201,22 @@ export default function FeedScreen() {
     router.push("/(tabs)/quiz");
   }, [router]);
 
+  const playVideoOfTheDay = useCallback(() => {
+    if (!videoOfTheDay) return;
+    router.push({
+      pathname: "/video/[id]",
+      params: {
+        id: videoOfTheDay.youtubeId,
+        title: videoOfTheDay.title,
+        embedUrl: getYouTubeProxyEmbedUrl(videoOfTheDay.youtubeId, {
+          cc_load_policy: videoOfTheDay.cc_load_policy,
+        }),
+        isPortrait: "0",
+        source: "youtube",
+      },
+    });
+  }, [router, videoOfTheDay]);
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <TabHeader title="Feed" />
@@ -222,6 +266,46 @@ export default function FeedScreen() {
             <Text style={styles.actionButtonText}>See All Aussie Slang →</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Video of the Day */}
+        {videoOfTheDay && (
+          <View style={[styles.card, styles.videoCard]}>
+            <Pressable
+              style={({ pressed }) => [pressed && styles.cardPressed]}
+              onPress={playVideoOfTheDay}
+            >
+              <View style={styles.cardHeader}>
+                <Ionicons name="play-circle-outline" size={28} color="#333" />
+                <Text style={[styles.cardTitle, { color: colors.text }]}>
+                  Video of the Day
+                </Text>
+              </View>
+              <View style={styles.videoCardContent}>
+                <Image
+                  source={{ uri: getYouTubeThumbnail(videoOfTheDay.youtubeId) }}
+                  style={styles.videoThumb}
+                  contentFit="cover"
+                />
+                <Text
+                  style={[styles.videoTitle, { color: colors.text }]}
+                  numberOfLines={2}
+                >
+                  {videoOfTheDay.title}
+                </Text>
+                <Text style={[styles.videoHint, { color: colors.icon }]}>
+                  Tap to watch →
+                </Text>
+              </View>
+            </Pressable>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => router.push("/(tabs)/videos")}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.actionButtonText}>See All Videos →</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* Question of the Day */}
         <View style={[styles.card, styles.quizCard]}>
@@ -356,8 +440,30 @@ const styles = StyleSheet.create({
   quizCard: {
     backgroundColor: "#e8ffe8",
   },
+  videoCard: {
+    backgroundColor: "#fff",
+  },
   quoteCard: {
     backgroundColor: "#e8f4ff",
+  },
+  videoCardContent: {
+    marginBottom: 4,
+  },
+  videoThumb: {
+    width: "100%",
+    height: 180,
+    borderRadius: 12,
+    marginBottom: 10,
+    backgroundColor: "#f0f0f0",
+  },
+  videoTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  videoHint: {
+    fontSize: 14,
+    marginBottom: 14,
   },
   cardHeader: {
     flexDirection: "row",

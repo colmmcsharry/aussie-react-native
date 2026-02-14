@@ -141,14 +141,6 @@ export default function VideoPlayerScreen() {
           )}
         />
       </View>
-
-      {/* Video info below the player */}
-      <View style={[styles.infoSection, { paddingBottom: insets.bottom + 16 }]}>
-        <ThemedText style={styles.infoTitle}>{title}</ThemedText>
-        <ThemedText style={styles.infoId}>
-          {source === 'youtube' ? `youtube.com/watch?v=${id}` : `vimeo.com/${id}`}
-        </ThemedText>
-      </View>
     </View>
   );
 }
@@ -171,14 +163,14 @@ const styles = StyleSheet.create({
     minWidth: 70,
   },
   backIcon: {
-    color: '#194F89',
+    color: '#fff',
     fontSize: 32,
     lineHeight: 32,
     fontWeight: '300',
     marginRight: 2,
   },
   backText: {
-    color: '#194F89',
+    color: '#fff',
     fontSize: 17,
   },
   headerTitleWrap: {
@@ -213,21 +205,5 @@ const styles = StyleSheet.create({
   loadingText: {
     color: '#888',
     fontSize: 15,
-  },
-  infoSection: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    backgroundColor: '#111',
-  },
-  infoTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-    lineHeight: 24,
-  },
-  infoId: {
-    color: '#666',
-    fontSize: 13,
-    marginTop: 4,
   },
 });
