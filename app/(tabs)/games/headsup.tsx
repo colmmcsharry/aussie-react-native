@@ -17,6 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { DeviceMotion } from 'expo-sensors';
 import * as Haptics from 'expo-haptics';
+import { Audio } from 'expo-av';
 
 import {
   HEADSUP_TOPIC_META,
@@ -28,7 +29,7 @@ import {
 
 const ACCENT_BLUE = '#194F89';
 const CONTENT_BG = '#F0F4F8';
-const GAME_BG = '#c9e4c7';
+const GAME_BG = ACCENT_BLUE;
 // Reserve space where tab bar would be so layout doesn't jump when it hides on this screen
 const TAB_BAR_HEIGHT = 84;
 
@@ -50,6 +51,45 @@ const SKIP_GAMMA_MAX = -15;
 const POINT_GAMMA_MIN = -165;
 const POINT_GAMMA_MAX = -125;
 const DEBOUNCE_MS = 800;
+
+// Heads Up sound effects (from old app)
+const SOUNDS = {
+  correct: require('@/assets/audio/correct.m4a'),
+  skip: require('@/assets/audio/skipsound.m4a'),
+  gong: require('@/assets/audio/gong.m4a'),
+};
+
+// 5-second clock ticking — play once for countdown and once for last 5s of game
+const CLOCK_TICKING = require('@/assets/audio/clock-ticking.mp3');
+
+async function playHeadsupSound(
+  source: number,
+  volume = 0.7
+): Promise<void> {
+  try {
+    const { sound } = await Audio.Sound.createAsync(source, { shouldPlay: true, volume });
+    sound.setOnPlaybackStatusUpdate((status) => {
+      if (status.isLoaded && status.didJustFinish) {
+        sound.unloadAsync().catch(() => {});
+      }
+    });
+  } catch {
+    // ignore
+  }
+}
+
+async function playClockTicking(volume = 0.5): Promise<void> {
+  try {
+    const { sound } = await Audio.Sound.createAsync(CLOCK_TICKING, { shouldPlay: true, volume });
+    sound.setOnPlaybackStatusUpdate((status) => {
+      if (status.isLoaded && status.didJustFinish) {
+        sound.unloadAsync().catch(() => {});
+      }
+    });
+  } catch {
+    // ignore
+  }
+}
 
 export default function HeadsUpGameScreen() {
   const router = useRouter();
@@ -103,6 +143,7 @@ export default function HeadsUpGameScreen() {
     setShowFeedback('correct');
     setTimeout(() => setShowFeedback(null), 300);
     if (Platform.OS === 'ios') Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    playHeadsupSound(SOUNDS.correct);
     nextWord();
   }, [currentWord, nextWord]);
 
@@ -112,6 +153,7 @@ export default function HeadsUpGameScreen() {
     setShowFeedback('skip');
     setTimeout(() => setShowFeedback(null), 300);
     if (Platform.OS === 'ios') Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+    playHeadsupSound(SOUNDS.skip);
     nextWord();
   }, [currentWord, nextWord]);
 
@@ -140,6 +182,8 @@ export default function HeadsUpGameScreen() {
     if (activeTopics.includes('easy')) words = [...words, ...HEADSUP_EASY_WORDS];
     if (activeTopics.includes('hard')) words = [...words, ...HEADSUP_HARD_WORDS];
     if (activeTopics.includes('xxx')) words = [...words, ...HEADSUP_XXX_WORDS];
+    const used = new Set([...correctWords, ...skippedWords]);
+    words = words.filter((w) => !used.has(w));
     words = shuffleArray(words);
     wordPool.current = words;
 
@@ -152,15 +196,17 @@ export default function HeadsUpGameScreen() {
     setSkippedWords([]);
     setTimeRemaining(gameDuration);
     setGameOver(false);
-  }, [activeTopics, gameDuration]);
+  }, [activeTopics, gameDuration, correctWords, skippedWords]);
 
-  // Countdown
+  // Countdown — play 5s clock once when countdown starts
   useEffect(() => {
     if (!showCountdown) return;
+    playClockTicking(0.5);
     countdownRef.current = setInterval(() => {
       setCountdown((c) => {
         if (c <= 1) {
           if (countdownRef.current) clearInterval(countdownRef.current);
+          playHeadsupSound(SOUNDS.gong, 0.5);
           setShowCountdown(false);
           setGameStarted(true);
           const first = pickNextWord();
@@ -177,17 +223,19 @@ export default function HeadsUpGameScreen() {
     };
   }, [showCountdown, pickNextWord]);
 
-  // Game timer
+  // Game timer — play 5s clock once when 5 seconds remain
   useEffect(() => {
     if (!gameStarted || gameOver) return;
     gameTimerRef.current = setInterval(() => {
       setTimeRemaining((t) => {
         if (t <= 1) {
           if (gameTimerRef.current) clearInterval(gameTimerRef.current);
+          playHeadsupSound(SOUNDS.gong, 0.5);
           setGameOver(true);
           setGameStarted(false);
           return 0;
         }
+        if (t === 5) playClockTicking(0.5);
         return t - 1;
       });
     }, 1000);
@@ -251,6 +299,17 @@ export default function HeadsUpGameScreen() {
     setCurrentWord(null);
     router.replace('/games');
   }, [router]);
+
+  /** Return to Heads Up menu (play again); keeps correct/skipped so same words don't reappear. */
+  const backToMenu = useCallback(() => {
+    if (gameTimerRef.current) clearInterval(gameTimerRef.current);
+    if (countdownRef.current) clearInterval(countdownRef.current);
+    setGameStarted(false);
+    setGameOver(false);
+    setShowCountdown(false);
+    setCountdown(5);
+    setCurrentWord(null);
+  }, []);
 
   const topicIds: HeadsUpTopicId[] = ['easy', 'hard', 'xxx'];
 
@@ -413,7 +472,6 @@ export default function HeadsUpGameScreen() {
               <View style={styles.gameContainer}>
                 <Text style={styles.gameTimer}>{timeRemaining}</Text>
                 <Text style={styles.wordDisplay}>{currentWord}</Text>
-                <Text style={styles.scoreDisplay}>{score}</Text>
               </View>
             )}
           </View>
@@ -421,31 +479,45 @@ export default function HeadsUpGameScreen() {
       )}
 
       {gameOver && (
-        <View style={styles.gameOverContainer}>
+        <View style={[styles.gameOverContainer, { paddingBottom: insets.bottom + 32 }]}>
           <Text style={styles.scorePhrase}>{scorePhrase}</Text>
           <Text style={styles.finalScore}>{score}</Text>
           <View style={styles.resultsRow}>
             <View style={styles.resultColumn}>
               <Text style={styles.resultTitle}>Correct ✓</Text>
-              {correctWords.slice(0, 8).map((w, i) => (
-                <Text key={i} style={styles.resultItem}>{i + 1}. {w}</Text>
-              ))}
-              {correctWords.length > 8 && (
-                <Text style={styles.resultMore}>+{correctWords.length - 8} more</Text>
+              <ScrollView
+                style={styles.resultScroll}
+                contentContainerStyle={styles.resultScrollContent}
+                showsVerticalScrollIndicator={true}
+                persistentScrollbar={true}
+              >
+                {correctWords.map((w, i) => (
+                  <Text key={i} style={styles.resultItem}>{i + 1}. {w}</Text>
+                ))}
+              </ScrollView>
+              {correctWords.length > 15 && (
+                <Text style={styles.resultScrollHint}>↓ Scroll to see all</Text>
               )}
             </View>
             <View style={styles.resultColumn}>
               <Text style={[styles.resultTitle, styles.resultTitleSkipped]}>Skipped ✗</Text>
-              {skippedWords.slice(0, 8).map((w, i) => (
-                <Text key={i} style={styles.resultItem}>{i + 1}. {w}</Text>
-              ))}
-              {skippedWords.length > 8 && (
-                <Text style={styles.resultMore}>+{skippedWords.length - 8} more</Text>
+              <ScrollView
+                style={styles.resultScroll}
+                contentContainerStyle={styles.resultScrollContent}
+                showsVerticalScrollIndicator={true}
+                persistentScrollbar={true}
+              >
+                {skippedWords.map((w, i) => (
+                  <Text key={i} style={styles.resultItem}>{i + 1}. {w}</Text>
+                ))}
+              </ScrollView>
+              {skippedWords.length > 15 && (
+                <Text style={styles.resultScrollHint}>↓ Scroll to see all</Text>
               )}
             </View>
           </View>
-          <TouchableOpacity onPress={endAndReset} style={styles.backToGamesBtn}>
-            <Text style={styles.backToGamesText}>Back to Games</Text>
+          <TouchableOpacity onPress={backToMenu} style={styles.backToMenuBtn}>
+            <Text style={styles.backToMenuText}>Play again</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -668,13 +740,13 @@ const styles = StyleSheet.create({
   countdownTitle: {
     fontSize: 44,
     fontWeight: '800',
-    color: '#11181C',
+    color: '#fff',
     textAlign: 'center',
   },
   countdownNumber: {
     fontSize: 108,
     fontWeight: '800',
-    color: '#c64a4a',
+    color: '#fff',
   },
   gameContainer: {
     flex: 1,
@@ -685,13 +757,13 @@ const styles = StyleSheet.create({
   gameTimer: {
     fontSize: 48,
     fontWeight: '700',
-    color: '#11181C',
+    color: '#fff',
     marginBottom: 16,
   },
   wordDisplay: {
     fontSize: 64,
     fontWeight: '800',
-    color: '#11181C',
+    color: '#fff',
     textAlign: 'center',
     paddingHorizontal: 24,
     marginBottom: 16,
@@ -701,7 +773,7 @@ const styles = StyleSheet.create({
   scoreDisplay: {
     fontSize: 48,
     fontWeight: '700',
-    color: 'rgb(28, 149, 83)',
+    color: '#fff',
   },
   gameOverContainer: {
     flex: 1,
@@ -711,14 +783,14 @@ const styles = StyleSheet.create({
   scorePhrase: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#11181C',
+    color: '#fff',
     textAlign: 'center',
     marginBottom: 8,
   },
   finalScore: {
     fontSize: 56,
     fontWeight: '800',
-    color: '#11181C',
+    color: '#fff',
     textAlign: 'center',
     marginBottom: 24,
   },
@@ -733,7 +805,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 12,
-    maxHeight: 200,
+    minHeight: 240,
+    maxHeight: 420,
+  },
+  resultScroll: {
+    flex: 1,
+  },
+  resultScrollContent: {
+    paddingBottom: 8,
+  },
+  resultScrollHint: {
+    fontSize: 11,
+    color: '#687076',
+    textAlign: 'center',
+    marginTop: 6,
   },
   resultTitle: {
     fontSize: 14,
@@ -749,18 +834,14 @@ const styles = StyleSheet.create({
     color: '#11181C',
     marginBottom: 4,
   },
-  resultMore: {
-    fontSize: 12,
-    color: '#687076',
-    fontStyle: 'italic',
-  },
-  backToGamesBtn: {
+  backToMenuBtn: {
     backgroundColor: ACCENT_BLUE,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
+    marginTop: 8,
   },
-  backToGamesText: {
+  backToMenuText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
