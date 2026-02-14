@@ -16,6 +16,12 @@ export default function GamesLayout() {
           animation: 'slide_from_right',
         }}
       />
+      <Stack.Screen
+        name="headsup"
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
     </Stack>
   );
 }

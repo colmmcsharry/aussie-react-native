@@ -22,6 +22,12 @@ const GAMES = [
     description: 'Read the card aloud — whoever has done it, drinks!',
     icon: 'beer' as const,
   },
+  {
+    id: 'headsup',
+    title: 'Heads Up',
+    description: 'Guess the word from your mates — tilt down for correct, up to skip',
+    icon: 'phone-portrait-outline' as const,
+  },
 ];
 
 export default function GamesScreen() {

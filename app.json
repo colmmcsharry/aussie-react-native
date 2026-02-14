@@ -35,6 +35,12 @@
     "plugins": [
       "expo-router",
       [
+        "expo-sensors",
+        {
+          "motionPermission": "Allow $(PRODUCT_NAME) to detect tilts for the Heads Up game"
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
