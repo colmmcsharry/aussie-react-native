@@ -1,3 +1,4 @@
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { Tabs, useRouter } from 'expo-router';
 import React from 'react';
 
@@ -66,10 +67,14 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="games"
-        options={{
-          title: 'Games',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="gamecontroller.fill" color={color} />,
-          tabBarButton: createTabButton('/games'),
+        options={({ route }) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? 'index';
+          return {
+            title: 'Games',
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="gamecontroller.fill" color={color} />,
+            tabBarButton: createTabButton('/games'),
+            tabBarStyle: routeName === 'headsup' ? { display: 'none' } : undefined,
+          };
         }}
       />
       <Tabs.Screen

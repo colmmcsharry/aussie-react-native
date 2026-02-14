@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const WORD_MAX_WIDTH = Math.round(SCREEN_WIDTH * 1.22);
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -68,7 +69,6 @@ export default function HeadsUpGameScreen() {
   const [showFeedback, setShowFeedback] = useState<'correct' | 'skip' | null>(null);
   const [motionPermissionGranted, setMotionPermissionGranted] = useState<boolean | null>(null);
   const [motionPermissionError, setMotionPermissionError] = useState<string | null>(null);
-  const [debugGamma, setDebugGamma] = useState(0);
 
   const wordPool = useRef<string[]>([]);
   const hasTiltedDown = useRef(false);
@@ -202,7 +202,6 @@ export default function HeadsUpGameScreen() {
     DeviceMotion.setUpdateInterval(50);
     const sub = DeviceMotion.addListener(({ rotation }) => {
       const gamma = toDeg(rotation?.gamma ?? 0);
-      setDebugGamma(Math.round(gamma));
       const now = Date.now();
 
       // Skip (tilt up toward ceiling): gamma from -90 toward -2, detect in (-50, -10)
@@ -272,7 +271,7 @@ export default function HeadsUpGameScreen() {
       {showMenu && (
         <TouchableOpacity
           onPress={endAndReset}
-          style={[styles.backBtnFloating, { top: insets.top + 12 }]}
+          style={[styles.backBtnFloating, { top: insets.top + 40 }]}
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
         >
           <Ionicons name="arrow-back" size={24} color="#11181C" />
@@ -372,7 +371,7 @@ export default function HeadsUpGameScreen() {
           >
             <TouchableOpacity
               onPress={endAndReset}
-              style={[styles.backBtnInRotated, { top: 12 }]}
+              style={[styles.backBtnInRotated, { left: 16 + insets.top + 40, top: 12 }]}
               hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
             >
               <Ionicons name="arrow-back" size={24} color="#11181C" />
@@ -401,7 +400,6 @@ export default function HeadsUpGameScreen() {
                 <Text style={styles.gameTimer}>{timeRemaining}</Text>
                 <Text style={styles.wordDisplay}>{currentWord}</Text>
                 <Text style={styles.scoreDisplay}>{score}</Text>
-                <Text style={styles.debugText}>gamma: {debugGamma}°</Text>
               </View>
             )}
           </View>
@@ -634,13 +632,13 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   countdownTitle: {
-    fontSize: 28,
+    fontSize: 44,
     fontWeight: '800',
     color: '#11181C',
     textAlign: 'center',
   },
   countdownNumber: {
-    fontSize: 80,
+    fontSize: 108,
     fontWeight: '800',
     color: '#c64a4a',
   },
@@ -657,23 +655,19 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   wordDisplay: {
-    fontSize: 42,
+    fontSize: 64,
     fontWeight: '800',
     color: '#11181C',
     textAlign: 'center',
     paddingHorizontal: 24,
     marginBottom: 16,
+    alignSelf: 'center',
+    maxWidth: WORD_MAX_WIDTH,
   },
   scoreDisplay: {
     fontSize: 48,
     fontWeight: '700',
     color: 'rgb(28, 149, 83)',
-  },
-  debugText: {
-    fontSize: 18,
-    color: 'red',
-    fontWeight: '700',
-    marginTop: 8,
   },
   gameOverContainer: {
     flex: 1,
