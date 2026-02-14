@@ -27,6 +27,23 @@ export const Colors = {
   },
 };
 
+/** Card background palette used for feed and other cards app-wide (~2% less bright for a softer look) */
+export const CardPalette = {
+  /** Slang / G'day card – light yellow */
+  slang: '#faf6e3',
+  /** Quiz card – light green */
+  quiz: '#e3f9e3',
+  /** Video of the day card – light red */
+  video: '#fae3e3',
+  /** Quote card – light blue */
+  quote: '#e3effa',
+} as const;
+
+/** Shared card layout (border radius, etc.) for consistency */
+export const CardLayout = {
+  borderRadius: 20,
+} as const;
+
 export const Fonts = Platform.select({
   ios: {
     /** iOS `UIFontDescriptorSystemDesignDefault` */

@@ -22,7 +22,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SlangDetailModal } from "@/components/slang-detail-modal";
 import { TabHeader } from "@/components/tab-header";
-import { Colors } from "@/constants/theme";
+import { Colors, CardPalette } from "@/constants/theme";
 import { quizImageMap } from "@/data/quiz-assets";
 import { quizzes, type QuizQuestion } from "@/data/quiz-data";
 import { getCategories } from "@/data/slang";
@@ -446,16 +446,16 @@ const styles = StyleSheet.create({
     opacity: 0.95,
   },
   slangCard: {
-    backgroundColor: "#fffbe8",
+    backgroundColor: CardPalette.slang,
   },
   quizCard: {
-    backgroundColor: "#e8ffe8",
+    backgroundColor: CardPalette.quiz,
   },
   videoCard: {
-    backgroundColor: "#ffe8e8",
+    backgroundColor: CardPalette.video,
   },
   quoteCard: {
-    backgroundColor: "#e8f4ff",
+    backgroundColor: CardPalette.quote,
   },
   videoCardContent: {
     marginBottom: 4,

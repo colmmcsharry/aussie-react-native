@@ -14,15 +14,16 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { TabHeader } from '@/components/tab-header';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors } from '@/constants/theme';
+import { Colors, CardPalette } from '@/constants/theme';
 import { quizzes } from '@/data/quiz-data';
 import { getAllScores, getScoreColor } from '@/services/quiz-scores';
 
-const ANSWER_COLORS = [
-  'rgba(0, 44, 128, 0.19)',
-  'rgba(255, 0, 0, 0.27)',
-  'rgba(111, 223, 141, 0.19)',
-  'rgba(255, 128, 0, 0.23)',
+/** Card background colors for quiz list (cycles through app card palette) */
+const QUIZ_CARD_COLORS = [
+  CardPalette.slang,
+  CardPalette.quiz,
+  CardPalette.video,
+  CardPalette.quote,
 ];
 
 export default function QuizMenuScreen() {
@@ -76,7 +77,7 @@ export default function QuizMenuScreen() {
           {quizzes.map((quiz, index) => {
             const score = scores[quiz.id];
             const hasScore = score !== undefined;
-            const bgColor = ANSWER_COLORS[index % 4];
+            const bgColor = QUIZ_CARD_COLORS[index % QUIZ_CARD_COLORS.length];
 
             return (
               <TouchableOpacity
