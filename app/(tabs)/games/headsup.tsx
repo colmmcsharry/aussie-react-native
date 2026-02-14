@@ -7,6 +7,7 @@ import {
   Pressable,
   Platform,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -28,6 +29,8 @@ import {
 const ACCENT_BLUE = '#194F89';
 const CONTENT_BG = '#F0F4F8';
 const GAME_BG = '#c9e4c7';
+// Reserve space where tab bar would be so layout doesn't jump when it hides on this screen
+const TAB_BAR_HEIGHT = 84;
 
 function shuffleArray<T>(arr: T[]): T[] {
   const out = [...arr];
@@ -279,7 +282,8 @@ export default function HeadsUpGameScreen() {
       )}
 
       {showMenu && (
-        <View style={styles.menuContainer}>
+        <View style={[styles.menuWrapper, { height: SCREEN_HEIGHT - TAB_BAR_HEIGHT }]}>
+          <View style={[styles.menuContainer, { paddingTop: insets.top + 100, paddingBottom: TAB_BAR_HEIGHT + 24 }]}>
           <Pressable onPress={() => setRulesVisible(!rulesVisible)} style={styles.rulesHeader}>
             <Text style={styles.rulesTitle}>How to Play</Text>
             <Ionicons
@@ -293,13 +297,15 @@ export default function HeadsUpGameScreen() {
               <Text style={styles.ruleItem}>• Requires 2+ people</Text>
               <Text style={styles.ruleItem}>• Hold phone sideways on your forehead</Text>
               <Text style={styles.ruleItem}>• Friends describe the word (no spelling!)</Text>
-              <Text style={styles.ruleItem}>• Tilt DOWN then back up = correct (+1 point)</Text>
+              <Text style={styles.ruleItem}>• If you guess correctly, Tilt DOWN then back up</Text>
               <Text style={styles.ruleItem}>• Tilt UP = skip to next word</Text>
             </View>
           )}
 
           <View style={styles.timerRow}>
-            <Text style={styles.timerLabel}>Timer</Text>
+            <View style={styles.timerLabelWrap}>
+              <Ionicons name="time-outline" size={24} color="#11181C" style={styles.timerIcon} />
+            </View>
             <View style={styles.timerOptions}>
               <Pressable
                 onPress={() => setGameDuration(60)}
@@ -337,12 +343,17 @@ export default function HeadsUpGameScreen() {
                       isActive && styles.topicBtnTextActive,
                     ]}
                   >
-                    {meta.emoji} {meta.label}
+                    {meta.emoji}  {meta.label}
                   </Text>
+                  {isActive && (
+                    <Ionicons name="checkmark-circle" size={26} color="#fff" style={styles.topicTick} />
+                  )}
                 </Pressable>
               );
             })}
           </View>
+
+          <View style={styles.menuSpacer} />
 
           <TouchableOpacity
             onPress={() => startGame()}
@@ -354,6 +365,7 @@ export default function HeadsUpGameScreen() {
           {motionPermissionError != null && (
             <Text style={styles.permissionError}>{motionPermissionError}</Text>
           )}
+          </View>
         </View>
       )}
 
@@ -368,14 +380,16 @@ export default function HeadsUpGameScreen() {
                 height: SCREEN_WIDTH,
               },
             ]}
-          >
-            <TouchableOpacity
-              onPress={endAndReset}
-              style={[styles.backBtnInRotated, { left: 16 + insets.top + 40, top: 12 }]}
-              hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
             >
-              <Ionicons name="arrow-back" size={24} color="#11181C" />
-            </TouchableOpacity>
+            {!showCountdown && (
+              <TouchableOpacity
+                onPress={endAndReset}
+                style={[styles.backBtnInRotated, { left: 16 + insets.top + 40, top: 12 }]}
+                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+              >
+                <Ionicons name="arrow-back" size={24} color="#11181C" />
+              </TouchableOpacity>
+            )}
 
             {showFeedback === 'correct' && (
               <View style={styles.feedbackOverlay}>
@@ -513,10 +527,12 @@ const styles = StyleSheet.create({
   feedbackSkip: {
     backgroundColor: 'rgba(198, 74, 74, 0.4)',
   },
+  menuWrapper: {
+    width: '100%',
+  },
   menuContainer: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 80,
   },
   rulesHeader: {
     flexDirection: 'row',
@@ -526,19 +542,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: ACCENT_BLUE,
-    marginBottom: 12,
+    borderColor: '#dce0e5',
+    marginBottom: 24,
   },
   rulesTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#11181C',
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#687076',
   },
   rulesList: {
     backgroundColor: '#fff',
     padding: 16,
     borderRadius: 12,
-    marginBottom: 16,
+    marginBottom: 24,
   },
   ruleItem: {
     fontSize: 15,
@@ -550,61 +566,79 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: 24,
   },
-  timerLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#11181C',
+  timerLabelWrap: {
+    justifyContent: 'center',
+  },
+  timerIcon: {
+    marginRight: 4,
   },
   timerOptions: {
     flexDirection: 'row',
     gap: 12,
   },
   timerBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
     borderRadius: 10,
-    backgroundColor: '#e8ecf0',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#dce0e5',
   },
   timerBtnActive: {
     backgroundColor: ACCENT_BLUE,
+    borderColor: ACCENT_BLUE,
   },
   timerBtnText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#11181C',
+    color: ACCENT_BLUE,
   },
   timerBtnTextActive: {
     color: '#fff',
   },
   includeLabel: {
-    fontSize: 14,
-    color: '#687076',
-    marginBottom: 10,
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#11181C',
+    marginBottom: 14,
   },
   topicWrap: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-    marginBottom: 24,
+    flexDirection: 'column',
+    gap: 14,
+    marginBottom: 32,
   },
   topicBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 10,
-    backgroundColor: '#e8ecf0',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    minHeight: 72,
+    borderRadius: 14,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#dce0e5',
   },
   topicBtnActive: {
     backgroundColor: ACCENT_BLUE,
+    borderColor: ACCENT_BLUE,
   },
   topicBtnText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#11181C',
+    fontSize: 20,
+    fontWeight: '700',
+    color: ACCENT_BLUE,
   },
   topicBtnTextActive: {
     color: '#fff',
+  },
+  topicTick: {
+    marginLeft: 8,
+  },
+  menuSpacer: {
+    flex: 1,
+    minHeight: 24,
   },
   startBtn: {
     backgroundColor: ACCENT_BLUE,
