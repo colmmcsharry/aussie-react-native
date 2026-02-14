@@ -238,7 +238,8 @@ export default function FeedScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Slang of the Day */}
-        <View style={[styles.card, styles.slangCard]}>
+        <View style={styles.cardWrapper}>
+          <View style={[styles.card, styles.slangCard]}>
           <Pressable
             style={({ pressed }) => [pressed && styles.cardPressed]}
             onPress={() => slangOfTheDay && setShowSlangModal(true)}
@@ -265,10 +266,12 @@ export default function FeedScreen() {
           >
             <Text style={styles.actionButtonText}>See All Aussie Slang →</Text>
           </TouchableOpacity>
+          </View>
         </View>
 
         {/* Video of the Day */}
         {videoOfTheDay && (
+          <View style={styles.cardWrapper}>
           <View style={[styles.card, styles.videoCard]}>
             <Pressable
               style={({ pressed }) => [pressed && styles.cardPressed]}
@@ -305,9 +308,11 @@ export default function FeedScreen() {
               <Text style={styles.actionButtonText}>See All Videos →</Text>
             </TouchableOpacity>
           </View>
+          </View>
         )}
 
         {/* Question of the Day */}
+        <View style={styles.cardWrapper}>
         <View style={[styles.card, styles.quizCard]}>
           <View style={styles.cardHeader}>
             <Ionicons name="help-circle-outline" size={28} color="#333" />
@@ -382,8 +387,10 @@ export default function FeedScreen() {
             <Text style={styles.actionButtonText}>See All Quizzes →</Text>
           </TouchableOpacity>
         </View>
+        </View>
 
         {/* Aussie Quote of the Day */}
+        <View style={styles.cardWrapper}>
         <View style={[styles.card, styles.quoteCard]}>
           <View style={styles.cardHeader}>
             <Ionicons name="chatbox-ellipses-outline" size={28} color="#333" />
@@ -399,6 +406,7 @@ export default function FeedScreen() {
               — {aussieQuote.author}
             </Text>
           </View>
+        </View>
         </View>
       </ScrollView>
     </View>
@@ -417,19 +425,22 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     gap: 20,
   },
+  cardWrapper: {
+    borderRadius: 20,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+      },
+      android: { elevation: 2 },
+    }),
+  },
   card: {
     borderRadius: 20,
     padding: 20,
     overflow: "hidden",
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 12,
-      },
-      android: { elevation: 4 },
-    }),
   },
   cardPressed: {
     opacity: 0.95,
@@ -441,7 +452,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#e8ffe8",
   },
   videoCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#ffe8e8",
   },
   quoteCard: {
     backgroundColor: "#e8f4ff",

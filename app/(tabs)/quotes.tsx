@@ -85,7 +85,8 @@ function SlangCard({
   const hasImage = entry.image && slangImageMap[entry.image];
 
   return (
-    <View style={[styles.card, { backgroundColor: colors.background }]}>
+    <View style={styles.cardWrapper}>
+      <View style={[styles.card, { backgroundColor: colors.background }]}>
       {/* Image at top when expanded (reference: G'day card) */}
       {expanded && hasImage && (
         <Image
@@ -191,6 +192,7 @@ function SlangCard({
             )}
           </View>
         )}
+      </View>
       </View>
     </View>
   );
@@ -532,22 +534,25 @@ const styles = StyleSheet.create({
   listContent: {
     paddingBottom: 24, // extra space; list view adds insets.bottom + 80 via inline style
   },
-  card: {
+  cardWrapper: {
     borderRadius: 20,
     marginBottom: 20,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+      },
+      android: { elevation: 2 },
+    }),
+  },
+  card: {
+    borderRadius: 20,
     overflow: 'hidden',
     backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.06)',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.12,
-        shadowRadius: 12,
-      },
-      android: { elevation: 6 },
-    }),
   },
   cardImageTop: {
     width: '100%',
