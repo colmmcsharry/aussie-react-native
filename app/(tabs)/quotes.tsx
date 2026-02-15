@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors, BodyFont, ButtonFont, CardBodyFont, ContentBg, FontSizes, HeadingFont, SlangDisplayFont } from '@/constants/theme';
+import { Colors, BodyFont, ButtonFont, CardBodyFont, FontSizes, HeadingFont, SlangDisplayFont } from '@/constants/theme';
 import { getCategories, searchQuotes, SlangCategory, SlangEntry } from '@/data/slang';
 import { slangImageMap } from '@/data/image-map';
 import { playAudio, playAudioSlow, stopAudio } from '@/services/audio';
@@ -29,18 +29,28 @@ const NUM_COLUMNS = 3;
 
 // ---------- SlangCard (expanded by default when in category view) ----------
 
+/** Lighter variants of palette colors – slang cards only */
+const SLANG_CARD_COLORS = [
+  '#fcf9ef',
+  '#eefcf0',
+  '#fceeef',
+  '#eef6fc',
+] as const;
+
 function SlangCard({
   entry,
   isFav,
   onToggleFav,
   colors,
   defaultExpanded = false,
+  cardColor,
 }: {
   entry: SlangEntry;
   isFav: boolean;
   onToggleFav: (id: string) => void;
   colors: typeof Colors.light;
   defaultExpanded?: boolean;
+  cardColor?: string;
 }) {
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [playing, setPlaying] = useState(false);
@@ -81,20 +91,23 @@ function SlangCard({
 
   const hasImage = entry.image && slangImageMap[entry.image];
 
+  const bgColor = cardColor ?? colors.background;
   return (
     <View style={styles.cardWrapper}>
-      <View style={[styles.card, { backgroundColor: colors.background }]}>
+      <View style={[styles.card, { backgroundColor: bgColor }]}>
       {/* Image at top when expanded (reference: G'day card) */}
       {expanded && hasImage && (
-        <Image
-          source={slangImageMap[entry.image!]}
-          style={[
-            styles.cardImageTop,
-            imageAspectRatio != null && { aspectRatio: imageAspectRatio },
-          ]}
-          contentFit="cover"
-          onLoad={handleImageLoad}
-        />
+        <View style={styles.cardImageWrap}>
+          <Image
+            source={slangImageMap[entry.image!]}
+            style={[
+              styles.cardImageTop,
+              imageAspectRatio != null && { aspectRatio: imageAspectRatio },
+            ]}
+            contentFit="cover"
+            onLoad={handleImageLoad}
+          />
+        </View>
       )}
 
       <View style={styles.cardInner}>
@@ -117,8 +130,8 @@ function SlangCard({
             >
             <Ionicons
               name={isFav ? 'heart' : 'heart-outline'}
-              size={30}
-              color={isFav ? '#FF3B57' : ACCENT_BLUE}
+              size={38}
+              color={isFav ? '#d95b6e' : ACCENT_BLUE}
             />
             </Pressable>
             <Pressable
@@ -131,7 +144,7 @@ function SlangCard({
             >
               <Ionicons
                 name={playing ? 'stop' : 'volume-high'}
-                size={28}
+                size={40}
                 color={playing ? '#fff' : ACCENT_BLUE}
               />
             </Pressable>
@@ -144,9 +157,9 @@ function SlangCard({
               ]}
             >
               {playingSlow ? (
-                <Ionicons name="stop" size={28} color="#fff" />
+                <Ionicons name="stop" size={38} color="#fff" />
               ) : (
-                <MaterialCommunityIcons name="snail" size={28} color={ACCENT_BLUE} />
+                <MaterialCommunityIcons name="snail" size={38} color={ACCENT_BLUE} />
               )}
             </Pressable>
           </View>
@@ -306,19 +319,20 @@ export default function QuotesScreen() {
   const showGrid = selectedCategory === null && !showSearch && !showFavsOnly;
 
   const renderCard = useCallback(
-    ({ item }: { item: SlangEntry }) => (
+    ({ item, index }: { item: SlangEntry; index: number }) => (
       <SlangCard
         entry={item}
         isFav={favourites.has(item.id)}
         onToggleFav={handleToggleFav}
         colors={colors}
         defaultExpanded={true}
+        cardColor={SLANG_CARD_COLORS[index % SLANG_CARD_COLORS.length]}
       />
     ),
     [favourites, handleToggleFav, colors]
   );
 
-  const containerBg = showGrid ? colors.background : ContentBg;
+  const containerBg = colors.background;
   return (
     <View style={[styles.container, { backgroundColor: containerBg }]}>
       {/* Blue header — fixed height, left slot same width in all states */}
@@ -398,7 +412,7 @@ export default function QuotesScreen() {
       <View
         style={[
           styles.content,
-          !showGrid && styles.contentListBackground,
+          !showGrid && { backgroundColor: '#fff' },
           showGrid && styles.contentGridCentered,
         ]}
       >
@@ -550,9 +564,6 @@ const styles = StyleSheet.create({
     fontFamily: ButtonFont,
     textAlign: 'center',
   },
-  contentListBackground: {
-    backgroundColor: ContentBg,
-  },
   listContent: {
     paddingBottom: 24, // extra space; list view adds insets.bottom + 80 via inline style
   },
@@ -571,10 +582,14 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 20,
-    overflow: 'hidden',
     backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.06)',
+  },
+  cardImageWrap: {
+    overflow: 'hidden',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   cardImageTop: {
     width: '100%',
@@ -610,17 +625,17 @@ const styles = StyleSheet.create({
     width: 78,
     height: 78,
     borderRadius: 39,
-    backgroundColor: 'rgba(0,0,0,0.06)',
+    backgroundColor: 'rgba(255, 255, 255, 0.58)',
     alignItems: 'center',
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
-        shadowRadius: 3,
+        shadowColor: '#8a8782',
+        shadowOffset: { width: 4, height: 6 },
+        shadowOpacity: 0.35,
+        shadowRadius: 8,
       },
-      android: { elevation: 3 },
+      android: { elevation: 6 },
     }),
   },
   actionBtnPressed: {
@@ -640,8 +655,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     ...Platform.select({
-      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.12, shadowRadius: 2 },
-      android: { elevation: 2 },
+      ios: {
+        shadowColor: '#8a8782',
+        shadowOffset: { width: 3, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 6,
+      },
+      android: { elevation: 5 },
     }),
   },
   cardBody: {
@@ -660,6 +680,9 @@ const styles = StyleSheet.create({
   },
   noteRow: {
     marginBottom: 6,
+  },
+  examplesSection: {
+    gap: 6,
   },
   noteText: {
     fontSize: 16,
