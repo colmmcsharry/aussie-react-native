@@ -137,11 +137,8 @@ export default function FeedScreen() {
   useEffect(() => {
     fetchAussieYouTubeVideos()
       .then((list) => {
-        if (list.length === 0) return;
-        const sorted = [...list].sort(
-          (a, b) => getSortableTimestamp(b.date) - getSortableTimestamp(a.date),
-        );
-        setVideoOfTheDay(sorted[0]);
+        const chosen = pickRandom(list);
+        if (chosen) setVideoOfTheDay(chosen);
       })
       .catch(() => {});
   }, []);
