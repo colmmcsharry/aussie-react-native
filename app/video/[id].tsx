@@ -166,9 +166,9 @@ const styles = StyleSheet.create({
   backIcon: {
     color: '#fff',
     fontSize: 32,
-    lineHeight: 32,
-    fontWeight: '300',
-    marginRight: 2,
+    top: 7,
+    fontWeight: '500',
+    marginRight: 4,
   },
   backText: {
     color: '#fff',
