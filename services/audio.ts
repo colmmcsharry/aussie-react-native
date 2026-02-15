@@ -73,6 +73,7 @@ export async function playAudioSlow(
       shouldPlay: true,
       rate: SLOW_RATE,
       shouldCorrectPitch: true,
+      pitchCorrectionQuality: Audio.PitchCorrectionQuality.High,
     });
     slowSound = sound;
     sound.setOnPlaybackStatusUpdate((status) => {
