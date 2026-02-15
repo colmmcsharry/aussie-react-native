@@ -217,6 +217,15 @@ export default function FeedScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <TabHeader title="Feed" />
+      <Pressable
+        style={({ pressed }) => [
+          styles.previewOnboardingBanner,
+          { backgroundColor: colors.tint, opacity: pressed ? 0.9 : 1 },
+        ]}
+        onPress={() => router.push('/onboarding-preview')}
+      >
+        <Text style={styles.previewOnboardingText}>Preview onboarding</Text>
+      </Pressable>
       <SlangDetailModal
         visible={showSlangModal}
         entry={slangOfTheDay}
@@ -421,6 +430,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 24,
     gap: 20,
+  },
+  previewOnboardingBanner: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    marginHorizontal: 16,
+    marginBottom: 12,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  previewOnboardingText: {
+    fontFamily: ButtonFont,
+    fontSize: FontSizes.small,
+    color: "#fff",
   },
   cardWrapper: {
     borderRadius: 20,
