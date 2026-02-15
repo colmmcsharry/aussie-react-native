@@ -10,13 +10,12 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
-const CONTENT_BG = '#F0F4F8';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
-import { BodyFont, ButtonFont, HeadingFont } from '@/constants/theme';
+import { BodyFont, ButtonFont, CardPalette, ContentBg, HeadingFont } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -248,7 +247,7 @@ export default function VideosScreen() {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: CONTENT_BG }]}>
+    <View style={[styles.container, { backgroundColor: ContentBg }]}>
       <TabHeader title="Videos" />
       <View style={styles.toggleRow}>
         <Pressable
@@ -279,7 +278,7 @@ export default function VideosScreen() {
           renderItem={renderLatestItem}
           contentContainerStyle={[
             styles.listContent,
-            { paddingTop: 12, paddingBottom: insets.bottom + 90 },
+            { paddingTop: 12, paddingBottom: insets.bottom + 30 },
           ]}
           ListEmptyComponent={
             <ThemedText style={[styles.headerSubtitle, { color: subtextColor }]}>
@@ -295,7 +294,7 @@ export default function VideosScreen() {
           style={styles.scroll}
           contentContainerStyle={[
             styles.listContent,
-            { paddingTop: 12, paddingBottom: insets.bottom + 90 },
+            { paddingTop: 12, paddingBottom: insets.bottom + 30 },
           ]}
           showsVerticalScrollIndicator={false}
         >
@@ -408,7 +407,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 10,
     gap: 8,
-    backgroundColor: '#F0F4F8',
+    backgroundColor: ContentBg,
   },
   toggleBtn: {
     paddingVertical: 10,
@@ -420,7 +419,7 @@ const styles = StyleSheet.create({
   toggleText: { fontSize: 15, fontWeight: '600', color: '#333', fontFamily: ButtonFont },
   toggleTextActive: { color: '#fff' },
   scroll: { flex: 1 },
-  listContent: { paddingHorizontal: 16, backgroundColor: '#F0F4F8' },
+  listContent: { paddingHorizontal: 16, backgroundColor: ContentBg },
   headerSubtitle: { fontSize: 15, marginBottom: 16, fontFamily: BodyFont },
   videoCard: {
     backgroundColor: '#fff',

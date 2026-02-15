@@ -26,7 +26,7 @@ import { DeviceMotion } from "expo-sensors";
 import * as Haptics from "expo-haptics";
 import { Audio } from "expo-av";
 
-import { SlangDisplayFont, ButtonFont, HeadingFont } from "@/constants/theme";
+import { SlangDisplayFont, ButtonFont, ContentBg, HeadingFont } from "@/constants/theme";
 import {
   HEADSUP_TOPIC_META,
   HEADSUP_EASY_WORDS,
@@ -36,7 +36,6 @@ import {
 } from "@/data/headsup-topics";
 
 const ACCENT_BLUE = "#194F89";
-const CONTENT_BG = "#F0F4F8";
 const GAME_BG = ACCENT_BLUE;
 // Reserve space where tab bar would be so layout doesn't jump when it hides on this screen
 const TAB_BAR_HEIGHT = 84;
@@ -360,7 +359,7 @@ export default function HeadsUpGameScreen() {
     <View
       style={[
         styles.container,
-        { backgroundColor: showMenu ? CONTENT_BG : GAME_BG },
+        { backgroundColor: showMenu ? ContentBg : GAME_BG },
       ]}
     >
       {showMenu && (

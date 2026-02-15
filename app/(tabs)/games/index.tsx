@@ -4,10 +4,8 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 
-import { BodyFont, HeadingFont } from '@/constants/theme';
+import { BodyFont, ContentBg, HeadingFont } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
-
-const CONTENT_BG = '#F0F4F8';
 
 const GAME_IMAGES = {
   conversation: require('@/assets/games/conversations.png'),
@@ -38,12 +36,12 @@ export default function GamesScreen() {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { backgroundColor: CONTENT_BG }]}>
+    <View style={[styles.container, { backgroundColor: ContentBg }]}>
       <TabHeader title="Games" />
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingTop: 40, paddingBottom: insets.bottom + 90 },
+          { paddingTop: 40, paddingBottom: insets.bottom + 30 },
         ]}
         showsVerticalScrollIndicator={false}
       >

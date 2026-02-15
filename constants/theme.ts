@@ -44,6 +44,9 @@ export const CardLayout = {
   borderRadius: 20,
 } as const;
 
+/** Pale blue content background used on Games, Videos, Quotes, etc. */
+export const ContentBg = '#e0ebf6';
+
 export const Fonts = Platform.select({
   ios: {
     /** iOS `UIFontDescriptorSystemDesignDefault` */

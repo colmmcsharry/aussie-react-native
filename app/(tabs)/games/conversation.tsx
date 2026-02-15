@@ -23,7 +23,7 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
-import { BodyFont, ButtonFont, HeadingFont } from '@/constants/theme';
+import { BodyFont, ButtonFont, ContentBg, HeadingFont } from '@/constants/theme';
 import {
   CONVERSATION_TOPICS,
   CONVERSATION_TOPIC_META,
@@ -40,7 +40,6 @@ const SWIPE_THRESHOLD = 80;
 const ROTATION_FACTOR = 0.12;
 
 const ACCENT_BLUE = '#194F89';
-const CONTENT_BG = '#F0F4F8';
 
 function shuffleArray<T>(array: T[]): T[] {
   const out = [...array];
@@ -254,7 +253,7 @@ export default function ConversationGameScreen() {
   const topicIds = Object.keys(CONVERSATION_TOPIC_META) as ConversationTopicId[];
 
   return (
-    <View style={[styles.container, { backgroundColor: CONTENT_BG }]}>
+    <View style={[styles.container, { backgroundColor: ContentBg }]}>
       <TouchableOpacity
         onPress={() => router.replace('/games')}
         style={[styles.backBtnFloating, { top: insets.top + 12 }]}

@@ -23,7 +23,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { BodyFont, ButtonFont, HeadingFont } from "@/constants/theme";
+import { BodyFont, ButtonFont, ContentBg, HeadingFont } from "@/constants/theme";
 import {
   NEVEREVER_HIGHLIGHT_WORDS,
   NEVEREVER_TOPICS,
@@ -40,7 +40,6 @@ const SWIPE_THRESHOLD = 80;
 const ROTATION_FACTOR = 0.12;
 
 const ACCENT_BLUE = '#194F89';
-const CONTENT_BG = '#F0F4F8';
 
 function shuffleArray<T>(array: T[]): T[] {
   const out = [...array];
@@ -253,7 +252,7 @@ export default function NeverEverGameScreen() {
   const topicIds = Object.keys(NEVEREVER_TOPIC_META) as NeverEverTopicId[];
 
   return (
-    <View style={[styles.container, { backgroundColor: CONTENT_BG }]}>
+    <View style={[styles.container, { backgroundColor: ContentBg }]}>
       <TouchableOpacity
         onPress={() => router.replace('/games')}
         style={[styles.backBtnFloating, { top: insets.top + 12 }]}

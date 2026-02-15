@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors, BodyFont, ButtonFont, CardBodyFont, HeadingFont, SlangDisplayFont } from '@/constants/theme';
+import { Colors, BodyFont, ButtonFont, CardBodyFont, ContentBg, HeadingFont, SlangDisplayFont } from '@/constants/theme';
 import { getCategories, searchQuotes, SlangCategory, SlangEntry } from '@/data/slang';
 import { slangImageMap } from '@/data/image-map';
 import { playAudio, playAudioSlow, stopAudio } from '@/services/audio';
@@ -292,7 +292,7 @@ export default function QuotesScreen() {
     [favourites, handleToggleFav, colors]
   );
 
-  const containerBg = showGrid ? colors.background : '#F0F4F8';
+  const containerBg = showGrid ? colors.background : ContentBg;
   return (
     <View style={[styles.container, { backgroundColor: containerBg }]}>
       {/* Blue header — fixed height, left slot same width in all states */}
@@ -529,7 +529,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   contentListBackground: {
-    backgroundColor: '#F0F4F8',
+    backgroundColor: ContentBg,
   },
   listContent: {
     paddingBottom: 24, // extra space; list view adds insets.bottom + 80 via inline style

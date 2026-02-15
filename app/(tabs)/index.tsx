@@ -233,7 +233,7 @@ export default function FeedScreen() {
         style={styles.scroll}
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingBottom: insets.bottom + 90 },
+          { paddingBottom: insets.bottom + 40 },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -503,8 +503,8 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   quizQuestionText: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: "700",
     fontFamily: BodyFont,
     marginBottom: 12,
     lineHeight: 22,
@@ -555,9 +555,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   resultText: {
-    fontSize: 16,
-    fontWeight: "700",
-    fontFamily: BodyFont,
+    fontSize: 18,
+    fontWeight: "900",
+    fontFamily: HeadingFont,
   },
   correctMsg: {
     color: "#4CAF50",
