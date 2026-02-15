@@ -26,6 +26,7 @@ import { DeviceMotion } from "expo-sensors";
 import * as Haptics from "expo-haptics";
 import { Audio } from "expo-av";
 
+import { SlangDisplayFont, ButtonFont, HeadingFont } from "@/constants/theme";
 import {
   HEADSUP_TOPIC_META,
   HEADSUP_EASY_WORDS,
@@ -569,7 +570,22 @@ export default function HeadsUpGameScreen() {
             {gameStarted && !gameOver && currentWord && (
               <View style={styles.gameContainer}>
                 <Text style={styles.gameTimer}>{timeRemaining}</Text>
-                <Text style={styles.wordDisplay}>{currentWord}</Text>
+                <View style={styles.wordDisplayRow}>
+                  {currentWord
+                    .split(/\s+/)
+                    .filter(Boolean)
+                    .map((word, i) => (
+                      <Text
+                        key={`${word}-${i}`}
+                        style={styles.wordDisplay}
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
+                        minimumFontScale={0.5}
+                      >
+                        {word}
+                      </Text>
+                    ))}
+                </View>
               </View>
             )}
           </View>
@@ -879,15 +895,22 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginBottom: 16,
   },
-  wordDisplay: {
-    fontSize: 64,
-    fontWeight: "800",
-    color: "#fff",
-    textAlign: "center",
+  wordDisplayRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignContent: "center",
     paddingHorizontal: 24,
     marginBottom: 16,
-    alignSelf: "center",
     maxWidth: WORD_MAX_WIDTH,
+    columnGap: 20,
+    rowGap: 0,
+  },
+  wordDisplay: {
+    fontSize: 80,
+    fontFamily: HeadingFont,
+    color: "#fff",
+    textAlign: "center",
   },
   scoreDisplay: {
     fontSize: 48,
@@ -900,14 +923,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   scorePhrase: {
-    fontSize: 20,
+    fontFamily: ButtonFont,
+    fontSize: 28,
     fontWeight: "700",
     color: "#fff",
     textAlign: "center",
     marginBottom: 8,
   },
   finalScore: {
-    fontSize: 56,
+    fontFamily: ButtonFont,
+    fontSize: 92,
     fontWeight: "800",
     color: "#fff",
     textAlign: "center",
@@ -921,8 +946,6 @@ const styles = StyleSheet.create({
   },
   resultColumn: {
     flex: 1,
-    backgroundColor: "#fff",
-    borderRadius: 12,
     padding: 12,
     minHeight: 240,
     maxHeight: 420,
@@ -934,14 +957,16 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   resultScrollHint: {
-    fontSize: 11,
-    color: "#687076",
+    fontFamily: ButtonFont,
+    fontSize: 16,
+    color: "rgba(255,255,255,0.8)",
     textAlign: "center",
     marginTop: 6,
   },
   resultTitle: {
-    fontSize: 20,
-    fontWeight: "700",
+    fontFamily: HeadingFont,
+    fontSize: 26,
+    fontWeight: "900",
     color: "rgb(28, 149, 83)",
     marginBottom: 8,
   },
@@ -949,8 +974,10 @@ const styles = StyleSheet.create({
     color: "#c64a4a",
   },
   resultItem: {
-    fontSize: 13,
-    color: "#11181C",
+    fontFamily: ButtonFont,
+    fontSize: 19,
+    fontWeight: "700",
+    color: "#fff",
     marginBottom: 4,
   },
   backToMenuBtn: {
@@ -967,7 +994,7 @@ const styles = StyleSheet.create({
   },
   backToMenuText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "700",
   },
 });

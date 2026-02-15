@@ -37,7 +37,7 @@ export const HEADSUP_EASY_WORDS = [
 export const HEADSUP_HARD_WORDS = [
   "Drongo", "Yobbo", "Dag", "Dunny", "Durry", "Stubby Holder", "Chook", "Ripper",
   "True Blue", "Rooted", "Crook", "Bludger", "Seppo", "Straya", "Larrikin", "Trackie Dacks",
-  "Mozzie", "Tradie Crack", "Tall Poppy", "Bathers vs Togs", "Hoon", "Woopsie Woo", "Bingle",
+  "Mozzie", "Tradie Crack", "Tall Poppy", "Togs", "Hoon", "Woopsie Woo", "Bingle",
   "Tallie", "Bottlebrush", "Bluey", "Banana Bender", "Sandgroper", "Croweater",
   "Mexican (Victorian)", "Pie Floater", "Freo Doctor", "Stobie Pole", "Drop Bear",
   "Witchetty Grub", "Kookaburra", "Magpie Season", "Fair Go", "Hard Yakka", "Chuck a Sickie",

@@ -8,7 +8,6 @@ import { BodyFont, HeadingFont } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
 
 const CONTENT_BG = '#F0F4F8';
-const ACCENT_BLUE = '#194F89';
 
 const GAME_IMAGES = {
   conversation: require('@/assets/games/conversations.png'),
@@ -44,7 +43,7 @@ export default function GamesScreen() {
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingTop: 24, paddingBottom: insets.bottom + 90 },
+          { paddingTop: 40, paddingBottom: insets.bottom + 90 },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -79,8 +78,7 @@ const styles = StyleSheet.create({
   gameCard: {
     backgroundColor: '#fff',
     borderRadius: 16,
-    marginBottom: 18,
-    overflow: 'hidden',
+    marginBottom: 32,
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.06)',
     ...Platform.select({
@@ -96,7 +94,10 @@ const styles = StyleSheet.create({
   gameImageWrap: {
     width: '100%',
     aspectRatio: 1.6,
+    paddingTop: 1,
     overflow: 'hidden',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
   },
   gameImage: {
     width: '100%',
