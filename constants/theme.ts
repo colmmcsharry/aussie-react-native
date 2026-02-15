@@ -74,3 +74,14 @@ export const Fonts = Platform.select({
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });
+
+/** Heading font – Nunito 900 Black. Load in root layout. */
+export const HeadingFont = 'Nunito_900Black';
+/** Body text – Nunito Regular. Load in root layout. */
+export const BodyFont = 'Nunito_400Regular';
+/** Button text – Nunito Bold. Load in root layout. */
+export const ButtonFont = 'Nunito_700Bold';
+/** Card body text (explanation, notes, examples) – Nunito Medium, no 400 in cards. Load in root layout. */
+export const CardBodyFont = 'Nunito_500Medium';
+/** Slang phrases only (e.g. "G'day", "How ya goin'?") – Fredoka One. Load in root layout. */
+export const SlangDisplayFont = 'FredokaOne_400Regular';

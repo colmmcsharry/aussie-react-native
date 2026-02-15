@@ -4,7 +4,7 @@ import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import { BodyFont, Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 function createTabButton(path: string) {
@@ -32,6 +32,7 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
+        tabBarLabelStyle: { fontFamily: BodyFont },
       }}>
       <Tabs.Screen
         name="index"
@@ -79,11 +80,7 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-          tabBarButton: createTabButton('/explore'),
-        }}
+        options={{ href: null }}
       />
     </Tabs>
   );

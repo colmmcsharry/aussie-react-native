@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   View,
   Text,
@@ -9,16 +15,16 @@ import {
   Platform,
   Dimensions,
   ScrollView,
-} from 'react-native';
+} from "react-native";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const WORD_MAX_WIDTH = Math.round(SCREEN_WIDTH * 1.22);
-import { useRouter } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { DeviceMotion } from 'expo-sensors';
-import * as Haptics from 'expo-haptics';
-import { Audio } from 'expo-av';
+import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { DeviceMotion } from "expo-sensors";
+import * as Haptics from "expo-haptics";
+import { Audio } from "expo-av";
 
 import {
   HEADSUP_TOPIC_META,
@@ -26,10 +32,10 @@ import {
   HEADSUP_HARD_WORDS,
   HEADSUP_XXX_WORDS,
   type HeadsUpTopicId,
-} from '@/data/headsup-topics';
+} from "@/data/headsup-topics";
 
-const ACCENT_BLUE = '#194F89';
-const CONTENT_BG = '#F0F4F8';
+const ACCENT_BLUE = "#194F89";
+const CONTENT_BG = "#F0F4F8";
 const GAME_BG = ACCENT_BLUE;
 // Reserve space where tab bar would be so layout doesn't jump when it hides on this screen
 const TAB_BAR_HEIGHT = 84;
@@ -55,20 +61,20 @@ const DEBOUNCE_MS = 800;
 
 // Heads Up sound effects (from old app)
 const SOUNDS = {
-  correct: require('@/assets/audio/correct.m4a'),
-  skip: require('@/assets/audio/skipsound.m4a'),
-  gong: require('@/assets/audio/gong.m4a'),
+  correct: require("@/assets/audio/correct.m4a"),
+  skip: require("@/assets/audio/skipsound.m4a"),
+  gong: require("@/assets/audio/gong.m4a"),
 };
 
 // 5-second clock ticking — play once for countdown and once for last 5s of game
-const CLOCK_TICKING = require('@/assets/audio/clock-ticking.mp3');
+const CLOCK_TICKING = require("@/assets/audio/clock-ticking.mp3");
 
-async function playHeadsupSound(
-  source: number,
-  volume = 0.7
-): Promise<void> {
+async function playHeadsupSound(source: number, volume = 0.7): Promise<void> {
   try {
-    const { sound } = await Audio.Sound.createAsync(source, { shouldPlay: true, volume });
+    const { sound } = await Audio.Sound.createAsync(source, {
+      shouldPlay: true,
+      volume,
+    });
     sound.setOnPlaybackStatusUpdate((status) => {
       if (status.isLoaded && status.didJustFinish) {
         sound.unloadAsync().catch(() => {});
@@ -81,7 +87,10 @@ async function playHeadsupSound(
 
 async function playClockTicking(volume = 0.5): Promise<void> {
   try {
-    const { sound } = await Audio.Sound.createAsync(CLOCK_TICKING, { shouldPlay: true, volume });
+    const { sound } = await Audio.Sound.createAsync(CLOCK_TICKING, {
+      shouldPlay: true,
+      volume,
+    });
     sound.setOnPlaybackStatusUpdate((status) => {
       if (status.isLoaded && status.didJustFinish) {
         sound.unloadAsync().catch(() => {});
@@ -96,7 +105,10 @@ export default function HeadsUpGameScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
-  const [activeTopics, setActiveTopics] = useState<HeadsUpTopicId[]>(['easy', 'hard']);
+  const [activeTopics, setActiveTopics] = useState<HeadsUpTopicId[]>([
+    "easy",
+    "hard",
+  ]);
   const [gameDuration, setGameDuration] = useState<60 | 90>(60);
   const [rulesVisible, setRulesVisible] = useState(false);
   const [showCountdown, setShowCountdown] = useState(false);
@@ -110,9 +122,15 @@ export default function HeadsUpGameScreen() {
   const [skippedWords, setSkippedWords] = useState<string[]>([]);
   const [timeRemaining, setTimeRemaining] = useState(60);
 
-  const [showFeedback, setShowFeedback] = useState<'correct' | 'skip' | null>(null);
-  const [motionPermissionGranted, setMotionPermissionGranted] = useState<boolean | null>(null);
-  const [motionPermissionError, setMotionPermissionError] = useState<string | null>(null);
+  const [showFeedback, setShowFeedback] = useState<"correct" | "skip" | null>(
+    null,
+  );
+  const [motionPermissionGranted, setMotionPermissionGranted] = useState<
+    boolean | null
+  >(null);
+  const [motionPermissionError, setMotionPermissionError] = useState<
+    string | null
+  >(null);
 
   const wordPool = useRef<string[]>([]);
   const hasTiltedDown = useRef(false);
@@ -132,7 +150,7 @@ export default function HeadsUpGameScreen() {
 
   const nextWord = useCallback(() => {
     const next = pickNextWord();
-    setCurrentWord(next ?? '— No more words! —');
+    setCurrentWord(next ?? "— No more words! —");
     hasTiltedDown.current = false;
     hasTiltedUp.current = false;
   }, [pickNextWord]);
@@ -141,9 +159,10 @@ export default function HeadsUpGameScreen() {
     if (!currentWord) return;
     setScore((s) => s + 1);
     setCorrectWords((prev) => [...prev, currentWord]);
-    setShowFeedback('correct');
+    setShowFeedback("correct");
     setTimeout(() => setShowFeedback(null), 300);
-    if (Platform.OS === 'ios') Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    if (Platform.OS === "ios")
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     playHeadsupSound(SOUNDS.correct);
     nextWord();
   }, [currentWord, nextWord]);
@@ -151,9 +170,10 @@ export default function HeadsUpGameScreen() {
   const handleSkip = useCallback(() => {
     if (!currentWord) return;
     setSkippedWords((prev) => [...prev, currentWord]);
-    setShowFeedback('skip');
+    setShowFeedback("skip");
     setTimeout(() => setShowFeedback(null), 300);
-    if (Platform.OS === 'ios') Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+    if (Platform.OS === "ios")
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
     playHeadsupSound(SOUNDS.skip);
     nextWord();
   }, [currentWord, nextWord]);
@@ -164,25 +184,31 @@ export default function HeadsUpGameScreen() {
     try {
       const available = await DeviceMotion.isAvailableAsync();
       if (!available) {
-        setMotionPermissionError('Motion sensor not available on this device.');
+        setMotionPermissionError("Motion sensor not available on this device.");
         return;
       }
       const { granted } = await DeviceMotion.requestPermissionsAsync();
       if (!granted) {
         setMotionPermissionGranted(false);
-        setMotionPermissionError('Motion permission is needed to detect tilts. Enable it in Settings.');
+        setMotionPermissionError(
+          "Motion permission is needed to detect tilts. Enable it in Settings.",
+        );
         return;
       }
       setMotionPermissionGranted(true);
     } catch (e) {
-      setMotionPermissionError(e instanceof Error ? e.message : 'Could not access motion.');
+      setMotionPermissionError(
+        e instanceof Error ? e.message : "Could not access motion.",
+      );
       return;
     }
 
     let words: string[] = [];
-    if (activeTopics.includes('easy')) words = [...words, ...HEADSUP_EASY_WORDS];
-    if (activeTopics.includes('hard')) words = [...words, ...HEADSUP_HARD_WORDS];
-    if (activeTopics.includes('xxx')) words = [...words, ...HEADSUP_XXX_WORDS];
+    if (activeTopics.includes("easy"))
+      words = [...words, ...HEADSUP_EASY_WORDS];
+    if (activeTopics.includes("hard"))
+      words = [...words, ...HEADSUP_HARD_WORDS];
+    if (activeTopics.includes("xxx")) words = [...words, ...HEADSUP_XXX_WORDS];
     const used = new Set([...correctWords, ...skippedWords]);
     words = words.filter((w) => !used.has(w));
     words = shuffleArray(words);
@@ -249,7 +275,8 @@ export default function HeadsUpGameScreen() {
   useEffect(() => {
     if (!gameStarted || gameOver || !currentWord) return;
 
-    const toDeg = (r: number) => (Math.abs(r) <= Math.PI + 0.5 ? (r * 180) / Math.PI : r);
+    const toDeg = (r: number) =>
+      Math.abs(r) <= Math.PI + 0.5 ? (r * 180) / Math.PI : r;
 
     DeviceMotion.setUpdateInterval(50);
     const sub = DeviceMotion.addListener(({ rotation }) => {
@@ -270,7 +297,10 @@ export default function HeadsUpGameScreen() {
 
       // Point (tilt down toward floor): gamma from -90 past ±180 toward +170, detect in (120, 180)
       if (gamma > POINT_GAMMA_MIN && gamma < POINT_GAMMA_MAX) {
-        if (!hasTiltedDown.current && now - lastScoreTime.current > DEBOUNCE_MS) {
+        if (
+          !hasTiltedDown.current &&
+          now - lastScoreTime.current > DEBOUNCE_MS
+        ) {
           lastScoreTime.current = now;
           hasTiltedDown.current = true;
           hasTiltedUp.current = false;
@@ -286,7 +316,7 @@ export default function HeadsUpGameScreen() {
 
   const toggleTopic = useCallback((id: HeadsUpTopicId) => {
     setActiveTopics((prev) =>
-      prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id],
     );
   }, []);
 
@@ -298,7 +328,7 @@ export default function HeadsUpGameScreen() {
     setShowCountdown(false);
     setCountdown(5);
     setCurrentWord(null);
-    router.replace('/games');
+    router.replace("/games");
   }, [router]);
 
   /** Return to Heads Up menu (play again); keeps correct/skipped so same words don't reappear. */
@@ -312,17 +342,18 @@ export default function HeadsUpGameScreen() {
     setCurrentWord(null);
   }, []);
 
-  const topicIds: HeadsUpTopicId[] = ['easy', 'hard', 'xxx'];
+  const topicIds: HeadsUpTopicId[] = ["easy", "hard", "xxx"];
 
   const scorePhrase = useMemo(() => {
-    if (score === 0) return 'RUBBISH! 💩';
-    if (score < 5) return 'NOT BAD 🙂';
-    if (score < 10) return 'GOOD ON YA! 🦘';
-    return 'LEGEND! 🇦🇺';
+    if (score === 0) return "RUBBISH! 💩";
+    if (score < 5) return "NOT BAD 🙂";
+    if (score < 10) return "GOOD ON YA! 🦘";
+    return "LEGEND! 🇦🇺";
   }, [score]);
 
   const showMenu = !gameStarted && !showCountdown && !gameOver;
-  const showRotatedView = showCountdown || (gameStarted && !gameOver && currentWord);
+  const showRotatedView =
+    showCountdown || (gameStarted && !gameOver && currentWord);
 
   return (
     <View
@@ -342,89 +373,144 @@ export default function HeadsUpGameScreen() {
       )}
 
       {showMenu && (
-        <View style={[styles.menuWrapper, { height: SCREEN_HEIGHT - TAB_BAR_HEIGHT }]}>
-          <View style={[styles.menuContainer, { paddingTop: insets.top + 100, paddingBottom: TAB_BAR_HEIGHT + 24 }]}>
-          <Pressable onPress={() => setRulesVisible(!rulesVisible)} style={styles.rulesHeader}>
-            <Text style={styles.rulesTitle}>How to Play</Text>
-            <Ionicons
-              name={rulesVisible ? 'chevron-up' : 'chevron-down'}
-              size={20}
-              color="#687076"
-            />
-          </Pressable>
-          {rulesVisible && (
-            <View style={styles.rulesList}>
-              <Text style={styles.ruleItem}>• Requires 2+ people</Text>
-              <Text style={styles.ruleItem}>• Hold phone sideways on your forehead</Text>
-              <Text style={styles.ruleItem}>• Friends describe the word (no spelling!)</Text>
-              <Text style={styles.ruleItem}>• If you guess correctly, Tilt DOWN then back up</Text>
-              <Text style={styles.ruleItem}>• Tilt UP = skip to next word</Text>
-            </View>
-          )}
-
-          <View style={styles.timerRow}>
-            <View style={styles.timerLabelWrap}>
-              <Ionicons name="time-outline" size={24} color="#11181C" style={styles.timerIcon} />
-            </View>
-            <View style={styles.timerOptions}>
-              <Pressable
-                onPress={() => setGameDuration(60)}
-                style={[styles.timerBtn, gameDuration === 60 && styles.timerBtnActive]}
-              >
-                <Text style={[styles.timerBtnText, gameDuration === 60 && styles.timerBtnTextActive]}>
-                  60s
+        <View
+          style={[
+            styles.menuWrapper,
+            { height: SCREEN_HEIGHT - TAB_BAR_HEIGHT },
+          ]}
+        >
+          <View
+            style={[
+              styles.menuContainer,
+              {
+                paddingTop: insets.top + 100,
+                paddingBottom: TAB_BAR_HEIGHT + 24,
+              },
+            ]}
+          >
+            <Pressable
+              onPress={() => setRulesVisible(!rulesVisible)}
+              style={styles.rulesHeader}
+            >
+              <Text style={styles.rulesTitle}>How to Play</Text>
+              <Ionicons
+                name={rulesVisible ? "chevron-up" : "chevron-down"}
+                size={20}
+                color="#687076"
+              />
+            </Pressable>
+            {rulesVisible && (
+              <View style={styles.rulesList}>
+                <Text style={styles.ruleItem}>• Requires 2+ people</Text>
+                <Text style={styles.ruleItem}>
+                  • Hold phone sideways on your forehead
                 </Text>
-              </Pressable>
-              <Pressable
-                onPress={() => setGameDuration(90)}
-                style={[styles.timerBtn, gameDuration === 90 && styles.timerBtnActive]}
-              >
-                <Text style={[styles.timerBtnText, gameDuration === 90 && styles.timerBtnTextActive]}>
-                  90s
+                <Text style={styles.ruleItem}>
+                  • Friends describe the word (no spelling!)
                 </Text>
-              </Pressable>
-            </View>
-          </View>
+                <Text style={styles.ruleItem}>
+                  • If you guess correctly, Tilt DOWN then back up
+                </Text>
+                <Text style={styles.ruleItem}>
+                  • Tilt UP = skip to next word
+                </Text>
+                <Text style={styles.ruleItem}>
+                  • Guess as many words as you can in the time limit
+                </Text>
+              </View>
+            )}
 
-          <Text style={styles.includeLabel}>Words to include</Text>
-          <View style={styles.topicWrap}>
-            {topicIds.map((id) => {
-              const meta = HEADSUP_TOPIC_META[id];
-              const isActive = activeTopics.includes(id);
-              return (
+            <View style={styles.timerRow}>
+              <View style={styles.timerLabelWrap}>
+                <Ionicons
+                  name="time-outline"
+                  size={24}
+                  color="#11181C"
+                  style={styles.timerIcon}
+                />
+              </View>
+              <View style={styles.timerOptions}>
                 <Pressable
-                  key={id}
-                  onPress={() => toggleTopic(id)}
-                  style={[styles.topicBtn, isActive && styles.topicBtnActive]}
+                  onPress={() => setGameDuration(60)}
+                  style={[
+                    styles.timerBtn,
+                    gameDuration === 60 && styles.timerBtnActive,
+                  ]}
                 >
                   <Text
                     style={[
-                      styles.topicBtnText,
-                      isActive && styles.topicBtnTextActive,
+                      styles.timerBtnText,
+                      gameDuration === 60 && styles.timerBtnTextActive,
                     ]}
                   >
-                    {meta.emoji}  {meta.label}
+                    60s
                   </Text>
-                  {isActive && (
-                    <Ionicons name="checkmark-circle" size={26} color="#fff" style={styles.topicTick} />
-                  )}
                 </Pressable>
-              );
-            })}
-          </View>
+                <Pressable
+                  onPress={() => setGameDuration(90)}
+                  style={[
+                    styles.timerBtn,
+                    gameDuration === 90 && styles.timerBtnActive,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.timerBtnText,
+                      gameDuration === 90 && styles.timerBtnTextActive,
+                    ]}
+                  >
+                    90s
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
 
-          <View style={styles.menuSpacer} />
+            <Text style={styles.includeLabel}>Words to include</Text>
+            <View style={styles.topicWrap}>
+              {topicIds.map((id) => {
+                const meta = HEADSUP_TOPIC_META[id];
+                const isActive = activeTopics.includes(id);
+                return (
+                  <Pressable
+                    key={id}
+                    onPress={() => toggleTopic(id)}
+                    style={[styles.topicBtn, isActive && styles.topicBtnActive]}
+                  >
+                    <Text
+                      style={[
+                        styles.topicBtnText,
+                        isActive && styles.topicBtnTextActive,
+                      ]}
+                    >
+                      {meta.emoji} {meta.label}
+                    </Text>
+                    {isActive && (
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={26}
+                        color="#fff"
+                        style={styles.topicTick}
+                      />
+                    )}
+                  </Pressable>
+                );
+              })}
+            </View>
 
-          <TouchableOpacity
-            onPress={() => startGame()}
-            style={styles.startBtn}
-            disabled={activeTopics.length === 0}
-          >
-            <Text style={styles.startBtnText}>Start</Text>
-          </TouchableOpacity>
-          {motionPermissionError != null && (
-            <Text style={styles.permissionError}>{motionPermissionError}</Text>
-          )}
+            <View style={styles.menuSpacer} />
+
+            <TouchableOpacity
+              onPress={() => startGame()}
+              style={styles.startBtn}
+              disabled={activeTopics.length === 0}
+            >
+              <Text style={styles.startBtnText}>Start</Text>
+            </TouchableOpacity>
+            {motionPermissionError != null && (
+              <Text style={styles.permissionError}>
+                {motionPermissionError}
+              </Text>
+            )}
           </View>
         </View>
       )}
@@ -440,25 +526,36 @@ export default function HeadsUpGameScreen() {
                 height: SCREEN_WIDTH,
               },
             ]}
-            >
+          >
             {!showCountdown && (
               <TouchableOpacity
                 onPress={endAndReset}
-                style={[styles.backBtnInRotated, { left: 16 + insets.top + 40, top: 12 }]}
+                style={[
+                  styles.backBtnInRotated,
+                  { left: 16 + insets.top + 40, top: 12 },
+                ]}
                 hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
               >
                 <Ionicons name="arrow-back" size={24} color="#11181C" />
               </TouchableOpacity>
             )}
 
-            {showFeedback === 'correct' && (
+            {showFeedback === "correct" && (
               <View style={styles.feedbackOverlay}>
-                <Image source={require('@/assets/check-mark.png')} style={styles.feedbackImage} resizeMode="contain" />
+                <Image
+                  source={require("@/assets/check-mark.png")}
+                  style={styles.feedbackImage}
+                  resizeMode="contain"
+                />
               </View>
             )}
-            {showFeedback === 'skip' && (
+            {showFeedback === "skip" && (
               <View style={[styles.feedbackOverlay, styles.feedbackSkip]}>
-                <Image source={require('@/assets/xmark.png')} style={styles.feedbackImage} resizeMode="contain" />
+                <Image
+                  source={require("@/assets/xmark.png")}
+                  style={styles.feedbackImage}
+                  resizeMode="contain"
+                />
               </View>
             )}
 
@@ -480,7 +577,12 @@ export default function HeadsUpGameScreen() {
       )}
 
       {gameOver && (
-        <View style={[styles.gameOverContainer, { paddingBottom: insets.bottom + 32 }]}>
+        <View
+          style={[
+            styles.gameOverContainer,
+            { paddingBottom: insets.bottom + 32 },
+          ]}
+        >
           <Text style={styles.scorePhrase}>{scorePhrase}</Text>
           <Text style={styles.finalScore}>{score}</Text>
           <View style={styles.resultsRow}>
@@ -493,7 +595,9 @@ export default function HeadsUpGameScreen() {
                 persistentScrollbar={true}
               >
                 {correctWords.map((w, i) => (
-                  <Text key={i} style={styles.resultItem}>{i + 1}. {w}</Text>
+                  <Text key={i} style={styles.resultItem}>
+                    {i + 1}. {w}
+                  </Text>
                 ))}
               </ScrollView>
               {correctWords.length > 15 && (
@@ -501,7 +605,9 @@ export default function HeadsUpGameScreen() {
               )}
             </View>
             <View style={styles.resultColumn}>
-              <Text style={[styles.resultTitle, styles.resultTitleSkipped]}>Skipped ✗</Text>
+              <Text style={[styles.resultTitle, styles.resultTitleSkipped]}>
+                Skipped ✗
+              </Text>
               <ScrollView
                 style={styles.resultScroll}
                 contentContainerStyle={styles.resultScrollContent}
@@ -509,7 +615,9 @@ export default function HeadsUpGameScreen() {
                 persistentScrollbar={true}
               >
                 {skippedWords.map((w, i) => (
-                  <Text key={i} style={styles.resultItem}>{i + 1}. {w}</Text>
+                  <Text key={i} style={styles.resultItem}>
+                    {i + 1}. {w}
+                  </Text>
                 ))}
               </ScrollView>
               {skippedWords.length > 15 && (
@@ -518,7 +626,12 @@ export default function HeadsUpGameScreen() {
             </View>
           </View>
           <TouchableOpacity onPress={backToMenu} style={styles.backToMenuBtn}>
-            <Ionicons name="arrow-back" size={22} color="#fff" style={styles.backToMenuIcon} />
+            <Ionicons
+              name="arrow-back"
+              size={22}
+              color="#fff"
+              style={styles.backToMenuIcon}
+            />
             <Text style={styles.backToMenuText}>Go back</Text>
           </TouchableOpacity>
         </View>
@@ -532,18 +645,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backBtnFloating: {
-    position: 'absolute',
+    position: "absolute",
     left: 16,
     zIndex: 20,
     width: 44,
     height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.9)",
     borderRadius: 22,
     ...Platform.select({
       ios: {
-        shadowColor: '#000',
+        shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
@@ -552,34 +665,34 @@ const styles = StyleSheet.create({
     }),
   },
   rotatedWrapper: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
   },
   rotatedInner: {
-    transform: [{ rotate: '90deg' }],
-    justifyContent: 'center',
-    alignItems: 'center',
+    transform: [{ rotate: "90deg" }],
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: GAME_BG,
   },
   backBtnInRotated: {
-    position: 'absolute',
+    position: "absolute",
     left: 16,
     zIndex: 20,
     width: 44,
     height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.9)",
     borderRadius: 22,
     ...Platform.select({
       ios: {
-        shadowColor: '#000',
+        shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
@@ -588,81 +701,81 @@ const styles = StyleSheet.create({
     }),
   },
   feedbackOverlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(76, 175, 80, 0.4)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(76, 175, 80, 0.4)",
+    alignItems: "center",
+    justifyContent: "center",
     zIndex: 50,
   },
   feedbackSkip: {
-    backgroundColor: 'rgba(198, 74, 74, 0.4)',
+    backgroundColor: "rgba(198, 74, 74, 0.4)",
   },
   feedbackImage: {
     width: 200,
     height: 200,
   },
   menuWrapper: {
-    width: '100%',
+    width: "100%",
   },
   menuContainer: {
     flex: 1,
     paddingHorizontal: 20,
   },
   rulesHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#dce0e5',
+    borderColor: "#dce0e5",
     marginBottom: 24,
   },
   rulesTitle: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#687076',
+    fontWeight: "500",
+    color: "#687076",
   },
   rulesList: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 16,
     borderRadius: 12,
     marginBottom: 24,
   },
   ruleItem: {
     fontSize: 15,
-    color: '#687076',
+    color: "#687076",
     marginBottom: 8,
     lineHeight: 22,
   },
   timerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 24,
   },
   timerLabelWrap: {
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   timerIcon: {
     marginRight: 4,
   },
   timerOptions: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
   },
   timerBtn: {
     paddingVertical: 10,
     paddingHorizontal: 24,
     borderRadius: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: '#dce0e5',
+    borderColor: "#dce0e5",
   },
   timerBtnActive: {
     backgroundColor: ACCENT_BLUE,
@@ -670,34 +783,34 @@ const styles = StyleSheet.create({
   },
   timerBtnText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: ACCENT_BLUE,
   },
   timerBtnTextActive: {
-    color: '#fff',
+    color: "#fff",
   },
   includeLabel: {
     fontSize: 16,
-    fontWeight: '700',
-    color: '#11181C',
+    fontWeight: "700",
+    color: "#11181C",
     marginBottom: 14,
   },
   topicWrap: {
-    flexDirection: 'column',
+    flexDirection: "column",
     gap: 14,
     marginBottom: 32,
   },
   topicBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingVertical: 20,
     paddingHorizontal: 20,
     minHeight: 72,
     borderRadius: 14,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: '#dce0e5',
+    borderColor: "#dce0e5",
   },
   topicBtnActive: {
     backgroundColor: ACCENT_BLUE,
@@ -705,11 +818,11 @@ const styles = StyleSheet.create({
   },
   topicBtnText: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
     color: ACCENT_BLUE,
   },
   topicBtnTextActive: {
-    color: '#fff',
+    color: "#fff",
   },
   topicTick: {
     marginLeft: 8,
@@ -722,64 +835,64 @@ const styles = StyleSheet.create({
     backgroundColor: ACCENT_BLUE,
     paddingVertical: 16,
     borderRadius: 18,
-    alignItems: 'center',
+    alignItems: "center",
   },
   startBtnText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   permissionError: {
     marginTop: 12,
     fontSize: 14,
-    color: '#c64a4a',
-    textAlign: 'center',
+    color: "#c64a4a",
+    textAlign: "center",
     paddingHorizontal: 16,
   },
   countdownContainer: {
     flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
     gap: 24,
   },
   countdownTitle: {
     fontSize: 44,
-    fontWeight: '800',
-    color: '#fff',
-    textAlign: 'center',
+    fontWeight: "800",
+    color: "#fff",
+    textAlign: "center",
   },
   countdownNumber: {
     fontSize: 108,
-    fontWeight: '800',
-    color: '#fff',
+    fontWeight: "800",
+    color: "#fff",
   },
   gameContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
   },
   gameTimer: {
     fontSize: 48,
-    fontWeight: '700',
-    color: '#fff',
+    fontWeight: "700",
+    color: "#fff",
     marginBottom: 16,
   },
   wordDisplay: {
     fontSize: 64,
-    fontWeight: '800',
-    color: '#fff',
-    textAlign: 'center',
+    fontWeight: "800",
+    color: "#fff",
+    textAlign: "center",
     paddingHorizontal: 24,
     marginBottom: 16,
-    alignSelf: 'center',
+    alignSelf: "center",
     maxWidth: WORD_MAX_WIDTH,
   },
   scoreDisplay: {
     fontSize: 48,
-    fontWeight: '700',
-    color: '#fff',
+    fontWeight: "700",
+    color: "#fff",
   },
   gameOverContainer: {
     flex: 1,
@@ -788,27 +901,27 @@ const styles = StyleSheet.create({
   },
   scorePhrase: {
     fontSize: 20,
-    fontWeight: '700',
-    color: '#fff',
-    textAlign: 'center',
+    fontWeight: "700",
+    color: "#fff",
+    textAlign: "center",
     marginBottom: 8,
   },
   finalScore: {
     fontSize: 56,
-    fontWeight: '800',
-    color: '#fff',
-    textAlign: 'center',
+    fontWeight: "800",
+    color: "#fff",
+    textAlign: "center",
     marginBottom: 24,
   },
   resultsRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 16,
     marginBottom: 24,
     flex: 1,
   },
   resultColumn: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 12,
     minHeight: 240,
@@ -822,28 +935,28 @@ const styles = StyleSheet.create({
   },
   resultScrollHint: {
     fontSize: 11,
-    color: '#687076',
-    textAlign: 'center',
+    color: "#687076",
+    textAlign: "center",
     marginTop: 6,
   },
   resultTitle: {
     fontSize: 20,
-    fontWeight: '700',
-    color: 'rgb(28, 149, 83)',
+    fontWeight: "700",
+    color: "rgb(28, 149, 83)",
     marginBottom: 8,
   },
   resultTitleSkipped: {
-    color: '#c64a4a',
+    color: "#c64a4a",
   },
   resultItem: {
     fontSize: 13,
-    color: '#11181C',
+    color: "#11181C",
     marginBottom: 4,
   },
   backToMenuBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: ACCENT_BLUE,
     paddingVertical: 14,
     borderRadius: 12,
@@ -853,8 +966,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   backToMenuText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });

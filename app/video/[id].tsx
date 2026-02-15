@@ -10,6 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 
 import { ThemedText } from '@/components/themed-text';
+import { BodyFont, ButtonFont, HeadingFont } from '@/constants/theme';
 
 /**
  * Video player screen.
@@ -172,6 +173,7 @@ const styles = StyleSheet.create({
   backText: {
     color: '#fff',
     fontSize: 17,
+    fontFamily: ButtonFont,
   },
   headerTitleWrap: {
     flex: 1,
@@ -180,7 +182,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: HeadingFont,
   },
   headerSpacer: {
     minWidth: 70,
@@ -205,5 +207,6 @@ const styles = StyleSheet.create({
   loadingText: {
     color: '#888',
     fontSize: 15,
+    fontFamily: BodyFont,
   },
 });

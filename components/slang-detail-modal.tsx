@@ -12,7 +12,7 @@ import {
 import { Image } from 'expo-image';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { Colors } from '@/constants/theme';
+import { Colors, BodyFont, ButtonFont, CardBodyFont, SlangDisplayFont } from '@/constants/theme';
 import type { SlangEntry } from '@/data/slang';
 import { slangImageMap } from '@/data/image-map';
 import { playAudio, playAudioSlow, stopAudio } from '@/services/audio';
@@ -114,7 +114,7 @@ export function SlangDetailModal({
                 <Text style={[styles.cardTitle, { color: colors.text }]}>
                   {entry.buttonTitle}
                 </Text>
-                <Text style={[styles.cardExplanation, { color: colors.icon }]}>
+                <Text style={[styles.cardExplanation, { color: colors.text }]}>
                   {entry.explanation}
                 </Text>
 
@@ -239,14 +239,15 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   cardTitle: {
-    fontSize: 26,
-    fontWeight: '800',
+    fontSize: 30,
+    fontFamily: SlangDisplayFont,
     marginBottom: 8,
   },
   cardExplanation: {
     fontSize: 16,
     lineHeight: 24,
     marginBottom: 16,
+    fontFamily: CardBodyFont,
   },
   cardActionsRow: {
     flexDirection: 'row',
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
   },
   sectionLabel: {
     fontSize: 14,
-    fontWeight: '700',
+    fontFamily: ButtonFont,
     marginBottom: 6,
   },
   noteRow: {
@@ -300,6 +301,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     fontStyle: 'italic',
+    fontFamily: CardBodyFont,
   },
   examplesSection: {
     marginBottom: 8,
@@ -310,5 +312,6 @@ const styles = StyleSheet.create({
   exampleQuote: {
     fontSize: 14,
     lineHeight: 20,
+    fontFamily: CardBodyFont,
   },
 });

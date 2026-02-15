@@ -2,31 +2,35 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 
+import { BodyFont, HeadingFont } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
 
 const CONTENT_BG = '#F0F4F8';
 const ACCENT_BLUE = '#194F89';
 
+const GAME_IMAGES = {
+  conversation: require('@/assets/games/conversations.png'),
+  neverever: require('@/assets/games/neverever.png'),
+  headsup: require('@/assets/games/headsup.png'),
+} as const;
+
 const GAMES = [
   {
-    id: 'conversation',
+    id: 'conversation' as const,
     title: 'Conversations',
     description: 'Choose from a list of topics and discuss',
-    icon: 'chatbubbles' as const,
   },
   {
-    id: 'neverever',
+    id: 'neverever' as const,
     title: 'Never Have I Ever…',
     description: 'Read the card aloud — whoever has done it, drinks!',
-    icon: 'beer' as const,
   },
   {
-    id: 'headsup',
+    id: 'headsup' as const,
     title: 'Heads Up',
-    description: 'Guess the word from your mates — tilt down for correct, up to skip',
-    icon: 'phone-portrait-outline' as const,
+    description: 'Guess the word from your mates clues — tilt down for correct, up to skip',
   },
 ];
 
@@ -51,14 +55,13 @@ export default function GamesScreen() {
             onPress={() => router.push(`/games/${game.id}` as any)}
             activeOpacity={0.8}
           >
-            <View style={styles.gameIconWrap}>
-              <Ionicons name={game.icon} size={44} color={ACCENT_BLUE} />
+            <View style={styles.gameImageWrap}>
+              <Image source={GAME_IMAGES[game.id]} style={styles.gameImage} contentFit="cover" />
             </View>
             <View style={styles.gameTextWrap}>
               <Text style={styles.gameTitle}>{game.title}</Text>
               <Text style={styles.gameDescription}>{game.description}</Text>
             </View>
-            <Ionicons name="chevron-forward" size={24} color="#687076" />
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -74,12 +77,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   gameCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 16,
-    padding: 18,
     marginBottom: 18,
+    overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.06)',
     ...Platform.select({
@@ -92,26 +93,27 @@ const styles = StyleSheet.create({
       android: { elevation: 3 },
     }),
   },
-  gameIconWrap: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: 'rgba(25, 79, 137, 0.12)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
+  gameImageWrap: {
+    width: '100%',
+    aspectRatio: 1.6,
+    overflow: 'hidden',
+  },
+  gameImage: {
+    width: '100%',
+    height: '100%',
   },
   gameTextWrap: {
-    flex: 1,
+    padding: 18,
   },
   gameTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    fontFamily: HeadingFont,
     color: '#11181C',
     marginBottom: 4,
   },
   gameDescription: {
     fontSize: 14,
+    fontFamily: BodyFont,
     color: '#687076',
     lineHeight: 20,
   },

@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
+import { BodyFont, ButtonFont, HeadingFont } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -396,11 +397,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 32,
   },
-  loadingText: { marginTop: 16, fontSize: 16, opacity: 0.7 },
-  errorTitle: { fontSize: 20, fontWeight: '600', marginBottom: 8 },
-  errorDetail: { fontSize: 14, opacity: 0.6, textAlign: 'center', marginBottom: 24 },
+  loadingText: { marginTop: 16, fontSize: 16, opacity: 0.7, fontFamily: BodyFont },
+  errorTitle: { fontSize: 20, fontFamily: HeadingFont, marginBottom: 8 },
+  errorDetail: { fontSize: 14, opacity: 0.6, textAlign: 'center', marginBottom: 24, fontFamily: BodyFont },
   retryButton: { paddingHorizontal: 24, paddingVertical: 12, backgroundColor: '#194F89', borderRadius: 8 },
-  retryText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  retryText: { color: '#fff', fontSize: 16, fontWeight: '600', fontFamily: ButtonFont },
   toggleRow: {
     flexDirection: 'row',
     paddingHorizontal: 16,
@@ -416,11 +417,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.06)',
   },
   toggleBtnActive: { backgroundColor: '#194F89' },
-  toggleText: { fontSize: 15, fontWeight: '600', color: '#333' },
+  toggleText: { fontSize: 15, fontWeight: '600', color: '#333', fontFamily: ButtonFont },
   toggleTextActive: { color: '#fff' },
   scroll: { flex: 1 },
   listContent: { paddingHorizontal: 16, backgroundColor: '#F0F4F8' },
-  headerSubtitle: { fontSize: 15, marginBottom: 16 },
+  headerSubtitle: { fontSize: 15, marginBottom: 16, fontFamily: BodyFont },
   videoCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -456,10 +457,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 1,
   },
-  durationText: { color: '#fff', fontSize: 11, fontWeight: '600' },
+  durationText: { color: '#fff', fontSize: 11, fontWeight: '600', fontFamily: BodyFont },
   info: { flex: 1, marginLeft: 14, paddingTop: 2 },
-  title: { fontSize: 16, fontWeight: '600', lineHeight: 22 },
-  meta: { fontSize: 13, marginTop: 4 },
+  title: { fontSize: 16, lineHeight: 22, fontFamily: ButtonFont },
+  meta: { fontSize: 13, marginTop: 4, fontFamily: BodyFont },
 
   teacherCard: {
     backgroundColor: '#fff',
@@ -486,10 +487,10 @@ const styles = StyleSheet.create({
   },
   teacherThumbPlaceholder: { justifyContent: 'center', alignItems: 'center' },
   teacherInfo: { flex: 1, marginLeft: 14 },
-  teacherName: { fontSize: 18, fontWeight: '700', marginBottom: 6 },
+  teacherName: { fontSize: 18, fontFamily: HeadingFont, marginBottom: 6 },
   socialsRow: { flexDirection: 'row', gap: 8, marginBottom: 6 },
   socialBtn: { padding: 2 },
-  teacherBio: { fontSize: 14, lineHeight: 20, marginBottom: 8 },
+  teacherBio: { fontSize: 14, lineHeight: 20, marginBottom: 8, fontFamily: BodyFont },
   teacherVideosRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -499,5 +500,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#194F89',
+    fontFamily: BodyFont,
   },
 });

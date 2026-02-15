@@ -23,6 +23,7 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
+import { BodyFont, ButtonFont, HeadingFont } from '@/constants/theme';
 import {
   CONVERSATION_TOPICS,
   CONVERSATION_TOPIC_META,
@@ -391,6 +392,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 15,
+    fontFamily: BodyFont,
     color: '#687076',
     textAlign: 'center',
     marginBottom: 24,
@@ -414,6 +416,7 @@ const styles = StyleSheet.create({
   topicBtnText: {
     fontSize: 14,
     fontWeight: '600',
+    fontFamily: BodyFont,
     color: '#11181C',
   },
   topicBtnTextActive: {
@@ -460,6 +463,7 @@ const styles = StyleSheet.create({
   },
   cardExplanation: {
     fontSize: 14,
+    fontFamily: BodyFont,
     color: '#6b8fd4',
     textAlign: 'center',
     paddingTop: 12,
@@ -488,7 +492,7 @@ const styles = StyleSheet.create({
   },
   cardQuestion: {
     fontSize: 21,
-    fontWeight: '700',
+    fontFamily: HeadingFont,
     color: '#11181C',
     lineHeight: 30,
     textAlign: 'center',
@@ -499,6 +503,7 @@ const styles = StyleSheet.create({
   emptyMessage: {
     fontSize: 17,
     fontWeight: '700',
+    fontFamily: BodyFont,
     color: '#c64a4a',
     textAlign: 'center',
     paddingHorizontal: 24,
@@ -510,6 +515,7 @@ const styles = StyleSheet.create({
   },
   statsText: {
     fontSize: 14,
+    fontFamily: BodyFont,
     color: '#687076',
   },
   statsUsed: {
@@ -531,5 +537,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
+    fontFamily: ButtonFont,
   },
 });

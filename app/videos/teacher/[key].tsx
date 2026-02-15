@@ -12,6 +12,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
+import { BodyFont, ButtonFont, HeadingFont } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -219,22 +220,22 @@ const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
   scroll: { flex: 1 },
   scrollContent: { paddingHorizontal: 16, paddingTop: 16 },
-  errorTitle: { fontSize: 18, marginBottom: 16 },
+  errorTitle: { fontSize: 18, fontFamily: HeadingFont, marginBottom: 16 },
   backBtn: { paddingVertical: 12, paddingHorizontal: 24, backgroundColor: '#194F89', borderRadius: 8 },
-  backBtnText: { color: '#fff', fontWeight: '600' },
+  backBtnText: { color: '#fff', fontWeight: '600', fontFamily: ButtonFont },
   profileCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
   },
-  profileName: { fontSize: 22, fontWeight: '800', marginBottom: 10 },
+  profileName: { fontSize: 22, fontFamily: HeadingFont, marginBottom: 10 },
   socialsRow: { flexDirection: 'row', gap: 12, marginBottom: 12 },
   socialBtn: { padding: 4 },
-  bio: { fontSize: 15, lineHeight: 22 },
-  sectionTitle: { fontSize: 17, fontWeight: '700', marginBottom: 12 },
+  bio: { fontSize: 15, lineHeight: 22, fontFamily: BodyFont },
+  sectionTitle: { fontSize: 17, fontFamily: HeadingFont, marginBottom: 12 },
   loader: { marginVertical: 24 },
-  empty: { fontSize: 15, marginBottom: 16 },
+  empty: { fontSize: 15, marginBottom: 16, fontFamily: BodyFont },
   videoCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -267,8 +268,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 1,
   },
-  durationText: { color: '#fff', fontSize: 11, fontWeight: '600' },
+  durationText: { color: '#fff', fontSize: 11, fontWeight: '600', fontFamily: BodyFont },
   info: { flex: 1, marginLeft: 14 },
-  title: { fontSize: 16, fontWeight: '600', lineHeight: 22 },
-  meta: { fontSize: 13, marginTop: 4 },
+  title: { fontSize: 16, lineHeight: 22, fontFamily: ButtonFont },
+  meta: { fontSize: 13, marginTop: 4, fontFamily: BodyFont },
 });

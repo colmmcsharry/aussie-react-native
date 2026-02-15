@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors } from '@/constants/theme';
+import { Colors, BodyFont, ButtonFont, CardBodyFont, HeadingFont, SlangDisplayFont } from '@/constants/theme';
 import { getCategories, searchQuotes, SlangCategory, SlangEntry } from '@/data/slang';
 import { slangImageMap } from '@/data/image-map';
 import { playAudio, playAudioSlow, stopAudio } from '@/services/audio';
@@ -104,7 +104,7 @@ function SlangCard({
         <Text style={[styles.cardTitle, { color: colors.text }]}>
           {entry.buttonTitle}
         </Text>
-        <Text style={[styles.cardExplanation, { color: colors.icon }]}>
+        <Text style={[styles.cardExplanation, { color: colors.text }]}>
           {entry.explanation}
         </Text>
 
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 22,
-    fontWeight: '700',
+    fontFamily: HeadingFont,
     color: '#fff',
     textAlign: 'center',
   },
@@ -525,7 +525,7 @@ const styles = StyleSheet.create({
   },
   gridCellLabel: {
     fontSize: 12,
-    fontWeight: '600',
+    fontFamily: ButtonFont,
     textAlign: 'center',
   },
   contentListBackground: {
@@ -563,14 +563,15 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   cardTitle: {
-    fontSize: 24,
-    fontWeight: '800',
+    fontSize: 26,
+    fontFamily: SlangDisplayFont,
     marginBottom: 6,
   },
   cardExplanation: {
     fontSize: 15,
     lineHeight: 22,
     marginBottom: 14,
+    fontFamily: CardBodyFont,
   },
   cardActionsRow: {
     flexDirection: 'row',
@@ -632,7 +633,7 @@ const styles = StyleSheet.create({
   },
   sectionLabel: {
     fontSize: 13,
-    fontWeight: '700',
+    fontFamily: ButtonFont,
     marginBottom: 6,
   },
   noteRow: {
@@ -642,6 +643,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     fontStyle: 'italic',
+    fontFamily: CardBodyFont,
   },
   examplesSection: {
     gap: 6,
@@ -652,6 +654,7 @@ const styles = StyleSheet.create({
   exampleQuote: {
     fontSize: 14,
     lineHeight: 20,
+    fontFamily: CardBodyFont,
   },
   emptyState: {
     alignItems: 'center',
@@ -662,5 +665,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 15,
     textAlign: 'center',
+    fontFamily: BodyFont,
   },
 });

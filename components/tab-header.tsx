@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { HeadingFont } from '@/constants/theme';
+
 const ACCENT_BLUE = '#194F89'; // Australian blue
 
 type TabHeaderProps = {
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 22,
-    fontWeight: '700',
+    fontFamily: HeadingFont,
     color: '#fff',
     textAlign: 'center',
   },

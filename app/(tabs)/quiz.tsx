@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { TabHeader } from '@/components/tab-header';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors, CardPalette } from '@/constants/theme';
+import { Colors, BodyFont, CardPalette, HeadingFont } from '@/constants/theme';
 import { quizzes } from '@/data/quiz-data';
 import { getAllScores, getScoreColor } from '@/services/quiz-scores';
 
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontSize: 14,
+    fontFamily: BodyFont,
   },
   quizGrid: {
     gap: 20,
@@ -179,10 +180,11 @@ const styles = StyleSheet.create({
   quizName: {
     flex: 1,
     fontSize: 17,
-    fontWeight: '700',
+    fontFamily: HeadingFont,
   },
   quizCount: {
     fontSize: 12,
+    fontFamily: BodyFont,
     marginRight: 18,
   },
   scoreBadge: {

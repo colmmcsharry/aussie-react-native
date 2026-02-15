@@ -22,7 +22,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SlangDetailModal } from "@/components/slang-detail-modal";
 import { TabHeader } from "@/components/tab-header";
-import { Colors, CardPalette } from "@/constants/theme";
+import { Colors, CardPalette, BodyFont, ButtonFont, HeadingFont, SlangDisplayFont } from "@/constants/theme";
 import { quizImageMap } from "@/data/quiz-assets";
 import { quizzes, type QuizQuestion } from "@/data/quiz-data";
 import { getCategories } from "@/data/slang";
@@ -469,11 +469,12 @@ const styles = StyleSheet.create({
   },
   videoTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: ButtonFont,
     marginBottom: 4,
   },
   videoHint: {
     fontSize: 14,
+    fontFamily: BodyFont,
     marginBottom: 14,
   },
   cardHeader: {
@@ -484,25 +485,27 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 18,
-    fontWeight: "700",
+    fontFamily: HeadingFont,
   },
   cardContent: {
     marginBottom: 4,
   },
   slangTerm: {
-    fontSize: 26,
-    fontWeight: "700",
+    fontSize: 28,
+    fontFamily: SlangDisplayFont,
     textAlign: "center",
     marginBottom: 4,
   },
   slangHint: {
     fontSize: 14,
+    fontFamily: BodyFont,
     textAlign: "center",
     marginBottom: 14,
   },
   quizQuestionText: {
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: BodyFont,
     marginBottom: 12,
     lineHeight: 22,
   },
@@ -537,6 +540,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 15,
+    fontFamily: BodyFont,
   },
   optionTextCorrect: {
     fontWeight: "600",
@@ -553,6 +557,7 @@ const styles = StyleSheet.create({
   resultText: {
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: BodyFont,
   },
   correctMsg: {
     color: "#4CAF50",
@@ -565,10 +570,12 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     lineHeight: 24,
     marginBottom: 8,
+    fontFamily: BodyFont,
   },
   quoteAuthor: {
     fontSize: 15,
     fontWeight: "600",
+    fontFamily: BodyFont,
     textAlign: "right",
   },
   actionButton: {
@@ -582,5 +589,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: ButtonFont,
   },
 });

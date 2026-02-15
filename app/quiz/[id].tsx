@@ -28,7 +28,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createAudioPlayer, AudioPlayer } from 'expo-audio';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors } from '@/constants/theme';
+import { BodyFont, ButtonFont, Colors, HeadingFont } from '@/constants/theme';
 import { getQuiz, QuizQuestion } from '@/data/quiz-data';
 import {
   quizImageMap,
@@ -476,7 +476,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     fontSize: 18,
-    fontWeight: '700',
+    fontFamily: HeadingFont,
     textAlign: 'center',
   },
   gameplayContainer: {
@@ -501,6 +501,7 @@ const styles = StyleSheet.create({
   },
   questionCounter: {
     fontSize: 13,
+    fontFamily: BodyFont,
     textAlign: 'center',
   },
   questionContentArea: {
@@ -512,7 +513,7 @@ const styles = StyleSheet.create({
   },
   questionText: {
     fontSize: 20,
-    fontWeight: '700',
+    fontFamily: HeadingFont,
     textAlign: 'center',
     marginBottom: 20,
     lineHeight: 28,
@@ -559,6 +560,7 @@ const styles = StyleSheet.create({
   answerText: {
     fontSize: 15,
     fontWeight: '700',
+    fontFamily: BodyFont,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -586,11 +588,12 @@ const styles = StyleSheet.create({
   quizTitle: {
     fontSize: 15,
     fontWeight: '600',
+    fontFamily: BodyFont,
     marginBottom: 8,
   },
   bigScore: {
     fontSize: 48,
-    fontWeight: '800',
+    fontFamily: HeadingFont,
     marginBottom: 4,
   },
   ratingEmoji: {
@@ -631,12 +634,14 @@ const styles = StyleSheet.create({
   reviewNumber: {
     fontSize: 14,
     fontWeight: '700',
+    fontFamily: BodyFont,
     width: 22,
   },
   reviewQuestion: {
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
+    fontFamily: BodyFont,
     lineHeight: 20,
   },
   reviewAnswers: {
@@ -662,6 +667,7 @@ const styles = StyleSheet.create({
   answerPillText: {
     fontSize: 14,
     fontWeight: '700',
+    fontFamily: BodyFont,
   },
   backToQuizzesBtn: {
     borderRadius: 12,
@@ -674,5 +680,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '700',
+    fontFamily: ButtonFont,
   },
 });

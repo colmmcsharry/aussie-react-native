@@ -23,6 +23,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { BodyFont, ButtonFont, HeadingFont } from "@/constants/theme";
 import {
   NEVEREVER_HIGHLIGHT_WORDS,
   NEVEREVER_TOPICS,
@@ -392,6 +393,7 @@ const styles = StyleSheet.create({
   subtitle: {
     marginTop: 40,
     fontSize: 15,
+    fontFamily: BodyFont,
     color: '#687076',
     textAlign: 'center',
     marginBottom: 24,
@@ -415,6 +417,7 @@ const styles = StyleSheet.create({
   topicBtnText: {
     fontSize: 14,
     fontWeight: '600',
+    fontFamily: BodyFont,
     color: '#11181C',
   },
   topicBtnTextActive: {
@@ -461,13 +464,14 @@ const styles = StyleSheet.create({
   },
   neverPrefix: {
     fontSize: 18,
-    fontWeight: '700',
+    fontFamily: HeadingFont,
     color: '#11181C',
     textAlign: 'center',
     marginBottom: 40,
   },
   cardExplanation: {
     fontSize: 14,
+    fontFamily: BodyFont,
     color: '#6b8fd4',
     textAlign: 'center',
     paddingTop: 12,
@@ -496,7 +500,7 @@ const styles = StyleSheet.create({
   },
   cardQuestion: {
     fontSize: 21,
-    fontWeight: '700',
+    fontFamily: HeadingFont,
     color: '#11181C',
     lineHeight: 30,
     textAlign: 'center',
@@ -507,6 +511,7 @@ const styles = StyleSheet.create({
   emptyMessage: {
     fontSize: 17,
     fontWeight: '700',
+    fontFamily: BodyFont,
     color: '#c64a4a',
     textAlign: 'center',
     paddingHorizontal: 24,
@@ -518,6 +523,7 @@ const styles = StyleSheet.create({
   },
   statsText: {
     fontSize: 14,
+    fontFamily: BodyFont,
     color: '#687076',
   },
   statsUsed: {
@@ -539,5 +545,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
+    fontFamily: ButtonFont,
   },
 });
