@@ -22,7 +22,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SlangDetailModal } from "@/components/slang-detail-modal";
 import { TabHeader } from "@/components/tab-header";
-import { Colors, CardPalette, BodyFont, ButtonFont, HeadingFont, SlangDisplayFont } from "@/constants/theme";
+import { Colors, CardPalette, BodyFont, ButtonFont, FontSizes, HeadingFont, SlangDisplayFont } from "@/constants/theme";
 import { quizImageMap } from "@/data/quiz-assets";
 import { quizzes, type QuizQuestion } from "@/data/quiz-data";
 import { getCategories } from "@/data/slang";
@@ -468,12 +468,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
   },
   videoTitle: {
-    fontSize: 16,
+    fontSize: FontSizes.body,
     fontFamily: ButtonFont,
     marginBottom: 4,
   },
   videoHint: {
-    fontSize: 14,
+    fontSize: FontSizes.small,
     fontFamily: BodyFont,
     marginBottom: 14,
   },
@@ -484,26 +484,26 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: FontSizes.title,
     fontFamily: HeadingFont,
   },
   cardContent: {
     marginBottom: 4,
   },
   slangTerm: {
-    fontSize: 28,
+    fontSize: FontSizes.display,
     fontFamily: SlangDisplayFont,
     textAlign: "center",
     marginBottom: 4,
   },
   slangHint: {
-    fontSize: 14,
+    fontSize: FontSizes.small,
     fontFamily: BodyFont,
     textAlign: "center",
     marginBottom: 14,
   },
   quizQuestionText: {
-    fontSize: 18,
+    fontSize: FontSizes.title,
     fontWeight: "700",
     fontFamily: BodyFont,
     marginBottom: 12,
@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffebee",
   },
   optionText: {
-    fontSize: 15,
+    fontSize: FontSizes.body,
     fontFamily: BodyFont,
   },
   optionTextCorrect: {
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   resultText: {
-    fontSize: 18,
+    fontSize: FontSizes.title,
     fontWeight: "900",
     fontFamily: HeadingFont,
   },
@@ -566,14 +566,14 @@ const styles = StyleSheet.create({
     color: "#f44336",
   },
   quoteText: {
-    fontSize: 17,
+    fontSize: FontSizes.body,
     fontStyle: "italic",
     lineHeight: 24,
     marginBottom: 8,
     fontFamily: BodyFont,
   },
   quoteAuthor: {
-    fontSize: 15,
+    fontSize: FontSizes.small,
     fontWeight: "600",
     fontFamily: BodyFont,
     textAlign: "right",
@@ -587,7 +587,7 @@ const styles = StyleSheet.create({
   },
   actionButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: FontSizes.body,
     fontWeight: "700",
     fontFamily: ButtonFont,
   },

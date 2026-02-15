@@ -47,6 +47,18 @@ export const CardLayout = {
 /** Pale blue content background used on Games, Videos, Quotes, etc. */
 export const ContentBg = '#e0ebf6';
 
+/** Standard font sizes – small: 14, body and up: 16+ */
+export const FontSizes = {
+  /** Small text (hints, meta, attribution) – minimum size */
+  small: 14,
+  /** Body text, buttons, options */
+  body: 16,
+  /** Card titles, headings */
+  title: 18,
+  /** Large display (e.g. featured slang term) */
+  display: 28,
+} as const;
+
 export const Fonts = Platform.select({
   ios: {
     /** iOS `UIFontDescriptorSystemDesignDefault` */
