@@ -8,7 +8,7 @@ import {
   Pressable,
   TextInput,
   Platform,
-  Dimensions,
+  useWindowDimensions,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors, BodyFont, ButtonFont, CardBodyFont, ContentBg, HeadingFont, SlangDisplayFont } from '@/constants/theme';
+import { Colors, BodyFont, ButtonFont, CardBodyFont, ContentBg, FontSizes, HeadingFont, SlangDisplayFont } from '@/constants/theme';
 import { getCategories, searchQuotes, SlangCategory, SlangEntry } from '@/data/slang';
 import { slangImageMap } from '@/data/image-map';
 import { playAudio, playAudioSlow, stopAudio } from '@/services/audio';
@@ -24,11 +24,8 @@ import { loadFavourites, toggleFavourite } from '@/services/favourites';
 
 const ACCENT_BLUE = '#194F89'; // Australian blue
 const GRID_GAP = 12;
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const CONTENT_PAD = 32; // 16*2
-const CARD_PAD = 32;   // 16*2 inner card
-const GRID_INNER = SCREEN_WIDTH - CONTENT_PAD - CARD_PAD;
-const CELL_SIZE = (GRID_INNER - GRID_GAP * 2) / 3;
+const GRID_HORIZ_PADDING = 32; // content padding 16*2 only – grid card has no horizontal padding
+const NUM_COLUMNS = 3;
 
 // ---------- SlangCard (expanded by default when in category view) ----------
 
@@ -204,23 +201,43 @@ function CategoryCell({
   category,
   onPress,
   colors,
+  cellSize,
+  iconSize,
+  labelFontSize,
 }: {
   category: SlangCategory;
   onPress: () => void;
   colors: typeof Colors.light;
+  cellSize: number;
+  iconSize: number;
+  labelFontSize: number;
 }) {
   const iconSource = slangImageMap[category.icon];
   return (
     <TouchableOpacity
-      style={[styles.gridCell, { backgroundColor: colors.background }]}
+      style={[
+        styles.gridCell,
+        {
+          width: cellSize,
+          height: cellSize,
+          backgroundColor: colors.background,
+        },
+      ]}
       onPress={onPress}
       activeOpacity={0.7}
     >
       <View style={styles.gridCellInner} pointerEvents="none">
         {iconSource && (
-          <Image source={iconSource} style={styles.gridCellIcon} contentFit="contain" />
+          <Image
+            source={iconSource}
+            style={{ width: iconSize, height: iconSize, marginBottom: 6 }}
+            contentFit="contain"
+          />
         )}
-        <Text style={[styles.gridCellLabel, { color: colors.text }]} numberOfLines={1}>
+        <Text
+          style={[styles.gridCellLabel, { color: colors.text, fontSize: labelFontSize }]}
+          numberOfLines={1}
+        >
           {category.displayName}
         </Text>
       </View>
@@ -234,6 +251,15 @@ export default function QuotesScreen() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
+  const { width: screenWidth } = useWindowDimensions();
+
+  const { cellSize, iconSize, labelFontSize } = useMemo(() => {
+    const gridInner = screenWidth - GRID_HORIZ_PADDING;
+    const cell = (gridInner - GRID_GAP * (NUM_COLUMNS - 1)) / NUM_COLUMNS;
+    const icon = Math.round(cell * 0.42);
+    const labelSize = Math.max(FontSizes.small, Math.min(FontSizes.body, Math.round(cell * 0.14)));
+    return { cellSize: cell, iconSize: icon, labelFontSize: labelSize };
+  }, [screenWidth]);
 
   const categories = useMemo(() => getCategories(), []);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -385,6 +411,9 @@ export default function QuotesScreen() {
                   category={cat}
                   onPress={() => setSelectedCategory(cat.name)}
                   colors={colors}
+                  cellSize={cellSize}
+                  iconSize={iconSize}
+                  labelFontSize={labelFontSize}
                 />
               ))}
             </View>
@@ -486,7 +515,8 @@ const styles = StyleSheet.create({
   gridCard: {
     backgroundColor: '#fff',
     borderRadius: 20,
-    padding: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 0,
     overflow: 'hidden',
     ...Platform.select({
       ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 8 },
@@ -499,8 +529,6 @@ const styles = StyleSheet.create({
     gap: GRID_GAP,
   },
   gridCell: {
-    width: CELL_SIZE,
-    height: CELL_SIZE,
     borderRadius: 14,
     overflow: 'hidden',
     ...Platform.select({
@@ -518,13 +546,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 8,
   },
-  gridCellIcon: {
-    width: 44,
-    height: 44,
-    marginBottom: 6,
-  },
   gridCellLabel: {
-    fontSize: 12,
     fontFamily: ButtonFont,
     textAlign: 'center',
   },
