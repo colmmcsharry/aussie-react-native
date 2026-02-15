@@ -5,7 +5,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
 import { useFonts } from 'expo-font';
-import { Nunito_400Regular } from '@expo-google-fonts/nunito/400Regular';
 import { Nunito_500Medium } from '@expo-google-fonts/nunito/500Medium';
 import { Nunito_700Bold } from '@expo-google-fonts/nunito/700Bold';
 import { Nunito_900Black } from '@expo-google-fonts/nunito/900Black';
@@ -20,7 +19,6 @@ export const unstable_settings = {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [fontsLoaded] = useFonts({
-    Nunito_400Regular,
     Nunito_500Medium,
     Nunito_700Bold,
     Nunito_900Black,

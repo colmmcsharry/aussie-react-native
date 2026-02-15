@@ -92,8 +92,8 @@ export const Fonts = Platform.select({
 
 /** Heading font – Nunito 900 Black. Load in root layout. */
 export const HeadingFont = 'Nunito_900Black';
-/** Body text – Nunito Regular. Load in root layout. */
-export const BodyFont = 'Nunito_400Regular';
+/** Body text – Nunito Medium (min 500, no 400). Load in root layout. */
+export const BodyFont = 'Nunito_500Medium';
 /** Button text – Nunito Bold. Load in root layout. */
 export const ButtonFont = 'Nunito_700Bold';
 /** Card body text (explanation, notes, examples) – Nunito Medium, no 400 in cards. Load in root layout. */

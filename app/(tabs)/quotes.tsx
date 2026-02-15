@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 16,
-    paddingTop: 16,
+    paddingTop: 24,
   },
   contentGridCentered: {
     justifyContent: 'center',
@@ -558,7 +558,7 @@ const styles = StyleSheet.create({
   },
   cardWrapper: {
     borderRadius: 20,
-    marginBottom: 20,
+    marginBottom: 48,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -585,14 +585,15 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   cardTitle: {
-    fontSize: 26,
+    fontSize: FontSizes.display,
     fontFamily: SlangDisplayFont,
-    marginBottom: 6,
+    marginTop: 16,
+    marginBottom: 14,
   },
   cardExplanation: {
-    fontSize: 15,
+    fontSize: 18,
     lineHeight: 22,
-    marginBottom: 14,
+    marginBottom: 24,
     fontFamily: CardBodyFont,
   },
   cardActionsRow: {
@@ -606,9 +607,9 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   actionBtn: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
+    width: 78,
+    height: 78,
+    borderRadius: 39,
     backgroundColor: 'rgba(0,0,0,0.06)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -636,7 +637,6 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(0,0,0,0.06)',
     alignItems: 'center',
     justifyContent: 'center',
     ...Platform.select({
@@ -651,31 +651,27 @@ const styles = StyleSheet.create({
     borderTopColor: 'rgba(0,0,0,0.08)',
   },
   notesSection: {
-    marginBottom: 14,
+    marginBottom: 16,
   },
   sectionLabel: {
-    fontSize: 13,
+    fontSize: 16,
     fontFamily: ButtonFont,
-    marginBottom: 6,
-  },
-  noteRow: {
     marginBottom: 4,
   },
+  noteRow: {
+    marginBottom: 6,
+  },
   noteText: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 16,
     fontStyle: 'italic',
     fontFamily: CardBodyFont,
   },
-  examplesSection: {
-    gap: 6,
-  },
   exampleRow: {
-    marginBottom: 6,
+    marginBottom: 2,
   },
   exampleQuote: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 16,
+    marginBottom: 6,
     fontFamily: CardBodyFont,
   },
   emptyState: {
