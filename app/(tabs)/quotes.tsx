@@ -473,8 +473,8 @@ export default function QuotesScreen() {
           <View style={styles.headerRight}>
             <MaterialCommunityIcons
               name="crown"
-              size={24}
-              color="#FFD700"
+              size={26}
+              color="#F4B744"
             />
           </View>
           <View style={styles.headerTitleWrap} pointerEvents="none">
