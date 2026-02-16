@@ -180,9 +180,10 @@ function SlangCard({
             </View>
             <Pressable
               onPress={toggleExpand}
+              hitSlop={12}
               style={({ pressed }) => [
                 styles.actionBtnExpand,
-                pressed && styles.actionBtnPressed,
+                pressed && { opacity: 0.6 },
               ]}
             >
               <Ionicons
@@ -738,20 +739,9 @@ const styles = StyleSheet.create({
     backgroundColor: ACCENT_BLUE,
   },
   actionBtnExpand: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
     alignItems: "center",
     justifyContent: "center",
-    ...Platform.select({
-      ios: {
-        shadowColor: "#8a8782",
-        shadowOffset: { width: 3, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 6,
-      },
-      android: { elevation: 5 },
-    }),
+    padding: 12,
   },
   cardBody: {
     marginTop: 20,
