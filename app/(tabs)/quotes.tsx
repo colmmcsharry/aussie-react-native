@@ -294,16 +294,28 @@ export default function QuotesScreen() {
   const insets = useSafeAreaInsets();
   const { width: screenWidth } = useWindowDimensions();
 
+  const [gridContainerWidth, setGridContainerWidth] = useState(0);
+
   const { cellSize, iconSize, labelFontSize } = useMemo(() => {
-    const gridInner = screenWidth - GRID_HORIZ_PADDING;
-    const cell = (gridInner - GRID_GAP * (NUM_COLUMNS - 1)) / NUM_COLUMNS;
-    const icon = Math.round(cell * 0.42);
+    const isNarrowAndroid =
+      Platform.OS === "android" && screenWidth < 400;
+    const iconScale = isNarrowAndroid ? 0.36 : 0.42;
+    const labelScale = isNarrowAndroid ? 0.12 : 0.14;
+    // Use measured container width when available so 3 columns always fit; otherwise fallback
+    const availableWidth =
+      gridContainerWidth > 0
+        ? gridContainerWidth
+        : screenWidth - (isNarrowAndroid ? 64 : GRID_HORIZ_PADDING);
+    const cell = Math.floor(
+      (availableWidth - GRID_GAP * (NUM_COLUMNS - 1)) / NUM_COLUMNS
+    );
+    const icon = Math.round(cell * iconScale);
     const labelSize = Math.max(
       FontSizes.small,
-      Math.min(FontSizes.body, Math.round(cell * 0.14)),
+      Math.min(FontSizes.body, Math.round(cell * labelScale)),
     );
     return { cellSize: cell, iconSize: icon, labelFontSize: labelSize };
-  }, [screenWidth]);
+  }, [screenWidth, gridContainerWidth]);
 
   const categories = useMemo(() => getCategories(), []);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -451,14 +463,28 @@ export default function QuotesScreen() {
           styles.content,
           !showGrid && { backgroundColor: "#fff" },
           showGrid && styles.contentGridCentered,
+          showGrid && Platform.OS === "android" && styles.contentAndroidGrid,
         ]}
       >
         {showGrid ? (
-          <View style={styles.gridCard}>
-            <View style={styles.grid}>
-              {categories.map((cat) => (
+          <View
+            style={[
+              styles.gridCard,
+              Platform.OS === "android" && styles.gridCardAndroidTight,
+            ]}
+            onLayout={(e) => {
+              const w = e.nativeEvent.layout.width;
+              if (w > 0) setGridContainerWidth(w);
+            }}
+          >
+            <FlatList
+              data={categories}
+              keyExtractor={(c) => c.name}
+              numColumns={NUM_COLUMNS}
+              scrollEnabled={false}
+              columnWrapperStyle={styles.gridRow}
+              renderItem={({ item: cat }) => (
                 <CategoryCell
-                  key={cat.name}
                   category={cat}
                   onPress={() => setSelectedCategory(cat.name)}
                   colors={colors}
@@ -466,8 +492,8 @@ export default function QuotesScreen() {
                   iconSize={iconSize}
                   labelFontSize={labelFontSize}
                 />
-              ))}
-            </View>
+              )}
+            />
           </View>
         ) : (
           <FlatList
@@ -572,6 +598,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 0,
     overflow: "hidden",
+    width: "100%",
     ...Platform.select({
       ios: {
         shadowColor: "#000",
@@ -581,6 +608,18 @@ const styles = StyleSheet.create({
       },
       android: { elevation: 4 },
     }),
+  },
+  gridCardAndroidTight: {
+    marginHorizontal: 0,
+  },
+  contentAndroidGrid: {
+    paddingHorizontal: 6,
+  },
+  gridRow: {
+    flexDirection: "row",
+    gap: GRID_GAP,
+    marginBottom: GRID_GAP,
+    justifyContent: "flex-start",
   },
   grid: {
     flexDirection: "row",
@@ -597,7 +636,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.06,
         shadowRadius: 4,
       },
-      android: { elevation: 2 },
+      android: { elevation: 0 },
     }),
   },
   gridCellInner: {
