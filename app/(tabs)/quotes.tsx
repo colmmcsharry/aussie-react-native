@@ -301,9 +301,9 @@ export default function QuotesScreen() {
       Platform.OS === "android" && screenWidth < 400;
     const iconScale = isNarrowAndroid ? 0.36 : 0.42;
     const labelScale = isNarrowAndroid ? 0.12 : 0.14;
-    // Use measured container width when available so 3 columns always fit; otherwise fallback
+    // On Android use measured width so 3 columns always fit; on iOS use original formula so look is unchanged
     const availableWidth =
-      gridContainerWidth > 0
+      Platform.OS === "android" && gridContainerWidth > 0
         ? gridContainerWidth
         : screenWidth - (isNarrowAndroid ? 64 : GRID_HORIZ_PADDING);
     const cell = Math.floor(
