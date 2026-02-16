@@ -715,17 +715,20 @@ const styles = StyleSheet.create({
     width: 78,
     height: 78,
     borderRadius: 39,
-    backgroundColor: "rgba(255, 255, 255, 0.58)",
     alignItems: "center",
     justifyContent: "center",
     ...Platform.select({
       ios: {
+        backgroundColor: "rgba(255, 255, 255, 0.58)",
         shadowColor: "#8a8782",
         shadowOffset: { width: 4, height: 6 },
         shadowOpacity: 0.35,
         shadowRadius: 8,
       },
-      android: { elevation: 6 },
+      android: {
+        backgroundColor: "#f0f0f0",
+        elevation: 6,
+      },
     }),
   },
   actionBtnPressed: {
