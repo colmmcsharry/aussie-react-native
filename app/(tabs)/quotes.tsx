@@ -65,6 +65,10 @@ function SlangCard({
   const [playingSlow, setPlayingSlow] = useState(false);
   const [imageAspectRatio, setImageAspectRatio] = useState<number | null>(null);
 
+  useEffect(() => {
+    setExpanded(defaultExpanded);
+  }, [defaultExpanded]);
+
   const handleImageLoad = useCallback(
     (e: { source: { width: number; height: number } }) => {
       const { width, height } = e.source;
@@ -324,6 +328,12 @@ export default function QuotesScreen() {
   const [showSearch, setShowSearch] = useState(false);
   const [favourites, setFavourites] = useState<Set<string>>(new Set());
   const [showFavsOnly, setShowFavsOnly] = useState(false);
+  const [cardsExpandedByDefault, setCardsExpandedByDefault] = useState(true);
+
+  // When user selects a category, show all cards expanded by default
+  useEffect(() => {
+    if (selectedCategory !== null) setCardsExpandedByDefault(true);
+  }, [selectedCategory]);
 
   // When user taps Slang tab, reset to main categories view
   useFocusEffect(
@@ -369,11 +379,11 @@ export default function QuotesScreen() {
         isFav={favourites.has(item.id)}
         onToggleFav={handleToggleFav}
         colors={colors}
-        defaultExpanded={true}
+        defaultExpanded={cardsExpandedByDefault}
         cardColor={SLANG_CARD_COLORS[index % SLANG_CARD_COLORS.length]}
       />
     ),
-    [favourites, handleToggleFav, colors],
+    [favourites, handleToggleFav, colors, cardsExpandedByDefault],
   );
 
   const containerBg = colors.background;
@@ -501,6 +511,29 @@ export default function QuotesScreen() {
             data={currentQuotes}
             keyExtractor={(item) => item.id}
             renderItem={renderCard}
+            ListHeaderComponent={
+              <View style={styles.collapseAllRow}>
+                <TouchableOpacity
+                  onPress={() =>
+                    setCardsExpandedByDefault((prev) => !prev)
+                  }
+                  style={styles.collapseAllBtn}
+                  hitSlop={8}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons
+                    name={
+                      cardsExpandedByDefault ? "chevron-up" : "chevron-down"
+                    }
+                    size={22}
+                    color={ACCENT_BLUE}
+                  />
+                  <Text style={styles.collapseAllLabel}>
+                    {cardsExpandedByDefault ? "Collapse All" : "Expand All"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            }
             contentContainerStyle={[
               styles.listContent,
               { paddingBottom: insets.bottom + 80 },
@@ -588,7 +621,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 16,
-    paddingTop: 24,
   },
   contentGridCentered: {
     justifyContent: "center",
@@ -653,6 +685,20 @@ const styles = StyleSheet.create({
   gridCellLabel: {
     fontFamily: ButtonFont,
     textAlign: "center",
+  },
+  collapseAllRow: {
+    marginTop: 20,
+    marginBottom: 18,
+  },
+  collapseAllBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  collapseAllLabel: {
+    fontFamily: ButtonFont,
+    fontSize: 16,
+    color: ACCENT_BLUE,
   },
   listContent: {
     paddingBottom: 24, // extra space; list view adds insets.bottom + 80 via inline style
