@@ -15,6 +15,7 @@ import {
   Platform,
   Dimensions,
   ScrollView,
+  Modal,
 } from "react-native";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -110,7 +111,7 @@ export default function HeadsUpGameScreen() {
     "hard",
   ]);
   const [gameDuration, setGameDuration] = useState<60 | 90>(60);
-  const [rulesVisible, setRulesVisible] = useState(false);
+  const [rulesModalVisible, setRulesModalVisible] = useState(false);
   const [showCountdown, setShowCountdown] = useState(false);
   const [countdown, setCountdown] = useState(5);
   const [gameStarted, setGameStarted] = useState(false);
@@ -389,42 +390,74 @@ export default function HeadsUpGameScreen() {
             ]}
           >
             <Pressable
-              onPress={() => setRulesVisible(!rulesVisible)}
+              onPress={() => setRulesModalVisible(true)}
               style={styles.rulesHeader}
             >
               <Text style={styles.rulesTitle}>How to Play</Text>
-              <Ionicons
-                name={rulesVisible ? "chevron-up" : "chevron-down"}
-                size={20}
-                color="#687076"
-              />
+              <Ionicons name="chevron-forward" size={20} color="#687076" />
             </Pressable>
-            {rulesVisible && (
-              <View style={styles.rulesList}>
-                <Text style={styles.ruleItem}>• Requires 2+ people</Text>
-                <Text style={styles.ruleItem}>
-                  • Hold phone sideways on your forehead
-                </Text>
-                <Text style={styles.ruleItem}>
-                  • Friends describe the word (no spelling!)
-                </Text>
-                <Text style={styles.ruleItem}>
-                  • If you guess correctly, Tilt DOWN then back up
-                </Text>
-                <Text style={styles.ruleItem}>
-                  • Tilt UP = skip to next word
-                </Text>
-                <Text style={styles.ruleItem}>
-                  • Guess as many words as you can in the time limit
-                </Text>
-              </View>
-            )}
+
+            <Modal
+              visible={rulesModalVisible}
+              transparent
+              animationType="fade"
+              onRequestClose={() => setRulesModalVisible(false)}
+            >
+              <Pressable
+                style={styles.modalBackdrop}
+                onPress={() => setRulesModalVisible(false)}
+              >
+                <Pressable
+                  style={styles.modalContent}
+                  onPress={(e) => e.stopPropagation()}
+                >
+                  <View style={styles.modalHeader}>
+                    <Text style={styles.modalTitle}>How to Play</Text>
+                    <Pressable
+                      onPress={() => setRulesModalVisible(false)}
+                      hitSlop={12}
+                      style={styles.modalCloseBtn}
+                    >
+                      <Ionicons name="close" size={28} color="#687076" />
+                    </Pressable>
+                  </View>
+                  <ScrollView
+                    style={styles.modalScroll}
+                    contentContainerStyle={styles.modalScrollContent}
+                    showsVerticalScrollIndicator={false}
+                  >
+                    <Text style={styles.ruleItem}>• Requires 2+ people</Text>
+                    <Text style={styles.ruleItem}>
+                      • Hold phone sideways on your forehead
+                    </Text>
+                    <Text style={styles.ruleItem}>
+                      • Friends describe the word (no spelling!)
+                    </Text>
+                    <Text style={styles.ruleItem}>
+                      • If you guess correctly, Tilt DOWN then back up
+                    </Text>
+                    <Text style={styles.ruleItem}>
+                      • Tilt UP = skip to next word
+                    </Text>
+                    <Text style={styles.ruleItem}>
+                      • Guess as many words as you can in the time limit
+                    </Text>
+                  </ScrollView>
+                  <Pressable
+                    style={styles.modalDoneBtn}
+                    onPress={() => setRulesModalVisible(false)}
+                  >
+                    <Text style={styles.modalDoneText}>Done</Text>
+                  </Pressable>
+                </Pressable>
+              </Pressable>
+            </Modal>
 
             <View style={styles.timerRow}>
               <View style={styles.timerLabelWrap}>
                 <Ionicons
                   name="time-outline"
-                  size={24}
+                  size={30}
                   color="#11181C"
                   style={styles.timerIcon}
                 />
@@ -754,19 +787,66 @@ const styles = StyleSheet.create({
   rulesTitle: {
     fontSize: 16,
     fontWeight: "500",
-    color: "#687076",
-  },
-  rulesList: {
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 24,
+    color: "#11181C",
   },
   ruleItem: {
     fontSize: 15,
-    color: "#687076",
+    color: "#11181C",
+    fontFamily: ButtonFont,
     marginBottom: 8,
     lineHeight: 22,
+  },
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 24,
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    width: "100%",
+    maxWidth: 400,
+    maxHeight: "80%",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e8eaed",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#11181C",
+  },
+  modalCloseBtn: {
+    padding: 4,
+  },
+  modalScroll: {
+    maxHeight: 280,
+  },
+  modalScrollContent: {
+    padding: 20,
+    paddingBottom: 16,
+  },
+  modalDoneBtn: {
+    paddingVertical: 16,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    backgroundColor: ACCENT_BLUE,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  modalDoneText: {
+    fontSize: 17,
+    fontWeight: "600",
+    color: "#fff",
   },
   timerRow: {
     flexDirection: "row",
