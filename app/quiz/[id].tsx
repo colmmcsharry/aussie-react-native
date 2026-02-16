@@ -131,9 +131,6 @@ function ResultsView({
     <Animated.View style={[styles.resultsContainer, { opacity: fadeAnim }]}>
       {/* Score summary */}
       <View style={[styles.scoreSummary, { backgroundColor: colors.background }]}>
-        <Text style={[styles.quizTitle, { color: colors.icon }]}>
-          {quiz.name}
-        </Text>
         <Animated.Text
           style={[
             styles.bigScore,
@@ -254,7 +251,12 @@ export default function QuizGameplay() {
   if (!quiz) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <Text style={{ color: colors.text, textAlign: 'center', marginTop: 100 }}>
+        <Text
+          style={[
+            styles.quizNotFound,
+            { color: colors.text },
+          ]}
+        >
           Quiz not found
         </Text>
       </View>
@@ -464,6 +466,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  quizNotFound: {
+    textAlign: 'center',
+    marginTop: 100,
+    fontSize: 16,
+    fontFamily: BodyFont,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -558,9 +566,8 @@ const styles = StyleSheet.create({
     height: 60,
   },
   answerText: {
-    fontSize: 15,
-    fontWeight: '700',
-    fontFamily: BodyFont,
+    fontSize: 16,
+    fontFamily: ButtonFont,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -584,12 +591,6 @@ const styles = StyleSheet.create({
       },
       android: { elevation: 3 },
     }),
-  },
-  quizTitle: {
-    fontSize: 15,
-    fontWeight: '600',
-    fontFamily: BodyFont,
-    marginBottom: 8,
   },
   bigScore: {
     fontSize: 48,
@@ -633,14 +634,12 @@ const styles = StyleSheet.create({
   },
   reviewNumber: {
     fontSize: 14,
-    fontWeight: '700',
-    fontFamily: BodyFont,
+    fontFamily: ButtonFont,
     width: 22,
   },
   reviewQuestion: {
     flex: 1,
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 16,
     fontFamily: BodyFont,
     lineHeight: 20,
   },
@@ -665,9 +664,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#feeeee',
   },
   answerPillText: {
-    fontSize: 14,
-    fontWeight: '700',
-    fontFamily: BodyFont,
+    fontSize: 16,
+    fontFamily: ButtonFont,
   },
   backToQuizzesBtn: {
     borderRadius: 12,
@@ -679,7 +677,6 @@ const styles = StyleSheet.create({
   backToQuizzesBtnText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: '700',
     fontFamily: ButtonFont,
   },
 });
