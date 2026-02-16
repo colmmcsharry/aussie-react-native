@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: ButtonFont,
-    fontSize: 18,
+    fontSize: 20,
     textAlign: "center",
     marginBottom: 8,
   },

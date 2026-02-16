@@ -681,7 +681,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
                   style={[
                     styles.dot,
                     i === testimonialIndex
-                      ? [styles.dotActive, { backgroundColor: colors.tint }]
+                      ? [styles.dotActive, { backgroundColor: "#78C57C" }]
                       : { backgroundColor: colors.icon },
                   ]}
                 />
