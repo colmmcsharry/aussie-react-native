@@ -39,10 +39,18 @@ const CATEGORY_DISPLAY: Record<string, { displayName: string; icon: string }> = 
   sex: { displayName: '18+', icon: 'sex.png' },
 };
 
+/**
+ * Quotes in slang-data.json have ids that are only unique per category (e.g. "1", "2"
+ * in both Greetings and General). We assign globally unique ids so lists and favourites work.
+ */
 export function getCategories(): SlangCategory[] {
   return (slangData.categories as string[]).map((name) => {
     const display = CATEGORY_DISPLAY[name] || { displayName: name, icon: '' };
-    const quotes = (slangData.quotes as Record<string, SlangEntry[]>)[name] || [];
+    const rawQuotes = (slangData.quotes as Record<string, SlangEntry[]>)[name] || [];
+    const quotes = rawQuotes.map((q) => ({
+      ...q,
+      id: `${name}-${q.id}`,
+    }));
     return {
       name,
       displayName: display.displayName,

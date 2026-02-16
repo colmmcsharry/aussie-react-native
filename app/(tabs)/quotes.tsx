@@ -391,7 +391,12 @@ export default function QuotesScreen() {
     if (searchQuery.trim()) return searchQuotes(searchQuery);
     if (showFavsOnly) {
       const all = categories.flatMap((c) => c.quotes);
-      return all.filter((q) => favourites.has(q.id));
+      // Deduplicate by id so the same quote in multiple categories doesn't cause duplicate keys
+      const byId = new Map<string, SlangEntry>();
+      all.forEach((q) => {
+        if (favourites.has(q.id)) byId.set(q.id, q);
+      });
+      return Array.from(byId.values());
     }
     if (!selectedCategory) return [];
     const cat = categories.find((c) => c.name === selectedCategory);
