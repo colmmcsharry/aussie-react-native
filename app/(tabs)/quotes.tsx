@@ -258,6 +258,7 @@ function CategoryCell({
   labelFontSize: number;
 }) {
   const iconSource = slangImageMap[category.icon];
+  const isPremium = category.name === "Rude" || category.name === "sex";
   return (
     <TouchableOpacity
       style={[
@@ -271,6 +272,15 @@ function CategoryCell({
       onPress={onPress}
       activeOpacity={0.7}
     >
+      {isPremium && (
+        <View style={styles.gridCellPremiumCrown} pointerEvents="none">
+          <MaterialCommunityIcons
+            name="crown"
+            size={24}
+            color="#FFD700"
+          />
+        </View>
+      )}
       <View style={styles.gridCellInner} pointerEvents="none">
         {iconSource && (
           <Image
@@ -752,6 +762,14 @@ const styles = StyleSheet.create({
       },
       android: { elevation: 0 },
     }),
+  },
+  gridCellPremiumCrown: {
+    position: "absolute",
+    top: -4,
+    left: 0,
+    right: 0,
+    alignItems: "center",
+    zIndex: 1,
   },
   gridCellInner: {
     position: "absolute",
