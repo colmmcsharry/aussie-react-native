@@ -10,7 +10,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { TabHeader } from '@/components/tab-header';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -18,12 +18,18 @@ import { Colors, BodyFont, CardPalette, HeadingFont } from '@/constants/theme';
 import { quizzes } from '@/data/quiz-data';
 import { getAllScores, getScoreColor } from '@/services/quiz-scores';
 
-/** Card background colors for quiz list (cycles through app card palette) */
-const QUIZ_CARD_COLORS = [
-  CardPalette.slang,
-  CardPalette.quiz,
-  CardPalette.video,
-  CardPalette.quote,
+/** Quiz IDs that are free; all others are premium and shown as locked */
+const FREE_QUIZ_IDS = new Set([1, 5]); // Quiz 1, Alcohol
+
+/** Card background colors for free quiz cards (first two: green, orange) */
+const FREE_QUIZ_COLORS = [CardPalette.slang, CardPalette.quiz];
+
+/** Faded background colors for locked premium quiz cards */
+const LOCKED_QUIZ_COLORS = [
+  '#E9F5DF', // very light green
+  '#FDF2DE', // very light orange
+  '#E5EDF8', // very light blue
+  '#F0E9F5', // very light purple
 ];
 
 export default function QuizMenuScreen() {
@@ -45,6 +51,9 @@ export default function QuizMenuScreen() {
 
   const completedCount = Object.keys(scores).length;
   const progressPct = (completedCount / 20) * 100;
+
+  const freeQuizzes = quizzes.filter((q) => FREE_QUIZ_IDS.has(q.id));
+  const premiumQuizzes = quizzes.filter((q) => !FREE_QUIZ_IDS.has(q.id));
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -68,16 +77,16 @@ export default function QuizMenuScreen() {
             />
           </View>
           <Text style={[styles.progressText, { color: colors.icon }]}>
-            {completedCount}/20 completed
+            Quizzes taken: {completedCount}/20
           </Text>
         </View>
 
-        {/* Quiz buttons */}
+        {/* Free quizzes: Quiz 1, Alcohol */}
         <View style={styles.quizGrid}>
-          {quizzes.map((quiz, index) => {
+          {freeQuizzes.map((quiz, index) => {
             const score = scores[quiz.id];
             const hasScore = score !== undefined;
-            const bgColor = QUIZ_CARD_COLORS[index % QUIZ_CARD_COLORS.length];
+            const bgColor = FREE_QUIZ_COLORS[index % FREE_QUIZ_COLORS.length];
 
             return (
               <TouchableOpacity
@@ -90,7 +99,6 @@ export default function QuizMenuScreen() {
                   {quiz.name}
                 </Text>
 
-                {/* Score badge or spacer (left of "X questions" so that text stays in same spot) */}
                 {hasScore ? (
                   <View
                     style={[
@@ -117,6 +125,55 @@ export default function QuizMenuScreen() {
                   style={styles.chevron}
                 />
               </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        {/* Premium Only section */}
+        <View style={styles.premiumSection}>
+          <MaterialCommunityIcons name="crown" size={36} color="#F4B744" />
+          <Text style={[styles.premiumLabel, { color: colors.text }]}>
+            Premium Only
+          </Text>
+        </View>
+
+        {/* Locked premium quizzes */}
+        <View style={styles.quizGrid}>
+          {premiumQuizzes.map((quiz, index) => {
+            const score = scores[quiz.id];
+            const hasScore = score !== undefined;
+            const bgColor = LOCKED_QUIZ_COLORS[index % LOCKED_QUIZ_COLORS.length];
+
+            return (
+              <View
+                key={quiz.id}
+                style={[styles.quizButton, styles.quizButtonLocked, { backgroundColor: bgColor }]}
+              >
+                <Text style={[styles.quizName, styles.quizNameLocked, { color: colors.icon }]}>
+                  {quiz.name}
+                </Text>
+
+                {hasScore ? (
+                  <View
+                    style={[
+                      styles.scoreBadge,
+                      { backgroundColor: getScoreColor(score) },
+                    ]}
+                  >
+                    <Text style={styles.scoreText}>
+                      {score}/{quiz.questions.length}
+                    </Text>
+                  </View>
+                ) : (
+                  <View style={styles.scoreBadgePlaceholder} />
+                )}
+
+                <Text style={[styles.quizCount, styles.quizCountLocked, { color: colors.icon }]}>
+                  {quiz.questions.length} questions
+                </Text>
+
+                <Ionicons name="lock-closed" size={20} color={colors.icon} style={styles.lockIcon} />
+              </View>
             );
           })}
         </View>
@@ -155,6 +212,17 @@ const styles = StyleSheet.create({
   quizGrid: {
     gap: 20,
   },
+  premiumSection: {
+    alignItems: 'center',
+    marginTop: 24,
+    marginBottom: 16,
+    gap: 8,
+  },
+  premiumLabel: {
+    fontSize: 17,
+    fontFamily: HeadingFont,
+    fontWeight: '700',
+  },
   quizButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -177,15 +245,27 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  quizButtonLocked: {
+    opacity: 0.95,
+  },
   quizName: {
     flex: 1,
     fontSize: 17,
     fontFamily: HeadingFont,
   },
+  quizNameLocked: {
+    fontWeight: '500',
+  },
   quizCount: {
     fontSize: 12,
     fontFamily: BodyFont,
     marginRight: 18,
+  },
+  quizCountLocked: {
+    opacity: 0.9,
+  },
+  lockIcon: {
+    marginLeft: 10,
   },
   scoreBadge: {
     width: 50,

@@ -22,7 +22,6 @@ const MAPPING = {
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'newspaper.fill': 'article',
-  'gamecontroller.fill': 'sports-esports',
 } as IconMapping;
 
 /**

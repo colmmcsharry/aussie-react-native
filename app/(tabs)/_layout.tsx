@@ -2,6 +2,7 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { Tabs, useRouter } from 'expo-router';
 import React from 'react';
 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { BodyFont, Colors } from '@/constants/theme';
@@ -72,7 +73,7 @@ export default function TabLayout() {
           const routeName = getFocusedRouteNameFromRoute(route) ?? 'index';
           return {
             title: 'Games',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="gamecontroller.fill" color={color} />,
+            tabBarIcon: ({ color }) => <MaterialCommunityIcons name="dice-multiple" size={32} color={color} />,
             tabBarButton: createTabButton('/games'),
             tabBarStyle: routeName === 'headsup' ? { display: 'none' } : undefined,
           };

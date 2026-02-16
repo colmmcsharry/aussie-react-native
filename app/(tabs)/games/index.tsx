@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 
 import { BodyFont, ContentBg, HeadingFont } from '@/constants/theme';
@@ -15,9 +16,9 @@ const GAME_IMAGES = {
 
 const GAMES = [
   {
-    id: 'conversation' as const,
-    title: 'Conversations',
-    description: 'Choose from a list of topics and discuss',
+    id: 'headsup' as const,
+    title: 'Heads Up',
+    description: 'Guess the word from your mates clues — tilt down for correct, up to skip',
   },
   {
     id: 'neverever' as const,
@@ -25,9 +26,9 @@ const GAMES = [
     description: 'Read the card aloud — whoever has done it, drinks!',
   },
   {
-    id: 'headsup' as const,
-    title: 'Heads Up',
-    description: 'Guess the word from your mates clues — tilt down for correct, up to skip',
+    id: 'conversation' as const,
+    title: 'Conversations',
+    description: 'Choose from a list of topics and discuss',
   },
 ];
 
@@ -56,6 +57,12 @@ export default function GamesScreen() {
               <Image source={GAME_IMAGES[game.id]} style={styles.gameImage} contentFit="cover" />
             </View>
             <View style={styles.gameTextWrap}>
+              <MaterialCommunityIcons
+                name="crown"
+                size={24}
+                color="#F4B744"
+                style={styles.gameCrown}
+              />
               <Text style={styles.gameTitle}>{game.title}</Text>
               <Text style={styles.gameDescription}>{game.description}</Text>
             </View>
@@ -103,6 +110,10 @@ const styles = StyleSheet.create({
   },
   gameTextWrap: {
     padding: 18,
+  },
+  gameCrown: {
+    marginBottom: 0,
+    alignSelf: 'flex-start',
   },
   gameTitle: {
     fontSize: 18,
