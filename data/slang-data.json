@@ -34,10 +34,7 @@
         "buttonTitle": "How ya going?",
         "audioFile": "howyagoing.m4a",
         "explanation": "The Australian way of asking 'How are you?' or 'How's it going?'",
-        "examples": [
-          "How ya going today?",
-          "How ya going with that project?"
-        ],
+        "examples": ["How ya going today?", "How ya going with that project?"],
         "notes": [
           "This is probably the most common greeting you'll hear in Australia."
         ]
@@ -94,9 +91,7 @@
           "Hey mate, what's cracking?",
           "So what's cracking at the party tonight?"
         ],
-        "notes": [
-          "More common among younger Australians."
-        ]
+        "notes": ["More common among younger Australians."]
       },
       {
         "id": "9",
@@ -213,9 +208,7 @@
           "Do you want another beer? - Yeah, nah, I'm good thanks",
           "Should we go to that new restaurant? - Yeah, nah, I'm not in the mood"
         ],
-        "notes": [
-          "The reverse 'Nah, yeah' means 'yes'."
-        ]
+        "notes": ["The reverse 'Nah, yeah' means 'yes'."]
       },
       {
         "id": "8",
@@ -238,9 +231,7 @@
           "Catchya tomorrow at the barbie.",
           "Catch ya later, don't do anything I wouldn't do!"
         ],
-        "notes": [
-          "Sometimes shortened to just 'Catchya'."
-        ]
+        "notes": ["Sometimes shortened to just 'Catchya'."]
       },
       {
         "id": "doona",
@@ -287,9 +278,7 @@
           "It's been yonks since I've been to Melbourne",
           "That happened yonks ago"
         ],
-        "notes": [
-          "Used to exaggerate how long something has been"
-        ]
+        "notes": ["Used to exaggerate how long something has been"]
       },
       {
         "id": "ron",
@@ -301,9 +290,7 @@
           "We can deal with that ron",
           "Maybe ron we'll go to the beach"
         ],
-        "notes": [
-          "Rhyming slang - 'later ron' becomes just 'ron'"
-        ]
+        "notes": ["Rhyming slang - 'later ron' becomes just 'ron'"]
       },
       {
         "id": "tick",
@@ -339,9 +326,7 @@
           "Streuth, that was close!",
           "Streuth mate, you scared me!"
         ],
-        "notes": [
-          "Short for 'God's truth' - shows surprise or disbelief"
-        ]
+        "notes": ["Short for 'God's truth' - shows surprise or disbelief"]
       },
       {
         "id": "ta",
@@ -367,9 +352,7 @@
           "Will you buy me that toy? - We'll see",
           "We'll see how the weather goes"
         ],
-        "notes": [
-          "Often means 'probably not' when said by parents"
-        ]
+        "notes": ["Often means 'probably not' when said by parents"]
       },
       {
         "id": "sweet",
@@ -381,9 +364,7 @@
           "Sweet, see you at 7pm then",
           "Everything's sweet mate"
         ],
-        "notes": [
-          "Can mean both 'good' and 'okay/agreed'"
-        ]
+        "notes": ["Can mean both 'good' and 'okay/agreed'"]
       },
       {
         "id": "straya",
@@ -395,9 +376,7 @@
           "Straya Day is January 26th",
           "That's so Straya"
         ],
-        "notes": [
-          "Often used with pride or humor about Australian culture"
-        ]
+        "notes": ["Often used with pride or humor about Australian culture"]
       },
       {
         "id": "milkbar",
@@ -409,9 +388,7 @@
           "The milk bar on the corner has everything",
           "Can you get some ice cream from the milk bar?"
         ],
-        "notes": [
-          "Like a convenience store but more community-focused"
-        ]
+        "notes": ["Like a convenience store but more community-focused"]
       },
       {
         "id": "bigsmoke",
@@ -423,9 +400,7 @@
           "Life in the big smoke is different",
           "She moved from the farm to the big smoke"
         ],
-        "notes": [
-          "Usually refers to the nearest major city"
-        ]
+        "notes": ["Usually refers to the nearest major city"]
       },
       {
         "id": "sticks",
@@ -437,9 +412,7 @@
           "Mobile coverage is terrible in the sticks",
           "I grew up in the sticks, nothing but trees"
         ],
-        "notes": [
-          "Refers to areas with lots of trees, far from cities"
-        ]
+        "notes": ["Refers to areas with lots of trees, far from cities"]
       },
       {
         "id": "ute",
@@ -451,9 +424,7 @@
           "My ute's perfect for moving furniture",
           "Every tradie needs a good ute"
         ],
-        "notes": [
-          "Short for 'utility vehicle' - essential Australian vehicle"
-        ]
+        "notes": ["Short for 'utility vehicle' - essential Australian vehicle"]
       },
       {
         "id": "smoko",
@@ -479,9 +450,7 @@
           "He's been agro all day",
           "The bouncer got agro with the drunk guy"
         ],
-        "notes": [
-          "Can be used as adjective (aggressive) or noun (aggravation)"
-        ]
+        "notes": ["Can be used as adjective (aggressive) or noun (aggravation)"]
       },
       {
         "id": "aircon",
@@ -505,9 +474,7 @@
           "The ambo arrived in five minutes",
           "My mate works as an ambo"
         ],
-        "notes": [
-          "Short for ambulance"
-        ]
+        "notes": ["Short for ambulance"]
       },
       {
         "id": "arsey",
@@ -519,9 +486,7 @@
           "He's so arsey, always gets away with everything",
           "What an arsey shot to win the game!"
         ],
-        "notes": [
-          "Derived from 'tin arsed' - can mean daring or very lucky"
-        ]
+        "notes": ["Derived from 'tin arsed' - can mean daring or very lucky"]
       },
       {
         "id": "bags",
@@ -533,9 +498,7 @@
           "Can someone do the dishes? - Bags not!",
           "I bags the last piece of cake"
         ],
-        "notes": [
-          "Used to claim ownership of something, often by children"
-        ]
+        "notes": ["Used to claim ownership of something, often by children"]
       },
       {
         "id": "bailup",
@@ -559,9 +522,7 @@
           "The kids ate all the bickies",
           "Tim Tams are my favorite bickies"
         ],
-        "notes": [
-          "Can also mean lots of money when used as 'big bickies'"
-        ]
+        "notes": ["Can also mean lots of money when used as 'big bickies'"]
       },
       {
         "id": "bignote",
@@ -585,9 +546,7 @@
           "That's none of your bizzo",
           "What's your bizzo here?"
         ],
-        "notes": [
-          "Short for business"
-        ]
+        "notes": ["Short for business"]
       },
       {
         "id": "blow",
@@ -611,9 +570,7 @@
           "These boardies are perfect for surfing",
           "I live in boardies during summer"
         ],
-        "notes": [
-          "From 'board shorts' - essential Australian beachwear"
-        ]
+        "notes": ["From 'board shorts' - essential Australian beachwear"]
       },
       {
         "id": "bodgy",
@@ -640,9 +597,7 @@
           "Don't wait for me, bog in",
           "The kids really bogged in to that cake"
         ],
-        "notes": [
-          "This is similar to saying 'tuck in'."
-        ]
+        "notes": ["This is similar to saying 'tuck in'."]
       },
       {
         "id": "11",
@@ -785,9 +740,7 @@
           "The car's buggered, won't start",
           "If they catch me, I'm buggered"
         ],
-        "notes": [
-          "Multiple meanings depending on context"
-        ]
+        "notes": ["Multiple meanings depending on context"]
       },
       {
         "id": "bung",
@@ -799,9 +752,7 @@
           "My phone's bung, screen won't work",
           "Just bung your bag over there"
         ],
-        "notes": [
-          "Can mean 'put' or 'broken' depending on context"
-        ]
+        "notes": ["Can mean 'put' or 'broken' depending on context"]
       },
       {
         "id": "bushtelly",
@@ -813,9 +764,7 @@
           "The bush telly's crackling nicely",
           "Nothing beats watching the bush telly under the stars"
         ],
-        "notes": [
-          "Humorous term - campfires provide entertainment like TV"
-        ]
+        "notes": ["Humorous term - campfires provide entertainment like TV"]
       },
       {
         "id": "bushmanshanky",
@@ -827,9 +776,7 @@
           "No tissues? Time for a bushman's hanky",
           "That's gross, use a tissue not a bushman's hanky"
         ],
-        "notes": [
-          "Crude but practical method used in the bush"
-        ]
+        "notes": ["Crude but practical method used in the bush"]
       },
       {
         "id": "busker",
@@ -853,9 +800,7 @@
           "The chook laid some fresh cackleberries",
           "Scrambled cackleberries for breakfast"
         ],
-        "notes": [
-          "Humorous term - from the cackling sound chickens make"
-        ]
+        "notes": ["Humorous term - from the cackling sound chickens make"]
       },
       {
         "id": "cactus",
@@ -867,9 +812,7 @@
           "The engine's cactus, won't start",
           "After that crash, the car was cactus"
         ],
-        "notes": [
-          "Means completely broken or dead"
-        ]
+        "notes": ["Means completely broken or dead"]
       },
       {
         "id": "carkit",
@@ -893,9 +836,7 @@
           "Carn mate, have another beer",
           "Carn, you can do better than that"
         ],
-        "notes": [
-          "Contraction of 'come on', especially used in sports"
-        ]
+        "notes": ["Contraction of 'come on', especially used in sports"]
       },
       {
         "id": "catspyjamas",
@@ -907,9 +848,7 @@
           "She thinks she's the cat's pyjamas",
           "This restaurant is the cat's pyjamas"
         ],
-        "notes": [
-          "Similar to 'cat's whiskers' or 'bee's knees'"
-        ]
+        "notes": ["Similar to 'cat's whiskers' or 'bee's knees'"]
       },
       {
         "id": "chook",
@@ -921,9 +860,7 @@
           "Grab some eggs from the chook pen",
           "We had roast chook for dinner"
         ],
-        "notes": [
-          "Very common Australian term for chicken"
-        ]
+        "notes": ["Very common Australian term for chicken"]
       },
       {
         "id": "chrissie",
@@ -947,9 +884,7 @@
           "He chucked a sickie to go surfing",
           "Don't chuck a sickie on a Monday, too obvious"
         ],
-        "notes": [
-          "When you're perfectly healthy but call in sick"
-        ]
+        "notes": ["When you're perfectly healthy but call in sick"]
       },
       {
         "id": "chunder",
@@ -961,9 +896,7 @@
           "He chundered all over the bathroom",
           "The boat ride made me want to chunder"
         ],
-        "notes": [
-          "Classic Australian slang for vomiting"
-        ]
+        "notes": ["Classic Australian slang for vomiting"]
       },
       {
         "id": "claytons",
@@ -989,9 +922,7 @@
           "Don't get clucky on me",
           "My wife's been clucky lately"
         ],
-        "notes": [
-          "From clucking hens sitting on eggs"
-        ]
+        "notes": ["From clucking hens sitting on eggs"]
       },
       {
         "id": "coldone",
@@ -1027,9 +958,7 @@
           "The compo claim was approved",
           "She's been on compo for months"
         ],
-        "notes": [
-          "Short for compensation"
-        ]
+        "notes": ["Short for compensation"]
       },
       {
         "id": "cooee",
@@ -1041,9 +970,7 @@
           "Give us a cooee when you're ready",
           "The house is within cooee of the beach"
         ],
-        "notes": [
-          "From Aboriginal call - means within hearing distance"
-        ]
+        "notes": ["From Aboriginal call - means within hearing distance"]
       },
       {
         "id": "cooked",
@@ -1055,9 +982,7 @@
           "I was so cooked last night",
           "Don't drive, you're cooked"
         ],
-        "notes": [
-          "Modern slang meaning very intoxicated"
-        ]
+        "notes": ["Modern slang meaning very intoxicated"]
       },
       {
         "id": "copitsweet",
@@ -1081,9 +1006,7 @@
           "That's a nice cossie you're wearing",
           "The kids need new cossies for summer"
         ],
-        "notes": [
-          "Short for costume, also spelled 'cozzie'"
-        ]
+        "notes": ["Short for costume, also spelled 'cozzie'"]
       },
       {
         "id": "cranky",
@@ -1107,9 +1030,7 @@
           "Crikey, that was close!",
           "Crikey mate, you scared me"
         ],
-        "notes": [
-          "Made famous by Steve Irwin"
-        ]
+        "notes": ["Made famous by Steve Irwin"]
       },
       {
         "id": "crook",
@@ -1147,9 +1068,7 @@
           "I ripped my dacks on the fence",
           "Nice dacks, where'd you get them?"
         ],
-        "notes": [
-          "Also spelled 'daks' - general term for lower body clothing"
-        ]
+        "notes": ["Also spelled 'daks' - general term for lower body clothing"]
       },
       {
         "id": "dag",
@@ -1199,9 +1118,7 @@
           "Your new car is deadly bro",
           "The surf was deadly today"
         ],
-        "notes": [
-          "Adopted from Aboriginal English meaning excellent"
-        ]
+        "notes": ["Adopted from Aboriginal English meaning excellent"]
       },
       {
         "id": "devo",
@@ -1213,9 +1130,7 @@
           "She was devo when her phone broke",
           "Don't be devo, there's always next time"
         ],
-        "notes": [
-          "Short for devastated"
-        ]
+        "notes": ["Short for devastated"]
       },
       {
         "id": "der",
@@ -1227,9 +1142,7 @@
           "You need to study for the test? Der!",
           "Der, everyone knows that"
         ],
-        "notes": [
-          "Common among children and teenagers"
-        ]
+        "notes": ["Common among children and teenagers"]
       },
       {
         "id": "dekko",
@@ -1253,9 +1166,7 @@
           "He gave his little sister a dink on his bike",
           "I got a dink on the handlebars"
         ],
-        "notes": [
-          "Also 'double-dink' for two passengers"
-        ]
+        "notes": ["Also 'double-dink' for two passengers"]
       },
       {
         "id": "dinkum",
@@ -1267,9 +1178,7 @@
           "Are you dinkum about that story?",
           "Fair dinkum, I didn't see you there"
         ],
-        "notes": [
-          "Often used as 'fair dinkum' meaning honest/true"
-        ]
+        "notes": ["Often used as 'fair dinkum' meaning honest/true"]
       },
       {
         "id": "dinkydi",
@@ -1281,9 +1190,7 @@
           "That's dinky-di Australian beef",
           "She's dinky-di, born and bred in the bush"
         ],
-        "notes": [
-          "Emphasizes authenticity, especially Australian authenticity"
-        ]
+        "notes": ["Emphasizes authenticity, especially Australian authenticity"]
       },
       {
         "id": "dirty",
@@ -1295,9 +1202,7 @@
           "He was dirty on me after I took his parking spot",
           "The weather turned dirty quickly"
         ],
-        "notes": [
-          "Context-dependent - weather or emotions"
-        ]
+        "notes": ["Context-dependent - weather or emotions"]
       },
       {
         "id": "dob",
@@ -1335,9 +1240,7 @@
           "There's a good doco on tonight",
           "I love nature docos"
         ],
-        "notes": [
-          "Short for documentary"
-        ]
+        "notes": ["Short for documentary"]
       },
       {
         "id": "doona1",
@@ -1349,9 +1252,7 @@
           "I need a new doona for winter",
           "The doona fell off the bed"
         ],
-        "notes": [
-          "From the brand name Doona - equivalent to British 'duvet'"
-        ]
+        "notes": ["From the brand name Doona - equivalent to British 'duvet'"]
       },
       {
         "id": "drongo",
@@ -1363,9 +1264,7 @@
           "That drongo forgot his keys again",
           "Only a drongo would try that"
         ],
-        "notes": [
-          "From a type of bird known for being easily caught"
-        ]
+        "notes": ["From a type of bird known for being easily caught"]
       },
       {
         "id": "drum",
@@ -1377,9 +1276,7 @@
           "Got the drum on the best place to eat?",
           "He gave me the drum about the job"
         ],
-        "notes": [
-          "Becoming less common - means inside information"
-        ]
+        "notes": ["Becoming less common - means inside information"]
       },
       {
         "id": "duchess",
@@ -1391,9 +1288,7 @@
           "The duchess is full of old dishes",
           "Mum keeps the tablecloth in the duchess"
         ],
-        "notes": [
-          "Furniture term - where you display dishes"
-        ]
+        "notes": ["Furniture term - where you display dishes"]
       },
       {
         "id": "dummy",
@@ -1419,9 +1314,7 @@
           "The dunny paper's run out",
           "That old house still has a dunny out the back"
         ],
-        "notes": [
-          "Originally outdoor toilets, now any toilet"
-        ]
+        "notes": ["Originally outdoor toilets, now any toilet"]
       },
       {
         "id": "dux",
@@ -1433,9 +1326,7 @@
           "He's trying to dux the physics class",
           "The dux gets a special prize"
         ],
-        "notes": [
-          "From Latin 'dux' meaning leader"
-        ]
+        "notes": ["From Latin 'dux' meaning leader"]
       },
       {
         "id": "bigbickies",
@@ -1447,9 +1338,7 @@
           "He's earning big bickies at his new job",
           "The house renovation is going to be big bickies"
         ],
-        "notes": [
-          "From 'biscuits' - means lots of money"
-        ]
+        "notes": ["From 'biscuits' - means lots of money"]
       },
       {
         "id": "exy",
@@ -1461,9 +1350,7 @@
           "Sydney rent is so exy",
           "The drinks at that bar are exy"
         ],
-        "notes": [
-          "Short for expensive"
-        ]
+        "notes": ["Short for expensive"]
       },
       {
         "id": "brassrazoo",
@@ -1475,9 +1362,7 @@
           "I can't come out, I haven't got a brass razoo",
           "After the divorce, she hasn't got a brass razoo"
         ],
-        "notes": [
-          "A razoo was a made-up coin - means no money at all"
-        ]
+        "notes": ["A razoo was a made-up coin - means no money at all"]
       },
       {
         "id": "prawn",
@@ -1489,9 +1374,7 @@
           "I found a prawn in my old jeans",
           "This coffee costs more than a prawn"
         ],
-        "notes": [
-          "Also called 'pink lady' or 'piglet'"
-        ]
+        "notes": ["Also called 'pink lady' or 'piglet'"]
       },
       {
         "id": "bluey",
@@ -1503,9 +1386,7 @@
           "I've only got a bluey left",
           "Can you change a bluey?"
         ],
-        "notes": [
-          "Also called 'blue swimmer' or 'Banjo'"
-        ]
+        "notes": ["Also called 'blue swimmer' or 'Banjo'"]
       },
       {
         "id": "lobster",
@@ -1517,9 +1398,7 @@
           "I need a lobster to pay for lunch",
           "That shirt costs three lobsters"
         ],
-        "notes": [
-          "From the red/orange color of the $20 note"
-        ]
+        "notes": ["From the red/orange color of the $20 note"]
       },
       {
         "id": "pineapple",
@@ -1531,9 +1410,7 @@
           "I withdrew a pineapple from the ATM",
           "That's worth at least a pineapple"
         ],
-        "notes": [
-          "From the yellow/gold color of the $50 note"
-        ]
+        "notes": ["From the yellow/gold color of the $50 note"]
       },
       {
         "id": "kermit",
@@ -1545,9 +1422,7 @@
           "I've never seen a Kermit before",
           "That's going to cost a few Kermits"
         ],
-        "notes": [
-          "Also called 'watermelon', 'Granny Smith', or 'treefrog'"
-        ]
+        "notes": ["Also called 'watermelon', 'Granny Smith', or 'treefrog'"]
       },
       {
         "id": "earbashing",
@@ -1559,9 +1434,7 @@
           "I got an earbashing from the boss",
           "Stop giving me an earbashing"
         ],
-        "notes": [
-          "Means getting told off or lectured at length"
-        ]
+        "notes": ["Means getting told off or lectured at length"]
       },
       {
         "id": "fairgo",
@@ -1573,9 +1446,7 @@
           "Fair go, I was only joking",
           "Everyone deserves a fair go"
         ],
-        "notes": [
-          "Fundamental Australian value of giving everyone a chance"
-        ]
+        "notes": ["Fundamental Australian value of giving everyone a chance"]
       },
       {
         "id": "feral",
@@ -1587,9 +1458,7 @@
           "He's gone feral since moving out",
           "The bathroom was feral after the party"
         ],
-        "notes": [
-          "Can describe behavior, hygiene, or situations"
-        ]
+        "notes": ["Can describe behavior, hygiene, or situations"]
       },
       {
         "id": "flatchat",
@@ -1601,9 +1470,7 @@
           "The car was going flat chat down the highway",
           "We're flat chat trying to finish this project"
         ],
-        "notes": [
-          "Also 'flat out' - means maximum speed or effort"
-        ]
+        "notes": ["Also 'flat out' - means maximum speed or effort"]
       },
       {
         "id": "flick",
@@ -1615,9 +1482,7 @@
           "She gave him the flick after the party",
           "I'm giving this job the flick"
         ],
-        "notes": [
-          "'Give something the flick' means to discard or dump it"
-        ]
+        "notes": ["'Give something the flick' means to discard or dump it"]
       },
       {
         "id": "flog",
@@ -1629,9 +1494,7 @@
           "Someone flogged my bike",
           "Don't flog the engine like that"
         ],
-        "notes": [
-          "Multiple meanings - sell, steal, or abuse something"
-        ]
+        "notes": ["Multiple meanings - sell, steal, or abuse something"]
       },
       {
         "id": "fossick",
@@ -1643,9 +1506,7 @@
           "He's fossicking for gold in the creek",
           "Stop fossicking through my stuff"
         ],
-        "notes": [
-          "Originally meant prospecting for gold"
-        ]
+        "notes": ["Originally meant prospecting for gold"]
       },
       {
         "id": "franger",
@@ -1657,9 +1518,7 @@
           "The franger broke",
           "Always use a franger"
         ],
-        "notes": [
-          "Common slang for condom"
-        ]
+        "notes": ["Common slang for condom"]
       },
       {
         "id": "furphy",
@@ -1671,9 +1530,7 @@
           "Don't believe that furphy about the boss",
           "Sounds like another furphy to me"
         ],
-        "notes": [
-          "From Furphy water carts in WWI where rumors spread"
-        ]
+        "notes": ["From Furphy water carts in WWI where rumors spread"]
       },
       {
         "id": "gander",
@@ -1685,9 +1542,7 @@
           "Have a gander at this photo",
           "Take a gander under the bonnet"
         ],
-        "notes": [
-          "Also 'ganda' - means to look or inspect"
-        ]
+        "notes": ["Also 'ganda' - means to look or inspect"]
       },
       {
         "id": "getjackof",
@@ -1699,9 +1554,7 @@
           "She's getting jack of his excuses",
           "Eventually I got jack of the noise"
         ],
-        "notes": [
-          "Means to become tired or annoyed with something"
-        ]
+        "notes": ["Means to become tired or annoyed with something"]
       },
       {
         "id": "giveitaburl",
@@ -1713,9 +1566,7 @@
           "I'll give surfing a burl",
           "Come on, give it a burl"
         ],
-        "notes": [
-          "Encouragement to try something new"
-        ]
+        "notes": ["Encouragement to try something new"]
       },
       {
         "id": "gobsmacked",
@@ -1727,9 +1578,7 @@
           "He looked absolutely gobsmacked",
           "That left me gobsmacked"
         ],
-        "notes": [
-          "'Gob' means mouth - so shocked your mouth hangs open"
-        ]
+        "notes": ["'Gob' means mouth - so shocked your mouth hangs open"]
       },
       {
         "id": "goingoff",
@@ -1741,9 +1590,7 @@
           "This party's going off!",
           "The club was going off last night"
         ],
-        "notes": [
-          "Means very exciting or happening"
-        ]
+        "notes": ["Means very exciting or happening"]
       },
       {
         "id": "goodoil",
@@ -1755,9 +1602,7 @@
           "Here's the good oil about the job",
           "I got the good oil from someone reliable"
         ],
-        "notes": [
-          "Reliable inside information"
-        ]
+        "notes": ["Reliable inside information"]
       },
       {
         "id": "goodon",
@@ -1769,9 +1614,7 @@
           "You passed the test? Good on ya!",
           "Good on ya mate"
         ],
-        "notes": [
-          "Expression of approval or congratulation"
-        ]
+        "notes": ["Expression of approval or congratulation"]
       },
       {
         "id": "grouse",
@@ -1783,9 +1626,7 @@
           "We had a grouse time at the party",
           "What a grouse day for the beach"
         ],
-        "notes": [
-          "Especially common in Victoria"
-        ]
+        "notes": ["Especially common in Victoria"]
       },
       {
         "id": "gun",
@@ -1797,9 +1638,7 @@
           "She's a gun at maths",
           "That mechanic's a real gun"
         ],
-        "notes": [
-          "From shearing - the fastest shearer was the 'gun shearer'"
-        ]
+        "notes": ["From shearing - the fastest shearer was the 'gun shearer'"]
       },
       {
         "id": "hangshit",
@@ -1811,9 +1650,7 @@
           "They're just hanging shit",
           "Stop hanging shit on my car"
         ],
-        "notes": [
-          "Means to give someone a hard time"
-        ]
+        "notes": ["Means to give someone a hard time"]
       },
       {
         "id": "heaps",
@@ -1825,9 +1662,7 @@
           "There's heaps of food left",
           "I like her heaps"
         ],
-        "notes": [
-          "Can mean 'lots' or be used as an intensifier like 'very'"
-        ]
+        "notes": ["Can mean 'lots' or be used as an intensifier like 'very'"]
       },
       {
         "id": "hoolydooley",
@@ -1839,9 +1674,7 @@
           "Hooly dooley, that was close!",
           "Hooly dooley, what a mess!"
         ],
-        "notes": [
-          "Similar to 'good heavens' or 'my goodness'"
-        ]
+        "notes": ["Similar to 'good heavens' or 'my goodness'"]
       },
       {
         "id": "hoon",
@@ -1853,9 +1686,7 @@
           "That hoon nearly hit us",
           "The police caught him hooning"
         ],
-        "notes": [
-          "Dangerous driving, especially showing off"
-        ]
+        "notes": ["Dangerous driving, especially showing off"]
       },
       {
         "id": "hooroo",
@@ -1867,9 +1698,7 @@
           "Hooroo mate, drive safe",
           "Hooroo everyone!"
         ],
-        "notes": [
-          "Old-fashioned but still used way of saying farewell"
-        ]
+        "notes": ["Old-fashioned but still used way of saying farewell"]
       },
       {
         "id": "hottie",
@@ -1881,9 +1710,7 @@
           "Fill up the hottie, it's cold",
           "The hottie leaked all over the bed"
         ],
-        "notes": [
-          "Not an attractive person - that's a different meaning"
-        ]
+        "notes": ["Not an attractive person - that's a different meaning"]
       },
       {
         "id": "humpy",
@@ -1895,9 +1722,7 @@
           "The old humpy's falling down",
           "We slept in a humpy under the stars"
         ],
-        "notes": [
-          "Traditional Aboriginal temporary shelter"
-        ]
+        "notes": ["Traditional Aboriginal temporary shelter"]
       },
       {
         "id": "idiotbox",
@@ -1909,9 +1734,7 @@
           "He's glued to the idiot box all day",
           "Nothing good on the idiot box tonight"
         ],
-        "notes": [
-          "Derogatory term for TV"
-        ]
+        "notes": ["Derogatory term for TV"]
       },
       {
         "id": "jet",
@@ -1923,9 +1746,7 @@
           "Let's jet before it gets crowded",
           "He jetted off to the shops"
         ],
-        "notes": [
-          "Means to leave quickly"
-        ]
+        "notes": ["Means to leave quickly"]
       },
       {
         "id": "kangaroosloose",
@@ -1937,9 +1758,7 @@
           "That idea suggests kangaroos loose in the top paddock",
           "She's got a few kangaroos loose"
         ],
-        "notes": [
-          "Humorous way to say someone's not quite right mentally"
-        ]
+        "notes": ["Humorous way to say someone's not quite right mentally"]
       },
       {
         "id": "kenoath",
@@ -1951,9 +1770,7 @@
           "Ken oath that's right",
           "Ken oath, what a game!"
         ],
-        "notes": [
-          "Polite version of a stronger expression"
-        ]
+        "notes": ["Polite version of a stronger expression"]
       },
       {
         "id": "kero",
@@ -1965,9 +1782,7 @@
           "The kero lamp's running low",
           "We need more kero for camping"
         ],
-        "notes": [
-          "Short for kerosene"
-        ]
+        "notes": ["Short for kerosene"]
       },
       {
         "id": "kindie",
@@ -1979,9 +1794,7 @@
           "She works at the local kindie",
           "Kindie pickup is at 3pm"
         ],
-        "notes": [
-          "Short for kindergarten"
-        ]
+        "notes": ["Short for kindergarten"]
       },
       {
         "id": "knackered",
@@ -1993,9 +1806,7 @@
           "The car's knackered, won't start",
           "After that hike I was knackered"
         ],
-        "notes": [
-          "Can mean tired or broken"
-        ]
+        "notes": ["Can mean tired or broken"]
       },
       {
         "id": "knock",
@@ -2007,9 +1818,7 @@
           "He's always knocking my cooking",
           "Stop knocking the government"
         ],
-        "notes": [
-          "Means to criticize or find fault"
-        ]
+        "notes": ["Means to criticize or find fault"]
       },
       {
         "id": "knockback",
@@ -2021,9 +1830,7 @@
           "She knocked back his invitation",
           "That's a real knock back"
         ],
-        "notes": [
-          "To reject or be rejected"
-        ]
+        "notes": ["To reject or be rejected"]
       },
       {
         "id": "lendof",
@@ -2035,9 +1842,7 @@
           "Don't have a lend of me",
           "She's having a lend of the new guy"
         ],
-        "notes": [
-          "To trick or fool someone"
-        ]
+        "notes": ["To trick or fool someone"]
       },
       {
         "id": "lightglobe",
@@ -2049,9 +1854,7 @@
           "Change the light globe in the kitchen",
           "We need a new light globe"
         ],
-        "notes": [
-          "Australian term for light bulb"
-        ]
+        "notes": ["Australian term for light bulb"]
       },
       {
         "id": "lingo",
@@ -2063,9 +1866,7 @@
           "He speaks the surfing lingo",
           "What's all this computer lingo?"
         ],
-        "notes": [
-          "Informal language or jargon"
-        ]
+        "notes": ["Informal language or jargon"]
       },
       {
         "id": "lippy",
@@ -2077,9 +1878,7 @@
           "Your lippy's smudged",
           "What color lippy is that?"
         ],
-        "notes": [
-          "Short for lipstick"
-        ]
+        "notes": ["Short for lipstick"]
       },
       {
         "id": "lob",
@@ -2091,9 +1890,7 @@
           "He lobbed in unexpectedly",
           "Lob around anytime"
         ],
-        "notes": [
-          "Casual visit without prior arrangement"
-        ]
+        "notes": ["Casual visit without prior arrangement"]
       },
       {
         "id": "londontobrick",
@@ -2105,9 +1902,7 @@
           "London to a brick it'll rain",
           "London to a brick she'll win"
         ],
-        "notes": [
-          "Betting odds expression meaning very certain"
-        ]
+        "notes": ["Betting odds expression meaning very certain"]
       },
       {
         "id": "longpaddock",
@@ -2119,9 +1914,7 @@
           "Drought's so bad they're using the long paddock",
           "Stock on the long paddock again"
         ],
-        "notes": [
-          "Roadside grazing during tough times"
-        ]
+        "notes": ["Roadside grazing during tough times"]
       },
       {
         "id": "lurk",
@@ -2133,9 +1926,7 @@
           "That sounds like a lurk to me",
           "What's your lurk?"
         ],
-        "notes": [
-          "A scam or dodgy scheme"
-        ]
+        "notes": ["A scam or dodgy scheme"]
       },
       {
         "id": "manchester",
@@ -2147,9 +1938,7 @@
           "We need new manchester for the guest room",
           "Good quality manchester lasts years"
         ],
-        "notes": [
-          "From Manchester, England - textile manufacturing center"
-        ]
+        "notes": ["From Manchester, England - textile manufacturing center"]
       },
       {
         "id": "matesrates",
@@ -2161,9 +1950,7 @@
           "He charged me mate's rates for the repair",
           "Mate's rates - fifty bucks"
         ],
-        "notes": [
-          "Cheaper price for friends"
-        ]
+        "notes": ["Cheaper price for friends"]
       },
       {
         "id": "metho",
@@ -2175,9 +1962,7 @@
           "The metho's in the shed",
           "Use metho to remove the stain"
         ],
-        "notes": [
-          "Denatured alcohol used for cleaning"
-        ]
+        "notes": ["Denatured alcohol used for cleaning"]
       },
       {
         "id": "mickeymouse",
@@ -2189,9 +1974,7 @@
           "Mickey Mouse job on the repairs",
           "Don't give me that Mickey Mouse excuse"
         ],
-        "notes": [
-          "Can mean great or trivial depending on context"
-        ]
+        "notes": ["Can mean great or trivial depending on context"]
       },
       {
         "id": "milkbars",
@@ -2203,9 +1986,7 @@
           "The milk bar's open late",
           "I'll get milk from the milk bar"
         ],
-        "notes": [
-          "Small local shop, like a convenience store"
-        ]
+        "notes": ["Small local shop, like a convenience store"]
       },
       {
         "id": "moll",
@@ -2217,9 +1998,7 @@
           "That moll's causing trouble",
           "Don't be a moll about it"
         ],
-        "notes": [
-          "Can be derogatory - often mistakenly written as 'mole'"
-        ]
+        "notes": ["Can be derogatory - often mistakenly written as 'mole'"]
       },
       {
         "id": "mozz",
@@ -2231,9 +2010,7 @@
           "He's got the mozz on him",
           "That'll put the mozz on us"
         ],
-        "notes": [
-          "To jinx or bring bad luck"
-        ]
+        "notes": ["To jinx or bring bad luck"]
       },
       {
         "id": "mozzie",
@@ -2245,9 +2022,7 @@
           "Got any mozzie spray?",
           "A mozzie bit me"
         ],
-        "notes": [
-          "Short for mosquito"
-        ]
+        "notes": ["Short for mosquito"]
       },
       {
         "id": "munted",
@@ -2259,9 +2034,7 @@
           "He was munted after the party",
           "The car's munted from the accident"
         ],
-        "notes": [
-          "Can mean broken or very drunk/high"
-        ]
+        "notes": ["Can mean broken or very drunk/high"]
       },
       {
         "id": "muster",
@@ -2273,9 +2046,7 @@
           "The muster starts at dawn",
           "We're mustering the back paddock"
         ],
-        "notes": [
-          "Gathering livestock"
-        ]
+        "notes": ["Gathering livestock"]
       },
       {
         "id": "nah",
@@ -2287,9 +2058,7 @@
           "Nah, that's not right",
           "Nah mate, can't do it"
         ],
-        "notes": [
-          "Casual way to say no"
-        ]
+        "notes": ["Casual way to say no"]
       },
       {
         "id": "nasho",
@@ -2301,9 +2070,7 @@
           "Nasho was compulsory back then",
           "He met mum during nasho"
         ],
-        "notes": [
-          "Historical - Australia had conscription 1951-1972"
-        ]
+        "notes": ["Historical - Australia had conscription 1951-1972"]
       },
       {
         "id": "naturestrip",
@@ -2315,9 +2082,7 @@
           "Kids play on the nature strip",
           "Council maintains the nature strip"
         ],
-        "notes": [
-          "Called 'verge' in WA"
-        ]
+        "notes": ["Called 'verge' in WA"]
       },
       {
         "id": "nodrama",
@@ -2329,9 +2094,7 @@
           "No drama, I'll fix it",
           "No drama mate, anytime"
         ],
-        "notes": [
-          "Same as 'no worries'"
-        ]
+        "notes": ["Same as 'no worries'"]
       },
       {
         "id": "nosweat",
@@ -2343,9 +2106,7 @@
           "No sweat, I'll handle it",
           "No sweat mate"
         ],
-        "notes": [
-          "Means it's easy or no trouble"
-        ]
+        "notes": ["Means it's easy or no trouble"]
       },
       {
         "id": "notfullquid",
@@ -2357,9 +2118,7 @@
           "She's nice but not the full quid",
           "That idea's not the full quid"
         ],
-        "notes": [
-          "Quid was slang for pound - not having the full amount"
-        ]
+        "notes": ["Quid was slang for pound - not having the full amount"]
       },
       {
         "id": "nowuckers",
@@ -2371,9 +2130,7 @@
           "No wuckers, anytime",
           "No wuckers about it"
         ],
-        "notes": [
-          "Polite version of a ruder expression"
-        ]
+        "notes": ["Polite version of a ruder expression"]
       },
       {
         "id": "nutout",
@@ -2385,9 +2142,7 @@
           "We need to nut this out",
           "They nutted out a solution"
         ],
-        "notes": [
-          "To figure something out through discussion"
-        ]
+        "notes": ["To figure something out through discussion"]
       },
       {
         "id": "occystrap",
@@ -2399,9 +2154,7 @@
           "The occy strap snapped",
           "Got any occy straps?"
         ],
-        "notes": [
-          "Short for 'octopus strap' - has multiple arms"
-        ]
+        "notes": ["Short for 'octopus strap' - has multiple arms"]
       },
       {
         "id": "okeydokey",
@@ -2413,9 +2166,7 @@
           "Okey-dokey, I'll do it",
           "Okey-dokey then"
         ],
-        "notes": [
-          "Cheerful way to say OK"
-        ]
+        "notes": ["Cheerful way to say OK"]
       },
       {
         "id": "onyabike",
@@ -2427,9 +2178,7 @@
           "Tell him to get on his bike",
           "On ya bike, we're closed"
         ],
-        "notes": [
-          "Polite way to tell someone to leave"
-        ]
+        "notes": ["Polite way to tell someone to leave"]
       },
       {
         "id": "onya",
@@ -2441,9 +2190,7 @@
           "Onya for helping out",
           "Onya, you did it!"
         ],
-        "notes": [
-          "Short for 'good on you'"
-        ]
+        "notes": ["Short for 'good on you'"]
       },
       {
         "id": "opshop",
@@ -2455,9 +2202,7 @@
           "The op shop has great bargains",
           "Donate it to the op shop"
         ],
-        "notes": [
-          "Second-hand goods store run by charities"
-        ]
+        "notes": ["Second-hand goods store run by charities"]
       }
     ],
     "Drinking": [
@@ -2505,9 +2250,7 @@
         "buttonTitle": "Schooner",
         "audioFile": "scooner.m4a",
         "explanation": "A schooner is a glass of beer, usually 425ml, similar size as a pint.",
-        "examples": [
-          "I'm gonna hit the pub for a few schooners."
-        ],
+        "examples": ["I'm gonna hit the pub for a few schooners."],
         "notes": [
           "In certain parts of Australia, like Southern Australia, a schooner is only 285ml."
         ],
@@ -2633,9 +2376,7 @@
           "I can't afford good wine, just get some plonk",
           "We're drinking plonk until payday"
         ],
-        "notes": [
-          "Often refers to cask wine or very cheap bottled wine"
-        ]
+        "notes": ["Often refers to cask wine or very cheap bottled wine"]
       },
       {
         "id": "goonbag",
@@ -2661,9 +2402,7 @@
           "Stop bludging and help us clean up",
           "I'm having a bludge day with some beers"
         ],
-        "notes": [
-          "Can also mean to scrounge off friends"
-        ]
+        "notes": ["Can also mean to scrounge off friends"]
       },
       {
         "id": "scab",
@@ -2675,9 +2414,7 @@
           "He's always trying to scab durries",
           "I scabbed a feed at my mate's place"
         ],
-        "notes": [
-          "Not necessarily offensive - often expected among friends"
-        ]
+        "notes": ["Not necessarily offensive - often expected among friends"]
       },
       {
         "id": "paro",
@@ -2689,9 +2426,7 @@
           "Don't get paro before the wedding",
           "She's always paro at parties"
         ],
-        "notes": [
-          "Short for 'paralytic' - very drunk"
-        ]
+        "notes": ["Short for 'paralytic' - very drunk"]
       },
       {
         "id": "slaughtered",
@@ -2715,9 +2450,7 @@
           "Put away the turps, it's Monday morning",
           "The turps got the better of him"
         ],
-        "notes": [
-          "From turpentine - strong alcohol"
-        ]
+        "notes": ["From turpentine - strong alcohol"]
       },
       {
         "id": "technicolouryawn",
@@ -2729,9 +2462,7 @@
           "The technicolour yawn came after the tequila",
           "Too much goon leads to a technicolour yawn"
         ],
-        "notes": [
-          "Humorous term for throwing up"
-        ]
+        "notes": ["Humorous term for throwing up"]
       },
       {
         "id": "kickon",
@@ -2743,9 +2474,7 @@
           "The night kicked on until sunrise",
           "Who's up for kicking on?"
         ],
-        "notes": [
-          "Partying continues elsewhere"
-        ]
+        "notes": ["Partying continues elsewhere"]
       },
       {
         "id": "bundy",
@@ -2757,9 +2486,7 @@
           "Bundy's the drink of choice in Queensland",
           "Nothing beats a Bundy on the rocks"
         ],
-        "notes": [
-          "Often served with Coke as 'Bundy and Coke'"
-        ]
+        "notes": ["Often served with Coke as 'Bundy and Coke'"]
       },
       {
         "id": "pisshead",
@@ -2771,9 +2498,7 @@
           "Don't be such a pisshead",
           "The pissheads were causing trouble again"
         ],
-        "notes": [
-          "Can be affectionate or derogatory depending on context"
-        ]
+        "notes": ["Can be affectionate or derogatory depending on context"]
       },
       {
         "id": "middy",
@@ -2785,9 +2510,7 @@
           "Just a middy, I'm driving",
           "Two middies of Carlton please"
         ],
-        "notes": [
-          "Size varies by state - called 'pot' in Victoria"
-        ]
+        "notes": ["Size varies by state - called 'pot' in Victoria"]
       },
       {
         "id": "pot",
@@ -2799,9 +2522,7 @@
           "Two pots and a packet of chips",
           "The pot's the perfect size"
         ],
-        "notes": [
-          "Called 'middy' in NSW"
-        ]
+        "notes": ["Called 'middy' in NSW"]
       },
       {
         "id": "pony",
@@ -2813,9 +2534,7 @@
           "She ordered a pony of light beer",
           "A pony's too small for me"
         ],
-        "notes": [
-          "Smallest beer size available"
-        ]
+        "notes": ["Smallest beer size available"]
       },
       {
         "id": "cleanskin",
@@ -2827,9 +2546,7 @@
           "Grab some cleanskin for the party",
           "Cleanskins are great value"
         ],
-        "notes": [
-          "Unbranded wine, often good quality at low prices"
-        ]
+        "notes": ["Unbranded wine, often good quality at low prices"]
       },
       {
         "id": "cask",
@@ -2841,9 +2558,7 @@
           "The cask is in the fridge",
           "Cask wine's cheap and cheerful"
         ],
-        "notes": [
-          "Wine in a box with a tap"
-        ]
+        "notes": ["Wine in a box with a tap"]
       },
       {
         "id": "fortified",
@@ -2855,9 +2570,7 @@
           "Fortified wine will knock you around",
           "Port is a type of fortified wine"
         ],
-        "notes": [
-          "Higher alcohol content than regular wine"
-        ]
+        "notes": ["Higher alcohol content than regular wine"]
       },
       {
         "id": "roughred",
@@ -2869,9 +2582,7 @@
           "We drank rough red all night",
           "Rough red for five bucks a bottle"
         ],
-        "notes": [
-          "Low-quality red wine"
-        ]
+        "notes": ["Low-quality red wine"]
       },
       {
         "id": "champers",
@@ -2883,9 +2594,7 @@
           "Champers for the celebration",
           "Nothing beats good champers"
         ],
-        "notes": [
-          "Short for champagne"
-        ]
+        "notes": ["Short for champagne"]
       },
       {
         "id": "bubbly",
@@ -2897,9 +2606,7 @@
           "Bubbly for the toast",
           "Australian bubbly is world-class"
         ],
-        "notes": [
-          "Any sparkling wine"
-        ]
+        "notes": ["Any sparkling wine"]
       },
       {
         "id": "coldie",
@@ -2911,9 +2618,7 @@
           "Nothing beats a coldie after work",
           "Grab us a coldie from the esky"
         ],
-        "notes": [
-          "Emphasizes the cold temperature"
-        ]
+        "notes": ["Emphasizes the cold temperature"]
       },
       {
         "id": "frothy",
@@ -2925,9 +2630,7 @@
           "He's having a frothy at the pub",
           "A frothy sounds good right now"
         ],
-        "notes": [
-          "From the foam on top of beer"
-        ]
+        "notes": ["From the foam on top of beer"]
       },
       {
         "id": "amber",
@@ -2939,9 +2642,7 @@
           "The amber's flowing tonight",
           "Nothing like cold amber on a hot day"
         ],
-        "notes": [
-          "Refers to the amber color of beer"
-        ]
+        "notes": ["Refers to the amber color of beer"]
       },
       {
         "id": "liquid-lunch",
@@ -2953,9 +2654,7 @@
           "Liquid lunch at the pub",
           "Friday liquid lunch tradition"
         ],
-        "notes": [
-          "Drinking during lunch break"
-        ]
+        "notes": ["Drinking during lunch break"]
       },
       {
         "id": "session",
@@ -2967,9 +2666,7 @@
           "The session went all night",
           "Sunday session at the pub"
         ],
-        "notes": [
-          "Extended period of drinking"
-        ]
+        "notes": ["Extended period of drinking"]
       },
       {
         "id": "shout",
@@ -2981,9 +2678,7 @@
           "Thanks for the shout",
           "Whose shout is it?"
         ],
-        "notes": [
-          "Taking turns buying drinks for the group"
-        ]
+        "notes": ["Taking turns buying drinks for the group"]
       },
       {
         "id": "tragic",
@@ -2995,9 +2690,7 @@
           "Don't be a tragic at the wedding",
           "The tragic's at it again"
         ],
-        "notes": [
-          "Someone with a drinking problem"
-        ]
+        "notes": ["Someone with a drinking problem"]
       },
       {
         "id": "two-pot-screamer",
@@ -3009,9 +2702,7 @@
           "Don't give him much, he's a two-pot screamer",
           "I'm a two-pot screamer these days"
         ],
-        "notes": [
-          "Gets drunk after just two drinks"
-        ]
+        "notes": ["Gets drunk after just two drinks"]
       },
       {
         "id": "write-off",
@@ -3023,9 +2714,7 @@
           "Don't get written off tonight",
           "She was a write-off by 9pm"
         ],
-        "notes": [
-          "So drunk you're useless"
-        ]
+        "notes": ["So drunk you're useless"]
       },
       {
         "id": "maggoted",
@@ -3037,9 +2726,7 @@
           "He was maggoted by midnight",
           "Don't get maggoted before dinner"
         ],
-        "notes": [
-          "Extremely intoxicated"
-        ]
+        "notes": ["Extremely intoxicated"]
       },
       {
         "id": "shoey",
@@ -3091,9 +2778,7 @@
           "I'll have a vegemite sanger for lunch, thanks Debbie",
           "Michelle makes the best egg sangers"
         ],
-        "notes": [
-          "Can also be spelled 'sanga'"
-        ],
+        "notes": ["Can also be spelled 'sanga'"],
         "isPremium": true
       },
       {
@@ -3105,9 +2790,7 @@
           "Let's grab brekkie before heading to Byron Beach",
           "Jono always has coffee with his brekkie at the local cafe"
         ],
-        "notes": [
-          "A common shortening of 'breakfast'"
-        ],
+        "notes": ["A common shortening of 'breakfast'"],
         "isPremium": true
       },
       {
@@ -3161,9 +2844,7 @@
           "Let's have a cuppa and a choccy biccy at Grandma's place",
           "Melissa's got a pack of Tim Tam choccy biccies in the cupboard"
         ],
-        "notes": [
-          "'Choccy' = chocolate, 'biccy' = biscuit"
-        ],
+        "notes": ["'Choccy' = chocolate, 'biccy' = biscuit"],
         "isPremium": true
       },
       {
@@ -3245,9 +2926,7 @@
           "We're having lamingtons for Australia Day at Caroline's party",
           "My grandma makes the best lamingtons for the school fundraiser"
         ],
-        "notes": [
-          "A famous Australian cake, often sold at school fundraisers"
-        ],
+        "notes": ["A famous Australian cake, often sold at school fundraisers"],
         "isPremium": true
       },
       {
@@ -3260,9 +2939,7 @@
           "I need to grab a feed, I'm starving",
           "Where's a good place to grab a feed around here?"
         ],
-        "notes": [
-          "'Feed' is Australian slang for a meal"
-        ],
+        "notes": ["'Feed' is Australian slang for a meal"],
         "isPremium": true
       },
       {
@@ -3275,9 +2952,7 @@
           "The Chinese take-away is really good",
           "Is that for here or take-away?"
         ],
-        "notes": [
-          "Used instead of 'to go' in America"
-        ],
+        "notes": ["Used instead of 'to go' in America"],
         "isPremium": true
       },
       {
@@ -3303,9 +2978,7 @@
           "Can I bum a durry off ya?",
           "He smokes a pack of durries a day"
         ],
-        "notes": [
-          "Also called 'darts' in some areas"
-        ],
+        "notes": ["Also called 'darts' in some areas"],
         "isPremium": true
       },
       {
@@ -3318,9 +2991,7 @@
           "Flat whites are Australia's gift to the coffee world",
           "The flat white here is perfect"
         ],
-        "notes": [
-          "Originated in Australia/New Zealand, now popular worldwide"
-        ],
+        "notes": ["Originated in Australia/New Zealand, now popular worldwide"],
         "isPremium": true
       },
       {
@@ -3333,9 +3004,7 @@
           "Make it a long black, no milk",
           "Long black with a bit of sugar please"
         ],
-        "notes": [
-          "Different from Americano in preparation method"
-        ],
+        "notes": ["Different from Americano in preparation method"],
         "isPremium": true
       },
       {
@@ -3376,9 +3045,7 @@
           "The pavlova collapsed in the oven",
           "Nothing beats a good pavlova"
         ],
-        "notes": [
-          "Named after Russian ballerina Anna Pavlova"
-        ]
+        "notes": ["Named after Russian ballerina Anna Pavlova"]
       },
       {
         "id": "anzacbiscuits",
@@ -3390,9 +3057,7 @@
           "ANZAC biscuits for the school fete",
           "I love ANZAC biscuits with tea"
         ],
-        "notes": [
-          "Named after Australian and New Zealand Army Corps"
-        ]
+        "notes": ["Named after Australian and New Zealand Army Corps"]
       },
       {
         "id": "fairybread",
@@ -3404,9 +3069,7 @@
           "Make some fairy bread for the birthday",
           "Fairy bread is an Aussie classic"
         ],
-        "notes": [
-          "Essential at Australian children's parties"
-        ]
+        "notes": ["Essential at Australian children's parties"]
       },
       {
         "id": "timtams",
@@ -3432,9 +3095,7 @@
           "You either love or hate Vegemite",
           "Spread the Vegemite thin"
         ],
-        "notes": [
-          "Iconic Australian spread, very salty"
-        ]
+        "notes": ["Iconic Australian spread, very salty"]
       },
       {
         "id": "meatpie",
@@ -3446,9 +3107,7 @@
           "Meat pie and sauce for lunch",
           "The meat pie was piping hot"
         ],
-        "notes": [
-          "Australian fast food staple"
-        ]
+        "notes": ["Australian fast food staple"]
       },
       {
         "id": "sausageroll",
@@ -3460,9 +3119,7 @@
           "The sausage rolls are fresh from the oven",
           "Sausage roll for morning tea"
         ],
-        "notes": [
-          "Popular bakery item"
-        ]
+        "notes": ["Popular bakery item"]
       },
       {
         "id": "pasty",
@@ -3474,9 +3131,7 @@
           "The pasty was too hot to eat",
           "Pasties are popular in mining towns"
         ],
-        "notes": [
-          "Brought by Cornish miners"
-        ]
+        "notes": ["Brought by Cornish miners"]
       },
       {
         "id": "damper",
@@ -3488,9 +3143,7 @@
           "Damper with golden syrup",
           "The swagmen lived on damper"
         ],
-        "notes": [
-          "Traditional Australian bush bread"
-        ]
+        "notes": ["Traditional Australian bush bread"]
       },
       {
         "id": "billy",
@@ -3502,9 +3155,7 @@
           "The billy's boiling",
           "Make tea in the billy"
         ],
-        "notes": [
-          "Essential camping equipment"
-        ]
+        "notes": ["Essential camping equipment"]
       },
       {
         "id": "chiko",
@@ -3516,9 +3167,7 @@
           "Chiko rolls are greasy but good",
           "The Chiko roll is an Aussie invention"
         ],
-        "notes": [
-          "Australian fast food creation"
-        ]
+        "notes": ["Australian fast food creation"]
       },
       {
         "id": "dim-sim",
@@ -3530,9 +3179,7 @@
           "Steamed or fried dim sims?",
           "Dim sims with soy sauce"
         ],
-        "notes": [
-          "Different from traditional Chinese dim sum"
-        ]
+        "notes": ["Different from traditional Chinese dim sum"]
       },
       {
         "id": "potato-cake",
@@ -3544,9 +3191,7 @@
           "The potato cakes are crispy",
           "Potato cake and minimum chips"
         ],
-        "notes": [
-          "Called 'potato scallop' in NSW and Queensland"
-        ]
+        "notes": ["Called 'potato scallop' in NSW and Queensland"]
       },
       {
         "id": "spider",
@@ -3558,9 +3203,7 @@
           "Make me a lemonade spider",
           "Spiders are great on hot days"
         ],
-        "notes": [
-          "Ice cream in soft drink"
-        ]
+        "notes": ["Ice cream in soft drink"]
       },
       {
         "id": "golden-gaytime",
@@ -3572,9 +3215,7 @@
           "Golden Gaytime from the ice cream van",
           "The Gaytime jingle is catchy"
         ],
-        "notes": [
-          "Famous for its advertising slogan"
-        ]
+        "notes": ["Famous for its advertising slogan"]
       },
       {
         "id": "icy-pole",
@@ -3586,9 +3227,7 @@
           "Orange icy pole from the canteen",
           "Icy poles are perfect for summer"
         ],
-        "notes": [
-          "Called 'ice block' in some states"
-        ]
+        "notes": ["Called 'ice block' in some states"]
       },
       {
         "id": "zooper-dooper",
@@ -3600,9 +3239,7 @@
           "Blue Zooper Dooper is the best",
           "Cut the Zooper Dooper carefully"
         ],
-        "notes": [
-          "Popular brand of ice treats"
-        ]
+        "notes": ["Popular brand of ice treats"]
       },
       {
         "id": "lolly",
@@ -3614,9 +3251,7 @@
           "The lolly shop has everything",
           "Too many lollies will rot your teeth"
         ],
-        "notes": [
-          "General term for candy/sweets"
-        ]
+        "notes": ["General term for candy/sweets"]
       },
       {
         "id": "freddo",
@@ -3628,9 +3263,7 @@
           "Freddos used to cost 20 cents",
           "Caramello Freddo is even better"
         ],
-        "notes": [
-          "Popular children's chocolate"
-        ]
+        "notes": ["Popular children's chocolate"]
       }
     ],
     "Compliments": [
@@ -3644,9 +3277,7 @@
           "That party at Sarah's place was ace!",
           "Michael's new car is totally ace"
         ],
-        "notes": [
-          "Similar to saying 'awesome' or 'fantastic'"
-        ],
+        "notes": ["Similar to saying 'awesome' or 'fantastic'"],
         "image": "ace.webp",
         "isPremium": true
       },
@@ -3659,9 +3290,7 @@
           "That was a ripper of a game against the Sharks!",
           "Matthew scored a ripper of a goal in the final quarter"
         ],
-        "notes": [
-          "Often used with 'absolute' before it: 'absolute ripper'"
-        ],
+        "notes": ["Often used with 'absolute' before it: 'absolute ripper'"],
         "isPremium": true
       },
       {
@@ -3673,9 +3302,7 @@
           "David paid for everyone's drinks - bloody legend!",
           "You're a bloody legend for helping Sam move house"
         ],
-        "notes": [
-          "A popular way to give someone a big compliment"
-        ],
+        "notes": ["A popular way to give someone a big compliment"],
         "isPremium": true
       },
       {
@@ -3687,9 +3314,7 @@
           "What a bonza day for a barbie at the beach!",
           "That's a bonza idea, Kevin"
         ],
-        "notes": [
-          "An older term but still used today"
-        ],
+        "notes": ["An older term but still used today"],
         "isPremium": true
       },
       {
@@ -3701,9 +3326,7 @@
           "That's a grouse car Jack's got there",
           "We had a grouse time at Emma's party"
         ],
-        "notes": [
-          "Used most often in Victoria (Melbourne area)"
-        ],
+        "notes": ["Used most often in Victoria (Melbourne area)"],
         "isPremium": true
       },
       {
@@ -3715,9 +3338,7 @@
           "Sophie's cooking is tops, mate!",
           "The concert at the Opera House last night was tops"
         ],
-        "notes": [
-          "Used to show strong approval"
-        ],
+        "notes": ["Used to show strong approval"],
         "isPremium": true
       },
       {
@@ -3729,9 +3350,7 @@
           "That's a rippa of a shot from Kate!",
           "We had a rippa time at Bondi Beach"
         ],
-        "notes": [
-          "Used to describe something impressive"
-        ],
+        "notes": ["Used to describe something impressive"],
         "isPremium": true
       },
       {
@@ -3743,9 +3362,7 @@
           "That's a beaut of a catch by Steve!",
           "Jenny's got a beaut of a car"
         ],
-        "notes": [
-          "Sometimes said as 'beauty' instead of 'beaut'"
-        ],
+        "notes": ["Sometimes said as 'beauty' instead of 'beaut'"],
         "isPremium": true
       },
       {
@@ -3757,9 +3374,7 @@
           "You bought tickets to the grand final? You're a deadset legend, James!",
           "My friend Daniel helped me move house at 6am - deadset legend"
         ],
-        "notes": [
-          "'Deadset' means 'absolutely' or 'completely'"
-        ],
+        "notes": ["'Deadset' means 'absolutely' or 'completely'"],
         "isPremium": true
       },
       {
@@ -3771,9 +3386,7 @@
           "You got that promotion at Woolies? Good on ya, Rose!",
           "Good on ya for standing up to that bully, John"
         ],
-        "notes": [
-          "Same meaning as 'well done' or 'good for you'"
-        ],
+        "notes": ["Same meaning as 'well done' or 'good for you'"],
         "isPremium": true
       },
       {
@@ -3799,9 +3412,7 @@
           "Ben's got mad skills on the skateboard",
           "That was a mad party at Tom's place last night"
         ],
-        "notes": [
-          "Does NOT mean angry - it means good or impressive"
-        ],
+        "notes": ["Does NOT mean angry - it means good or impressive"],
         "isPremium": true
       },
       {
@@ -3813,9 +3424,7 @@
           "Onya Mark, that was a great job",
           "You stood up to the boss? Onya Sharon!"
         ],
-        "notes": [
-          "Often said with 'mate' after it"
-        ],
+        "notes": ["Often said with 'mate' after it"],
         "isPremium": true
       },
       {
@@ -3827,9 +3436,7 @@
           "The Midnight Oil concert was heaps good",
           "This new Thai restaurant in Surry Hills is heaps good"
         ],
-        "notes": [
-          "'Heaps' means 'very' or 'a lot'"
-        ],
+        "notes": ["'Heaps' means 'very' or 'a lot'"],
         "isPremium": true
       },
       {
@@ -3857,7 +3464,8 @@
           "We're walking across the Coathanger this arvo",
           "You can see the Coathanger from the Opera House"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Sydney Slang"
       },
       {
         "id": "crosscity",
@@ -3868,7 +3476,8 @@
           "Take the tunnel to avoid the traffic",
           "The tunnel toll is getting expensive"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Sydney Slang"
       },
       {
         "id": "thepoint",
@@ -3879,7 +3488,8 @@
           "Let's grab a coffee at the Point",
           "The Point has the best harbour views"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Sydney Slang"
       },
       {
         "id": "theloo",
@@ -3890,7 +3500,8 @@
           "He lives in the Loo now",
           "The Loo's getting really expensive"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Sydney Slang"
       },
       {
         "id": "westies",
@@ -3903,7 +3514,8 @@
         ],
         "notes": [
           "Can be used neutrally or sometimes pejoratively depending on context"
-        ]
+        ],
+        "regionalCounty": "Sydney Slang"
       },
       {
         "id": "theshore",
@@ -3914,9 +3526,8 @@
           "She grew up on the Shore",
           "Shore kids all go to private schools"
         ],
-        "notes": [
-          "Often associated with wealth and private school culture"
-        ]
+        "notes": ["Often associated with wealth and private school culture"],
+        "regionalCounty": "Sydney Slang"
       },
       {
         "id": "eastside",
@@ -3927,7 +3538,8 @@
           "The Eastern Suburbs are so expensive",
           "He's got that Eastern Suburbs vibe"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Sydney Slang"
       },
       {
         "id": "theinsular",
@@ -3940,7 +3552,8 @@
         ],
         "notes": [
           "Humorous reference to the perceived bubble of wealthy Eastern Suburbs residents"
-        ]
+        ],
+        "regionalCounty": "Sydney Slang"
       },
       {
         "id": "melbcoffee",
@@ -3951,9 +3564,8 @@
           "You can't get proper coffee anywhere else",
           "Melbourne has proper coffee"
         ],
-        "notes": [
-          "Melburnians are very proud of their coffee scene"
-        ]
+        "notes": ["Melburnians are very proud of their coffee scene"],
+        "regionalCounty": "Melbourne Slang"
       },
       {
         "id": "trams",
@@ -3966,7 +3578,8 @@
         ],
         "notes": [
           "Part of Melbourne's identity - largest tram network in the world"
-        ]
+        ],
+        "regionalCounty": "Melbourne Slang"
       },
       {
         "id": "melbweather",
@@ -3977,7 +3590,8 @@
           "That's Melbourne weather for you - four seasons in one day",
           "Better bring layers, it's Melbourne weather"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Melbourne Slang"
       },
       {
         "id": "laneways",
@@ -3988,7 +3602,8 @@
           "Let's explore the laneways",
           "There's a great bar hidden in the laneways"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Melbourne Slang"
       },
       {
         "id": "myki",
@@ -3999,18 +3614,17 @@
           "Don't forget to touch on your Myki",
           "My Myki's run out of credit"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Melbourne Slang"
       },
       {
         "id": "northsider",
         "buttonTitle": "Northside",
         "audioFile": "northside.m4a",
         "explanation": "Northern suburbs of Melbourne, often associated with hipster culture",
-        "examples": [
-          "He's very Northside Melbourne",
-          "That's a Northside bar"
-        ],
-        "notes": []
+        "examples": ["He's very Northside Melbourne", "That's a Northside bar"],
+        "notes": [],
+        "regionalCounty": "Melbourne Slang"
       },
       {
         "id": "sandbelt",
@@ -4021,20 +3635,19 @@
           "They live in the Sandbelt",
           "Sandbelt golf courses are world-class"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Melbourne Slang"
       },
       {
         "id": "brisvegas",
         "buttonTitle": "Brisvegas",
         "audioFile": "brisvegas.m4a",
         "explanation": "Humorous nickname for Brisbane",
-        "examples": [
-          "Welcome to Brisvegas!",
-          "How's life in Brisvegas?"
-        ],
+        "examples": ["Welcome to Brisvegas!", "How's life in Brisvegas?"],
         "notes": [
           "Ironic nickname playing on Brisbane's perceived lack of nightlife compared to Las Vegas"
-        ]
+        ],
+        "regionalCounty": "Brisbane Slang"
       },
       {
         "id": "brissy",
@@ -4045,7 +3658,8 @@
           "I'm heading up to Brissy next week",
           "Brissy's getting expensive"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Brisbane Slang"
       },
       {
         "id": "goldy",
@@ -4056,7 +3670,8 @@
           "We're going to the Goldy for schoolies",
           "The Goldy's packed with tourists"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Brisbane Slang"
       },
       {
         "id": "valley",
@@ -4067,18 +3682,17 @@
           "Let's hit the Valley tonight",
           "The Valley's where all the clubs are"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Brisbane Slang"
       },
       {
         "id": "northside",
         "buttonTitle": "Northside",
         "audioFile": "northside.m4a",
         "explanation": "Northern suburbs of Brisbane",
-        "examples": [
-          "I'm from the Northside",
-          "Northside Brisbane is nice"
-        ],
-        "notes": []
+        "examples": ["I'm from the Northside", "Northside Brisbane is nice"],
+        "notes": [],
+        "regionalCounty": "Brisbane Slang"
       },
       {
         "id": "goccard",
@@ -4089,7 +3703,8 @@
           "Touch on with your Go Card",
           "I forgot my Go Card at home"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Brisbane Slang"
       },
       {
         "id": "rotto",
@@ -4100,7 +3715,8 @@
           "We're going to Rotto for the weekend",
           "Rotto's beautiful this time of year"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Perth Slang"
       },
       {
         "id": "freo",
@@ -4111,7 +3727,8 @@
           "Let's go to Freo markets",
           "Freo has great fish and chips"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Perth Slang"
       },
       {
         "id": "smartrider",
@@ -4122,20 +3739,17 @@
           "Tag on with your SmartRider",
           "My SmartRider needs topping up"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Perth Slang"
       },
       {
         "id": "HBF",
         "buttonTitle": "HBF Stadium",
         "audioFile": "hbfdtadium.m4a",
         "explanation": "Perth's main rectangular stadium",
-        "examples": [
-          "The game's at HBF Stadium",
-          "HBF's a great venue"
-        ],
-        "notes": [
-          "HBF used to be called NIB Stadium"
-        ]
+        "examples": ["The game's at HBF Stadium", "HBF's a great venue"],
+        "notes": ["HBF used to be called NIB Stadium"],
+        "regionalCounty": "Perth Slang"
       },
       {
         "id": "scg",
@@ -4146,42 +3760,35 @@
           "The rugby's at the SCG tonight",
           "Nothing beats watching cricket at the SCG"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Sydney Slang"
       },
       {
         "id": "adelady",
         "buttonTitle": "Adelady",
         "audioFile": "adelady.m4a",
         "explanation": "Modern term for an Adelaide woman, from local lifestyle website",
-        "examples": [
-          "She's such an Adelady",
-          "Very Adelady style"
-        ],
-        "notes": []
+        "examples": ["She's such an Adelady", "Very Adelady style"],
+        "notes": [],
+        "regionalCounty": "Adelaide Slang"
       },
       {
         "id": "radelaide",
         "buttonTitle": "Radelaide",
         "audioFile": "radelaide.m4a",
         "explanation": "Ironic nickname for Adelaide playing on its conservative reputation",
-        "examples": [
-          "Welcome to Radelaide",
-          "That's very Radelaide"
-        ],
-        "notes": [
-          "References Adelaide's historically conservative culture"
-        ]
+        "examples": ["Welcome to Radelaide", "That's very Radelaide"],
+        "notes": ["References Adelaide's historically conservative culture"],
+        "regionalCounty": "Adelaide Slang"
       },
       {
         "id": "metrocard",
         "buttonTitle": "Metrocard",
         "audioFile": "metrocard.m4a",
         "explanation": "Adelaide's public transport card",
-        "examples": [
-          "Don't forget your Metrocard",
-          "My Metrocard's expired"
-        ],
-        "notes": []
+        "examples": ["Don't forget your Metrocard", "My Metrocard's expired"],
+        "notes": [],
+        "regionalCounty": "Adelaide Slang"
       },
       {
         "id": "tassie",
@@ -4192,7 +3799,8 @@
           "We're going to Tassie for holidays",
           "Tassie has amazing wilderness"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Tasmania Slang"
       },
       {
         "id": "tassidevil",
@@ -4203,7 +3811,8 @@
           "He's a real Tassie Devil",
           "The Tassie Devils are endangered"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Tasmania Slang"
       },
       {
         "id": "mona",
@@ -4214,7 +3823,8 @@
           "We're going to MONA today",
           "MONA is so weird and wonderful"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Tasmania Slang"
       },
       {
         "id": "theterritory",
@@ -4225,7 +3835,8 @@
           "Life in the Territory is different",
           "He's from the Territory"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Northern Territory Slang"
       },
       {
         "id": "topend",
@@ -4236,29 +3847,26 @@
           "The Top End gets pretty hot",
           "Top End crocodiles are massive"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Northern Territory Slang"
       },
       {
         "id": "wetdry",
         "buttonTitle": "The Wet/The Dry",
         "audioFile": "thewetthedry.m4a",
         "explanation": "Northern Territory's two distinct seasons",
-        "examples": [
-          "The Wet is coming",
-          "I prefer the Dry season"
-        ],
-        "notes": []
+        "examples": ["The Wet is coming", "I prefer the Dry season"],
+        "notes": [],
+        "regionalCounty": "Northern Territory Slang"
       },
       {
         "id": "alice",
         "buttonTitle": "Alice",
         "audioFile": "alice.m4a",
         "explanation": "Alice Springs",
-        "examples": [
-          "He's from Alice",
-          "Alice is in the middle of nowhere"
-        ],
-        "notes": []
+        "examples": ["He's from Alice", "Alice is in the middle of nowhere"],
+        "notes": [],
+        "regionalCounty": "Northern Territory Slang"
       },
       {
         "id": "redcentre",
@@ -4269,7 +3877,8 @@
           "The Red Centre is stunning",
           "We're touring the Red Centre"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Northern Territory Slang"
       },
       {
         "id": "bush",
@@ -4280,7 +3889,8 @@
           "He grew up in the bush",
           "City folk don't understand the bush"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Rural Australian Slang"
       },
       {
         "id": "woop",
@@ -4291,7 +3901,8 @@
           "They live in Woop Woop",
           "That's out in Woop Woop somewhere"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Rural Australian Slang"
       },
       {
         "id": "backoblocks",
@@ -4302,7 +3913,8 @@
           "He's from back o' Bourke",
           "That's back o' Bourke country"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Rural Australian Slang"
       },
       {
         "id": "station",
@@ -4313,7 +3925,8 @@
           "He works on a cattle station",
           "The station covers thousands of acres"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Rural Australian Slang"
       },
       {
         "id": "jackaroo",
@@ -4324,7 +3937,8 @@
           "He's working as a jackaroo",
           "The jackaroo life is tough"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Rural Australian Slang"
       },
       {
         "id": "jillaroo",
@@ -4335,7 +3949,8 @@
           "She's a jillaroo on a Northern Territory station",
           "Jillaroo work is hard but rewarding"
         ],
-        "notes": []
+        "notes": [],
+        "regionalCounty": "Rural Australian Slang"
       }
     ],
     "People": [
@@ -4376,9 +3991,7 @@
           "There's a sheila at the door asking for you.",
           "That sheila at the café was really friendly."
         ],
-        "notes": [
-          "Not commonly used by younger Aussies – sounds a bit dated."
-        ]
+        "notes": ["Not commonly used by younger Aussies – sounds a bit dated."]
       },
       {
         "id": "bloke",
@@ -4411,9 +4024,7 @@
           "He's a bit of a larrikin, always cracking jokes.",
           "The teacher loves him even though he's a total larrikin."
         ],
-        "notes": [
-          "Often used affectionately in Australia."
-        ]
+        "notes": ["Often used affectionately in Australia."]
       },
       {
         "id": "ranga",
@@ -4424,9 +4035,7 @@
           "That ranga over there plays footy for Wests.",
           "My cousin's a proud ranga."
         ],
-        "notes": [
-          "Can be playful or offensive, depending on how it's used."
-        ]
+        "notes": ["Can be playful or offensive, depending on how it's used."]
       },
       {
         "id": "ocker1",
@@ -4437,9 +4046,7 @@
           "He's a real ocker – thick accent, stubby in hand, and all.",
           "The ad used an ocker voice for the voiceover."
         ],
-        "notes": [
-          "Sometimes used negatively, but also with humour."
-        ]
+        "notes": ["Sometimes used negatively, but also with humour."]
       },
       {
         "id": "softcock",
@@ -4450,9 +4057,7 @@
           "He wouldn't go in the water – what a soft cock!",
           "Don't be a soft cock, it's just a bit of rain."
         ],
-        "notes": [
-          "Can be considered vulgar – not for polite company."
-        ]
+        "notes": ["Can be considered vulgar – not for polite company."]
       },
       {
         "id": "tool",
@@ -4474,9 +4079,7 @@
           "That guy at the gym is a unit!",
           "You see the size of that bouncer? Absolute unit."
         ],
-        "notes": [
-          "Can be said with admiration or just to state the obvious."
-        ]
+        "notes": ["Can be said with admiration or just to state the obvious."]
       },
       {
         "id": "flaminGalah",
@@ -4511,9 +4114,7 @@
           "You bought the beers? Legend!",
           "Thanks for the lift – you're a bloody legend."
         ],
-        "notes": [
-          "Used often in a light-hearted, matey way."
-        ]
+        "notes": ["Used often in a light-hearted, matey way."]
       },
       {
         "id": "bushie",
@@ -4560,9 +4161,7 @@
           "What's old mate doing now?",
           "Old mate's having a whinge again"
         ],
-        "notes": [
-          "Used as a substitute for 'he' when being dismissive"
-        ]
+        "notes": ["Used as a substitute for 'he' when being dismissive"]
       },
       {
         "id": "love",
@@ -4588,9 +4187,7 @@
           "Don't be such a silly duffer",
           "He's a silly old duffer but we love him"
         ],
-        "notes": [
-          "More gentle and affectionate than 'drongo'"
-        ]
+        "notes": ["More gentle and affectionate than 'drongo'"]
       },
       {
         "id": "relos",
@@ -4602,9 +4199,7 @@
           "How are your relos doing?",
           "The relos are coming for Christmas"
         ],
-        "notes": [
-          "Can be singular 'relo' or plural 'relos'"
-        ]
+        "notes": ["Can be singular 'relo' or plural 'relos'"]
       },
       {
         "id": "cub",
@@ -4630,9 +4225,7 @@
           "The brickie starts work at 6am",
           "Ask the brickie if he can do our driveway"
         ],
-        "notes": [
-          "Australian trades get the -ie suffix treatment"
-        ]
+        "notes": ["Australian trades get the -ie suffix treatment"]
       },
       {
         "id": "sparkie",
@@ -4644,9 +4237,7 @@
           "The sparkie said it'll cost 500 bucks",
           "My brother's training to be a sparkie"
         ],
-        "notes": [
-          "From 'spark' referring to electricity"
-        ]
+        "notes": ["From 'spark' referring to electricity"]
       },
       {
         "id": "chippie",
@@ -4658,9 +4249,7 @@
           "Need a good chippie for the kitchen renovation",
           "My dad was a chippie for 30 years"
         ],
-        "notes": [
-          "From 'chips' of wood"
-        ]
+        "notes": ["From 'chips' of wood"]
       },
       {
         "id": "bikie",
@@ -4700,9 +4289,7 @@
           "Don't be a FIGJAM about it",
           "That FIGJAM thinks he's God's gift"
         ],
-        "notes": [
-          "Stands for 'F*** I'm Good, Just Ask Me'"
-        ]
+        "notes": ["Stands for 'F*** I'm Good, Just Ask Me'"]
       },
       {
         "id": "battler",
@@ -4770,9 +4357,7 @@
           "She's a sandgroper from Perth",
           "Sandgropers know how to handle the heat"
         ],
-        "notes": [
-          "From the sandgroper insect found in WA sand"
-        ]
+        "notes": ["From the sandgroper insect found in WA sand"]
       },
       {
         "id": "mexicans",
@@ -4826,9 +4411,7 @@
           "She's a kiwi from Auckland",
           "Kiwis and Aussies are like siblings"
         ],
-        "notes": [
-          "Usually friendly, from New Zealand's national bird"
-        ]
+        "notes": ["Usually friendly, from New Zealand's national bird"]
       },
       {
         "id": "derro",
@@ -4840,9 +4423,7 @@
           "He looks like a derro in those old clothes",
           "Don't dress like a derro for the interview"
         ],
-        "notes": [
-          "Short for 'derelict' - can be offensive"
-        ]
+        "notes": ["Short for 'derelict' - can be offensive"]
       },
       {
         "id": "deso",
@@ -4854,9 +4435,7 @@
           "Who's the deso tonight?",
           "Being the deso sucks but someone has to do it"
         ],
-        "notes": [
-          "Short for designated driver"
-        ]
+        "notes": ["Short for designated driver"]
       },
       {
         "id": "smackie",
@@ -4868,9 +4447,7 @@
           "He became a smackie after the accident",
           "Help for smackies is available at the clinic"
         ],
-        "notes": [
-          "From 'smack' (heroin) - can be offensive"
-        ]
+        "notes": ["From 'smack' (heroin) - can be offensive"]
       },
       {
         "id": "ocker",
@@ -4882,9 +4459,7 @@
           "The ad used an ocker voice for the voiceover",
           "Stop acting like an ocker"
         ],
-        "notes": [
-          "Stereotypical rough Australian character"
-        ]
+        "notes": ["Stereotypical rough Australian character"]
       },
       {
         "id": "firey",
@@ -4896,9 +4471,7 @@
           "My brother's training to be a firey",
           "The fireys deserve a medal for that save"
         ],
-        "notes": [
-          "Short for firefighter, used especially in NSW"
-        ]
+        "notes": ["Short for firefighter, used especially in NSW"]
       },
       {
         "id": "cattleduffer",
@@ -4910,9 +4483,7 @@
           "Cattle duffers are still a problem in the outback",
           "He was accused of being a cattle duffer"
         ],
-        "notes": [
-          "Historical term for cattle thieves"
-        ]
+        "notes": ["Historical term for cattle thieves"]
       },
       {
         "id": "yank",
@@ -4924,9 +4495,7 @@
           "She married a yank and moved to America",
           "Those yanks don't understand cricket"
         ],
-        "notes": [
-          "Generally neutral term for Americans"
-        ]
+        "notes": ["Generally neutral term for Americans"]
       },
       {
         "id": "sheepshagger",
@@ -4938,9 +4507,7 @@
           "Don't call him a sheep shagger, it's offensive",
           "The sheep shaggers make good wine though"
         ],
-        "notes": [
-          "Crude stereotype - can be very offensive"
-        ]
+        "notes": ["Crude stereotype - can be very offensive"]
       },
       {
         "id": "ankle-biter",
@@ -4952,9 +4519,7 @@
           "Keep an eye on the ankle-biters at the pool",
           "My ankle-biter starts school next year"
         ],
-        "notes": [
-          "Affectionate term for young children"
-        ]
+        "notes": ["Affectionate term for young children"]
       },
       {
         "id": "bushpig",
@@ -4966,9 +4531,7 @@
           "Don't be mean, calling her a bush pig",
           "He's dating a real bush pig"
         ],
-        "notes": [
-          "Very offensive term - avoid using"
-        ]
+        "notes": ["Very offensive term - avoid using"]
       },
       {
         "id": "chook",
@@ -4994,9 +4557,7 @@
           "My dad's a total dag but we love him",
           "She's a bit of a dag but really funny"
         ],
-        "notes": [
-          "Often used affectionately"
-        ]
+        "notes": ["Often used affectionately"]
       },
       {
         "id": "galah",
@@ -5008,9 +4569,7 @@
           "You galah, that's not how you do it",
           "He's acting like a complete galah"
         ],
-        "notes": [
-          "From the galah bird, known for being noisy and silly"
-        ]
+        "notes": ["From the galah bird, known for being noisy and silly"]
       },
       {
         "id": "hoon",
@@ -5022,9 +4581,7 @@
           "Stop being a hoon in the car park",
           "The police caught the hoon doing burnouts"
         ],
-        "notes": [
-          "Someone who drives dangerously to show off"
-        ]
+        "notes": ["Someone who drives dangerously to show off"]
       },
       {
         "id": "jackaroo",
@@ -5036,9 +4593,7 @@
           "The jackaroo life is tough but rewarding",
           "My son wants to be a jackaroo"
         ],
-        "notes": [
-          "Learning the cattle station trade"
-        ]
+        "notes": ["Learning the cattle station trade"]
       },
       {
         "id": "jillaroo",
@@ -5050,9 +4605,7 @@
           "The jillaroo can ride better than most men",
           "Being a jillaroo builds character"
         ],
-        "notes": [
-          "Female equivalent of jackaroo"
-        ]
+        "notes": ["Female equivalent of jackaroo"]
       },
       {
         "id": "knockabout",
@@ -5064,9 +4617,7 @@
           "She's got that knockabout attitude",
           "We need more knockabout people around here"
         ],
-        "notes": [
-          "Someone who's relaxed and unpretentious"
-        ]
+        "notes": ["Someone who's relaxed and unpretentious"]
       },
       {
         "id": "larrikin",
@@ -5078,9 +4629,7 @@
           "The larrikin spirit is very Australian",
           "She's got that larrikin sense of humor"
         ],
-        "notes": [
-          "Celebrated Australian character type"
-        ]
+        "notes": ["Celebrated Australian character type"]
       },
       {
         "id": "mug",
@@ -5092,9 +4641,7 @@
           "I was a mug to believe that story",
           "Only a mug would pay that much"
         ],
-        "notes": [
-          "Someone gullible or naive"
-        ]
+        "notes": ["Someone gullible or naive"]
       },
       {
         "id": "nipper",
@@ -5106,9 +4653,7 @@
           "Keep the nippers away from the pool",
           "My nipper starts kindie next year"
         ],
-        "notes": [
-          "Affectionate term for young children"
-        ]
+        "notes": ["Affectionate term for young children"]
       },
       {
         "id": "ocker2",
@@ -5120,9 +4665,7 @@
           "Don't act like such an ocker",
           "The ocker accent was thick as treacle"
         ],
-        "notes": [
-          "Can be used negatively or with pride"
-        ]
+        "notes": ["Can be used negatively or with pride"]
       },
       {
         "id": "oldtimer",
@@ -5134,9 +4677,7 @@
           "Ask the old timer, he's been here forever",
           "That old timer's got some stories"
         ],
-        "notes": [
-          "Respectful term for elderly or experienced people"
-        ]
+        "notes": ["Respectful term for elderly or experienced people"]
       },
       {
         "id": "pommy",
@@ -5148,9 +4689,7 @@
           "He's a pommy but he's alright",
           "Typical pommy behavior"
         ],
-        "notes": [
-          "Can be neutral or mildly derogatory"
-        ]
+        "notes": ["Can be neutral or mildly derogatory"]
       },
       {
         "id": "ratbag",
@@ -5162,9 +4701,7 @@
           "He's a ratbag but we love him",
           "The old ratbag is up to his tricks again"
         ],
-        "notes": [
-          "Usually affectionate, especially for children"
-        ]
+        "notes": ["Usually affectionate, especially for children"]
       },
       {
         "id": "roughnut",
@@ -5176,9 +4713,7 @@
           "Don't mess with him, he's a rough nut",
           "She looks like a rough nut but she's sweet"
         ],
-        "notes": [
-          "Someone who appears tough or crude"
-        ]
+        "notes": ["Someone who appears tough or crude"]
       },
       {
         "id": "scallywag",
@@ -5190,9 +4725,7 @@
           "The scallywag's been in the cookie jar",
           "He's such a scallywag at school"
         ],
-        "notes": [
-          "Playful term, often for naughty children"
-        ]
+        "notes": ["Playful term, often for naughty children"]
       },
       {
         "id": "stirrer",
@@ -5204,9 +4737,7 @@
           "She's a stirrer, always causing drama",
           "The stirrer's at it again"
         ],
-        "notes": [
-          "Someone who deliberately creates conflict"
-        ]
+        "notes": ["Someone who deliberately creates conflict"]
       },
       {
         "id": "swagman",
@@ -5218,9 +4749,7 @@
           "Swagmen used to travel the country looking for work",
           "Waltzing Matilda is about a swagman"
         ],
-        "notes": [
-          "Historical figure from Australia's past"
-        ]
+        "notes": ["Historical figure from Australia's past"]
       },
       {
         "id": "toff",
@@ -5232,9 +4761,7 @@
           "The toffs don't understand real work",
           "She married a toff from the eastern suburbs"
         ],
-        "notes": [
-          "Often used with mild resentment"
-        ]
+        "notes": ["Often used with mild resentment"]
       },
       {
         "id": "troublemaker",
@@ -5246,9 +4773,7 @@
           "Don't be a troublemaker at the party",
           "The troublemaker's been banned from the pub"
         ],
-        "notes": [
-          "Someone who deliberately causes issues"
-        ]
+        "notes": ["Someone who deliberately causes issues"]
       },
       {
         "id": "yobbo",
@@ -5260,9 +4785,7 @@
           "Don't act like a yobbo at the restaurant",
           "Those yobbos got kicked out of the club"
         ],
-        "notes": [
-          "Similar to 'bogan' but emphasizes rowdy behavior"
-        ]
+        "notes": ["Similar to 'bogan' but emphasizes rowdy behavior"]
       }
     ],
     "Homonyms": [
@@ -5454,9 +4977,7 @@
         "buttonTitle": "Station",
         "audioFile": "station.m4a",
         "explanation": "In Australia, a 'station' can be a massive rural property (like a ranch), not just a train station.",
-        "examples": [
-          "She grew up on a cattle station in the outback."
-        ],
+        "examples": ["She grew up on a cattle station in the outback."],
         "notes": [
           "Australians may use 'station' the way Americans use 'ranch'."
         ]
@@ -5499,9 +5020,7 @@
           "He got into a stoush with the neighbour over the fence line.",
           "There was a bit of a stoush at the pub but nothing serious."
         ],
-        "notes": [
-          "Used in politics too: 'a political stoush'."
-        ]
+        "notes": ["Used in politics too: 'a political stoush'."]
       },
       {
         "id": "punchOn",
@@ -5512,9 +5031,7 @@
           "A couple of blokes were punchin' on near the kebab shop.",
           "It was all good until someone spilled a drink and they started punchin' on."
         ],
-        "notes": [
-          "Often used as 'punch on' or 'having a punch on'."
-        ]
+        "notes": ["Often used as 'punch on' or 'having a punch on'."]
       },
       {
         "id": "belt",
@@ -5575,9 +5092,7 @@
           "The boys were giving him stick all night about his new haircut.",
           "He gave the ref a bit too much stick and got sent off."
         ],
-        "notes": [
-          "Not always violent, can also mean 'hassle' or 'sledge'."
-        ]
+        "notes": ["Not always violent, can also mean 'hassle' or 'sledge'."]
       },
       {
         "id": "goHands",
@@ -5645,9 +5160,7 @@
           "They went toe to toe in the carpark.",
           "It was a fair fight – just two lads going toe to toe."
         ],
-        "notes": [
-          "Used for both physical and sporting matchups."
-        ]
+        "notes": ["Used for both physical and sporting matchups."]
       }
     ],
     "Sports": [
@@ -5737,9 +5250,7 @@
           "He's a chance for the Brownlow this year",
           "The Brownlow count is always exciting"
         ],
-        "notes": [
-          "Awarded based on votes from umpires throughout the season."
-        ]
+        "notes": ["Awarded based on votes from umpires throughout the season."]
       },
       {
         "id": "mcg",
@@ -5800,9 +5311,7 @@
           "He nailed the conversion from the sideline",
           "That's a tough conversion to kick"
         ],
-        "notes": [
-          "Worth 2 points in both league and union."
-        ]
+        "notes": ["Worth 2 points in both league and union."]
       },
       {
         "id": "scrum",
@@ -5813,9 +5322,7 @@
           "The ref called a scrum after the illegal tackle",
           "They have really big players so their scrum is really strong"
         ],
-        "notes": [
-          "More important in rugby union than rugby league."
-        ]
+        "notes": ["More important in rugby union than rugby league."]
       },
       {
         "id": "wallabies",
@@ -5826,9 +5333,7 @@
           "The Wallabies are playing the All Blacks",
           "He got selected for the Wallabies"
         ],
-        "notes": [
-          "Named after the wallaby, a native Australian animal."
-        ]
+        "notes": ["Named after the wallaby, a native Australian animal."]
       },
       {
         "id": "kangaroos",
@@ -5865,9 +5370,7 @@
           "He earned his baggy green",
           "The baggy green is sacred in Australian cricket"
         ],
-        "notes": [
-          "Considered one of the highest honors in Australian sport."
-        ]
+        "notes": ["Considered one of the highest honors in Australian sport."]
       },
       {
         "id": "wicket",
@@ -5878,9 +5381,7 @@
           "He took five wickets",
           "The wicket is playing really well today"
         ],
-        "notes": [
-          "Can also refer to the pitch condition."
-        ]
+        "notes": ["Can also refer to the pitch condition."]
       },
       {
         "id": "century",
@@ -5917,9 +5418,7 @@
           "The Aussies are famous for their sledging",
           "He copped some serious sledging out there"
         ],
-        "notes": [
-          "Australia is considered the home of cricket sledging."
-        ]
+        "notes": ["Australia is considered the home of cricket sledging."]
       },
       {
         "id": "bodyline",
@@ -5943,9 +5442,7 @@
           "The V8 Supercars are racing at Bathurst",
           "He drives in V8 Supercars"
         ],
-        "notes": [
-          "Bathurst 1000 is the most famous race."
-        ]
+        "notes": ["Bathurst 1000 is the most famous race."]
       },
       {
         "id": "bathurst",
@@ -5956,9 +5453,7 @@
           "Bathurst is the holy grail of Australian motorsport",
           "He won Bathurst three times"
         ],
-        "notes": [
-          "The Bathurst 1000 is often called 'The Great Race'."
-        ]
+        "notes": ["The Bathurst 1000 is often called 'The Great Race'."]
       },
       {
         "id": "netball",
@@ -5969,9 +5464,7 @@
           "She plays netball for the Diamonds",
           "Netball is huge in Australian schools"
         ],
-        "notes": [
-          "Australia's national team is called the Diamonds."
-        ]
+        "notes": ["Australia's national team is called the Diamonds."]
       },
       {
         "id": "ironman",
@@ -6115,9 +5608,7 @@
           "You flamin' galah, that's not how you do it!",
           "Stop being such a flamin' galah"
         ],
-        "notes": [
-          "Made famous by Alf Stewart in Home and Away"
-        ],
+        "notes": ["Made famous by Alf Stewart in Home and Away"],
         "isPremium": true
       },
       {
@@ -6169,9 +5660,7 @@
           "Look at you in that outfit, you're such a dag",
           "My dad's a total dag, always telling bad jokes"
         ],
-        "notes": [
-          "Originally referred to dried feces hanging from sheep wool"
-        ],
+        "notes": ["Originally referred to dried feces hanging from sheep wool"],
         "isPremium": true
       },
       {
@@ -6197,9 +5686,7 @@
           "That dropkick couldn't even plug in a toaster.",
           "You're such a bloody dropkick, mate."
         ],
-        "notes": [
-          "Originally a rugby term, now means a complete idiot."
-        ],
+        "notes": ["Originally a rugby term, now means a complete idiot."],
         "isPremium": true
       },
       {
@@ -6267,9 +5754,7 @@
           "That povo lunch was just two dry sandwiches.",
           "He bought a povo brand phone from Kmart."
         ],
-        "notes": [
-          "Can be classist if used about people. Also used jokingly."
-        ],
+        "notes": ["Can be classist if used about people. Also used jokingly."],
         "isPremium": true
       },
       {
@@ -6319,9 +5804,7 @@
           "Don't be a tool, it's not that hard.",
           "He's a good bloke but a total tool when he's drunk."
         ],
-        "notes": [
-          "Often affectionate among mates."
-        ],
+        "notes": ["Often affectionate among mates."],
         "isPremium": true
       },
       {
@@ -6373,9 +5856,7 @@
           "That pisshead was passed out on the lawn again.",
           "He's a mad pisshead but he's always up for a laugh."
         ],
-        "notes": [
-          "Sometimes said proudly, like a badge of honour."
-        ],
+        "notes": ["Sometimes said proudly, like a badge of honour."],
         "isPremium": true
       },
       {
@@ -6387,9 +5868,7 @@
           "That bludger hasn't moved off the couch all day.",
           "Stop being a bludger and mow the bloody lawn."
         ],
-        "notes": [
-          "Can be light-hearted or scathing, depending on delivery."
-        ],
+        "notes": ["Can be light-hearted or scathing, depending on delivery."],
         "isPremium": true
       },
       {
@@ -6402,9 +5881,7 @@
           "He's acting like a complete pelican",
           "What a pelican, he locked himself out"
         ],
-        "notes": [
-          "Similar to 'wanker' but less offensive"
-        ],
+        "notes": ["Similar to 'wanker' but less offensive"],
         "isPremium": true
       },
       {
@@ -6417,9 +5894,7 @@
           "You won the lottery? Fuck me dead!",
           "Fuck me dead, that was expensive"
         ],
-        "notes": [
-          "Despite the wording, it's just an exclamation, not literal"
-        ],
+        "notes": ["Despite the wording, it's just an exclamation, not literal"],
         "isPremium": true
       },
       {
@@ -6432,9 +5907,7 @@
           "He's always getting into biffs",
           "The biff started over nothing"
         ],
-        "notes": [
-          "Also spelled 'biffo'"
-        ],
+        "notes": ["Also spelled 'biffo'"],
         "isPremium": true
       },
       {
@@ -6447,9 +5920,7 @@
           "He's a complete nong",
           "Only a nong would try that"
         ],
-        "notes": [
-          "Sometimes 'ning-nong' for emphasis"
-        ],
+        "notes": ["Sometimes 'ning-nong' for emphasis"],
         "isPremium": true
       },
       {
@@ -6462,9 +5933,7 @@
           "He was ratshit drunk last night",
           "This phone is ratshit"
         ],
-        "notes": [
-          "Very crude but commonly used"
-        ],
+        "notes": ["Very crude but commonly used"],
         "isPremium": true
       },
       {
@@ -6477,9 +5946,7 @@
           "She's ropeable about the exam results",
           "The boss is ropeable over the mistake"
         ],
-        "notes": [
-          "So angry you need to be tied up with rope"
-        ],
+        "notes": ["So angry you need to be tied up with rope"],
         "isPremium": true
       },
       {
@@ -6545,9 +6012,7 @@
           "She gave him a gobby in the car",
           "He was hoping to get a gobby but she wasn't interested"
         ],
-        "notes": [
-          "From 'gob' meaning mouth"
-        ]
+        "notes": ["From 'gob' meaning mouth"]
       },
       {
         "id": "norks",
@@ -6558,9 +6023,7 @@
           "She's got massive norks",
           "He couldn't stop staring at her norks"
         ],
-        "notes": [
-          "One of many Australian slang terms for breasts"
-        ]
+        "notes": ["One of many Australian slang terms for breasts"]
       },
       {
         "id": "bonk",
@@ -6571,9 +6034,7 @@
           "They were bonking all night in the next room",
           "Tom and Sarah have been bonking for months"
         ],
-        "notes": [
-          "A more playful, less crude term than 'root'"
-        ]
+        "notes": ["A more playful, less crude term than 'root'"]
       },
       {
         "id": "froth",
@@ -6621,9 +6082,7 @@
           "Stop perving on her, you creep",
           "I caught him perving on the girls at the beach"
         ],
-        "notes": [
-          "Can be a verb ('to perve') or a noun ('he's a perve')"
-        ]
+        "notes": ["Can be a verb ('to perve') or a noun ('he's a perve')"]
       },
       {
         "id": "pinger",
@@ -6670,9 +6129,7 @@
           "I made a complete balls-up of my first time with her",
           "What a balls-up that date was"
         ],
-        "notes": [
-          "Balls here refers to testicles."
-        ],
+        "notes": ["Balls here refers to testicles."],
         "isPremium": true
       },
       {
@@ -6724,9 +6181,7 @@
           "They were caught on the job in the park",
           "Mate, I walked in and they were clearly on the job"
         ],
-        "notes": [
-          "Used as a euphemism, especially when caught in the act."
-        ]
+        "notes": ["Used as a euphemism, especially when caught in the act."]
       },
       {
         "id": "stiffy",
@@ -6737,9 +6192,7 @@
           "He had a stiffy all through class, poor bastard",
           "She gave me a stiffy just by smiling at me"
         ],
-        "notes": [
-          "Used mostly by men joking with each other."
-        ],
+        "notes": ["Used mostly by men joking with each other."],
         "isPremium": true
       },
       {
@@ -6777,9 +6230,7 @@
           "He reckons he got a blowie behind the pub",
           "She offered him a blowie for a lift home"
         ],
-        "notes": [
-          "Aussies love adding -ie to crude words too."
-        ]
+        "notes": ["Aussies love adding -ie to crude words too."]
       },
       {
         "id": "slapper",
@@ -6790,9 +6241,7 @@
           "That slapper tried to hook up with three guys in one night",
           "She's a slapper but owns it"
         ],
-        "notes": [
-          "Can be sexist; used often in trash talk."
-        ],
+        "notes": ["Can be sexist; used often in trash talk."],
         "isPremium": true
       },
       {
@@ -6804,9 +6253,7 @@
           "We shagged in the car after the concert",
           "I'm absolutely shagged from work today"
         ],
-        "notes": [
-          "Like 'rooted', Aussies use this double meaning often."
-        ]
+        "notes": ["Like 'rooted', Aussies use this double meaning often."]
       },
       {
         "id": "getItUpYa",
@@ -6817,9 +6264,7 @@
           "He finally got it up her after months of chasing",
           "Go on mate — get it up ya!"
         ],
-        "notes": [
-          "Very crude depending on how it's used."
-        ],
+        "notes": ["Very crude depending on how it's used."],
         "isPremium": true
       },
       {
@@ -6831,9 +6276,7 @@
           "She walked past and I got a cockstand instantly",
           "Don't stand up with that cockstand, mate"
         ],
-        "notes": [
-          "Not for the faint of heart. Mostly used in blokey chat."
-        ],
+        "notes": ["Not for the faint of heart. Mostly used in blokey chat."],
         "isPremium": true
       }
     ]

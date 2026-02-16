@@ -13,6 +13,8 @@ export interface SlangEntry {
   notes: string[];
   image?: string;
   isPremium?: boolean;
+  /** Region label for Regional category (e.g. "Sydney Slang"). */
+  regionalCounty?: string;
 }
 
 export interface SlangCategory {
@@ -64,4 +66,15 @@ export function searchQuotes(query: string): SlangEntry[] {
       entry.buttonTitle.toLowerCase().includes(q) ||
       entry.explanation.toLowerCase().includes(q)
   );
+}
+
+/** Unique region labels for the Regional category, sorted. */
+export function getRegionalCounties(): string[] {
+  const cat = getCategories().find((c) => c.name === "Regional");
+  if (!cat) return [];
+  const set = new Set<string>();
+  cat.quotes.forEach((q) => {
+    if (q.regionalCounty) set.add(q.regionalCounty);
+  });
+  return Array.from(set).sort();
 }

@@ -6,6 +6,7 @@ import {
   FlatList,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -27,6 +28,7 @@ import {
 import { slangImageMap } from "@/data/image-map";
 import {
   getCategories,
+  getRegionalCounties,
   searchQuotes,
   SlangCategory,
   SlangEntry,
@@ -329,11 +331,27 @@ export default function QuotesScreen() {
   const [favourites, setFavourites] = useState<Set<string>>(new Set());
   const [showFavsOnly, setShowFavsOnly] = useState(false);
   const [cardsExpandedByDefault, setCardsExpandedByDefault] = useState(true);
+  const [selectedRegionalCounty, setSelectedRegionalCounty] = useState<
+    string | null
+  >(null);
+
+  const regionalCounties = useMemo(() => getRegionalCounties(), []);
 
   // When user selects a category, show all cards expanded by default
   useEffect(() => {
     if (selectedCategory !== null) setCardsExpandedByDefault(true);
   }, [selectedCategory]);
+
+  // When entering Regional, select first region; when leaving, clear
+  useEffect(() => {
+    if (selectedCategory === "Regional") {
+      setSelectedRegionalCounty(
+        (prev) => prev ?? regionalCounties[0] ?? null,
+      );
+    } else {
+      setSelectedRegionalCounty(null);
+    }
+  }, [selectedCategory, regionalCounties]);
 
   // When user taps Slang tab, reset to main categories view
   useFocusEffect(
@@ -367,8 +385,24 @@ export default function QuotesScreen() {
     }
     if (!selectedCategory) return [];
     const cat = categories.find((c) => c.name === selectedCategory);
-    return cat?.quotes ?? [];
-  }, [searchQuery, selectedCategory, categories, showFavsOnly, favourites]);
+    const quotes = cat?.quotes ?? [];
+    if (
+      selectedCategory === "Regional" &&
+      selectedRegionalCounty != null
+    ) {
+      return quotes.filter(
+        (q) => q.regionalCounty === selectedRegionalCounty,
+      );
+    }
+    return quotes;
+  }, [
+    searchQuery,
+    selectedCategory,
+    selectedRegionalCounty,
+    categories,
+    showFavsOnly,
+    favourites,
+  ]);
 
   const showGrid = selectedCategory === null && !showSearch && !showFavsOnly;
 
@@ -445,10 +479,12 @@ export default function QuotesScreen() {
                 ? "Favourites"
                 : showSearch
                   ? "Search"
-                  : selectedCategory != null
-                    ? (categories.find((c) => c.name === selectedCategory)
-                        ?.displayName ?? "Slang")
-                    : "Slang"}
+                  : selectedCategory === "Regional"
+                    ? "Regional Slang"
+                    : selectedCategory != null
+                      ? (categories.find((c) => c.name === selectedCategory)
+                          ?.displayName ?? "Slang")
+                      : "Slang"}
             </Text>
           </View>
         </View>
@@ -512,26 +548,67 @@ export default function QuotesScreen() {
             keyExtractor={(item) => item.id}
             renderItem={renderCard}
             ListHeaderComponent={
-              <View style={styles.collapseAllRow}>
-                <TouchableOpacity
-                  onPress={() =>
-                    setCardsExpandedByDefault((prev) => !prev)
-                  }
-                  style={styles.collapseAllBtn}
-                  hitSlop={8}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons
-                    name={
-                      cardsExpandedByDefault ? "chevron-up" : "chevron-down"
+              <View>
+                {selectedCategory === "Regional" &&
+                  regionalCounties.length > 0 && (
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      style={styles.regionPickerScroll}
+                      contentContainerStyle={styles.regionPickerContent}
+                    >
+                      {regionalCounties.map((county) => (
+                        <TouchableOpacity
+                          key={county}
+                          onPress={() =>
+                            setSelectedRegionalCounty(county)
+                          }
+                          style={[
+                            styles.regionChip,
+                            selectedRegionalCounty === county &&
+                              styles.regionChipSelected,
+                          ]}
+                          activeOpacity={0.7}
+                        >
+                          <Text
+                            style={[
+                              styles.regionChipText,
+                              selectedRegionalCounty === county &&
+                                styles.regionChipTextSelected,
+                            ]}
+                            numberOfLines={1}
+                          >
+                            {county.replace(/\s+Slang$/, "")}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  )}
+                <View style={styles.collapseAllRow}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      setCardsExpandedByDefault((prev) => !prev)
                     }
-                    size={22}
-                    color={ACCENT_BLUE}
-                  />
-                  <Text style={styles.collapseAllLabel}>
-                    {cardsExpandedByDefault ? "Collapse All" : "Expand All"}
-                  </Text>
-                </TouchableOpacity>
+                    style={styles.collapseAllBtn}
+                    hitSlop={8}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons
+                      name={
+                        cardsExpandedByDefault
+                          ? "chevron-up"
+                          : "chevron-down"
+                      }
+                      size={22}
+                      color={ACCENT_BLUE}
+                    />
+                    <Text style={styles.collapseAllLabel}>
+                      {cardsExpandedByDefault
+                        ? "Collapse All"
+                        : "Expand All"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             }
             contentContainerStyle={[
@@ -685,6 +762,33 @@ const styles = StyleSheet.create({
   gridCellLabel: {
     fontFamily: ButtonFont,
     textAlign: "center",
+  },
+  regionPickerScroll: {
+    marginTop: 26,
+    marginBottom: 8,
+  },
+  regionPickerContent: {
+    paddingRight: 16,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  regionChip: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    marginRight: 8,
+    borderRadius: 20,
+    backgroundColor: "rgba(0,0,0,0.06)",
+  },
+  regionChipSelected: {
+    backgroundColor: ACCENT_BLUE,
+  },
+  regionChipText: {
+    fontFamily: ButtonFont,
+    fontSize: 14,
+    color: "#333",
+  },
+  regionChipTextSelected: {
+    color: "#fff",
   },
   collapseAllRow: {
     marginTop: 20,
