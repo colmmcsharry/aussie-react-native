@@ -944,7 +944,7 @@ const styles = StyleSheet.create({
   },
   wreathCenter: {
     flex: 0,
-    minWidth: 100,
+    minWidth: 109,
     maxWidth: 120,
     alignItems: "center",
     justifyContent: "center",
