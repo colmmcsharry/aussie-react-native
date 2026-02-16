@@ -497,8 +497,7 @@ const styles = StyleSheet.create({
   },
   teacherVideosCount: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#194F89',
-    fontFamily: BodyFont,
+    color: '#11181C',
+    fontFamily: ButtonFont,
   },
 });

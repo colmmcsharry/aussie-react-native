@@ -277,7 +277,7 @@ function CategoryCell({
           <MaterialCommunityIcons
             name="crown"
             size={24}
-            color="#FFD700"
+            color="#F4B744"
           />
         </View>
       )}
