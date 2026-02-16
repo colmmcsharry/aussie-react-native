@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Pressable,
   ScrollView,
   Animated,
   LayoutAnimation,
@@ -27,6 +28,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createAudioPlayer, AudioPlayer } from 'expo-audio';
 
+import { usePaywall } from '@/context/PaywallContext';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { BodyFont, ButtonFont, Colors, HeadingFont } from '@/constants/theme';
 import { getQuiz, QuizQuestion } from '@/data/quiz-data';
@@ -237,6 +239,7 @@ export default function QuizGameplay() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
+  const { openPaywall } = usePaywall();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
@@ -362,7 +365,9 @@ export default function QuizGameplay() {
         <Text style={[styles.headerTitle, { color: colors.text }]} numberOfLines={1}>
           {quiz.name}
         </Text>
-        <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
+        <Pressable onPress={openPaywall} hitSlop={12}>
+          <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
+        </Pressable>
       </View>
 
       {showResults ? (

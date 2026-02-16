@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import { usePaywall } from '@/context/PaywallContext';
 import { HeadingFont } from '@/constants/theme';
 
 const ACCENT_BLUE = '#194F89'; // Australian blue
@@ -15,6 +16,7 @@ type TabHeaderProps = {
 
 export function TabHeader({ title, left, right }: TabHeaderProps) {
   const insets = useSafeAreaInsets();
+  const { openPaywall } = usePaywall();
 
   return (
     <View
@@ -27,7 +29,9 @@ export function TabHeader({ title, left, right }: TabHeaderProps) {
         <View style={styles.headerLeftSlot}>{left ?? null}</View>
         <View style={styles.headerRight}>
           {right ?? (
-            <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
+            <Pressable onPress={openPaywall} hitSlop={12}>
+              <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
+            </Pressable>
           )}
         </View>
         <View style={styles.headerTitleWrap} pointerEvents="none">

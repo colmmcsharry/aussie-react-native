@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
 
 import { ThemedText } from "@/components/themed-text";
+import { usePaywall } from "@/context/PaywallContext";
 import { BodyFont, ButtonFont, HeadingFont } from "@/constants/theme";
 
 /**
@@ -22,7 +23,7 @@ import { BodyFont, ButtonFont, HeadingFont } from "@/constants/theme";
  *  - Proper viewport meta tag in the injected HTML.
  */
 export default function VideoPlayerScreen() {
-  const { id, title, embedUrl, isPortrait, source } = useLocalSearchParams<{
+  const { title, embedUrl, isPortrait } = useLocalSearchParams<{
     id: string;
     title: string;
     embedUrl: string;
@@ -30,6 +31,8 @@ export default function VideoPlayerScreen() {
     isPortrait: string;
     source?: string;
   }>();
+
+  const { openPaywall } = usePaywall();
 
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -112,7 +115,9 @@ export default function VideoPlayerScreen() {
           </ThemedText>
         </View>
         <View style={styles.headerSpacer}>
-          <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
+          <Pressable onPress={openPaywall} hitSlop={12}>
+            <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
+          </Pressable>
         </View>
       </View>
 

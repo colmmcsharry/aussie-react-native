@@ -389,7 +389,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
                 { color: colors.text },
               ]}
             >
-              (and it's good fun for locals too!)
+              (and it's good fun for Aussies too!)
             </Animated.Text>
           </View>
         )}

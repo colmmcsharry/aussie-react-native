@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { usePaywall } from "@/context/PaywallContext";
 import {
   BodyFont,
   ButtonFont,
@@ -309,6 +310,7 @@ export default function QuotesScreen() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? "light"];
   const insets = useSafeAreaInsets();
+  const { openPaywall } = usePaywall();
   const { width: screenWidth } = useWindowDimensions();
 
   const [gridContainerWidth, setGridContainerWidth] = useState(0);
@@ -486,11 +488,17 @@ export default function QuotesScreen() {
             )}
           </View>
           <View style={styles.headerRight}>
-            <MaterialCommunityIcons
-              name="crown"
-              size={26}
-              color="#F4B744"
-            />
+            <TouchableOpacity
+              onPress={openPaywall}
+              hitSlop={12}
+              activeOpacity={0.7}
+            >
+              <MaterialCommunityIcons
+                name="crown"
+                size={26}
+                color="#F4B744"
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.headerTitleWrap} pointerEvents="none">
             <Text style={styles.headerTitle} numberOfLines={1}>
