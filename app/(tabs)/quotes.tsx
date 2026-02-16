@@ -1,28 +1,41 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
+import { Image } from "expo-image";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   FlatList,
-  TouchableOpacity,
-  Pressable,
-  TextInput,
   Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
   useWindowDimensions,
-} from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { Image } from 'expo-image';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+  View,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors, BodyFont, ButtonFont, CardBodyFont, FontSizes, HeadingFont, SlangDisplayFont } from '@/constants/theme';
-import { getCategories, searchQuotes, SlangCategory, SlangEntry } from '@/data/slang';
-import { slangImageMap } from '@/data/image-map';
-import { playAudio, playAudioSlow, stopAudio } from '@/services/audio';
-import { loadFavourites, toggleFavourite } from '@/services/favourites';
+import {
+  BodyFont,
+  ButtonFont,
+  CardBodyFont,
+  Colors,
+  FontSizes,
+  HeadingFont,
+  SlangDisplayFont,
+} from "@/constants/theme";
+import { slangImageMap } from "@/data/image-map";
+import {
+  getCategories,
+  searchQuotes,
+  SlangCategory,
+  SlangEntry,
+} from "@/data/slang";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { playAudio, playAudioSlow, stopAudio } from "@/services/audio";
+import { loadFavourites, toggleFavourite } from "@/services/favourites";
 
-const ACCENT_BLUE = '#194F89'; // Australian blue
+const ACCENT_BLUE = "#194F89"; // Australian blue
 const GRID_GAP = 12;
 const GRID_HORIZ_PADDING = 32; // content padding 16*2 only – grid card has no horizontal padding
 const NUM_COLUMNS = 3;
@@ -30,12 +43,7 @@ const NUM_COLUMNS = 3;
 // ---------- SlangCard (expanded by default when in category view) ----------
 
 /** Lighter variants of palette colors – slang cards only */
-const SLANG_CARD_COLORS = [
-  '#fcf9ef',
-  '#eefcf0',
-  '#fceeef',
-  '#eef6fc',
-] as const;
+const SLANG_CARD_COLORS = ["#fcf9ef", "#eefcf0", "#fceeef", "#eef6fc"] as const;
 
 function SlangCard({
   entry,
@@ -57,10 +65,13 @@ function SlangCard({
   const [playingSlow, setPlayingSlow] = useState(false);
   const [imageAspectRatio, setImageAspectRatio] = useState<number | null>(null);
 
-  const handleImageLoad = useCallback((e: { source: { width: number; height: number } }) => {
-    const { width, height } = e.source;
-    if (width && height) setImageAspectRatio(width / height);
-  }, []);
+  const handleImageLoad = useCallback(
+    (e: { source: { width: number; height: number } }) => {
+      const { width, height } = e.source;
+      if (width && height) setImageAspectRatio(width / height);
+    },
+    [],
+  );
 
   const toggleExpand = useCallback(() => {
     setExpanded((prev) => !prev);
@@ -95,114 +106,128 @@ function SlangCard({
   return (
     <View style={styles.cardWrapper}>
       <View style={[styles.card, { backgroundColor: bgColor }]}>
-      {/* Image at top when expanded (reference: G'day card) */}
-      {expanded && hasImage && (
-        <View style={styles.cardImageWrap}>
-          <Image
-            source={slangImageMap[entry.image!]}
-            style={[
-              styles.cardImageTop,
-              imageAspectRatio != null && { aspectRatio: imageAspectRatio },
-            ]}
-            contentFit="cover"
-            onLoad={handleImageLoad}
-          />
-        </View>
-      )}
-
-      <View style={styles.cardInner}>
-        <Text style={[styles.cardTitle, { color: colors.text }]}>
-          {entry.buttonTitle}
-        </Text>
-        <Text style={[styles.cardExplanation, { color: colors.text }]}>
-          {entry.explanation}
-        </Text>
-
-        {/* Action row: 3 main buttons (heart, play, slow) + smaller separate expand/collapse */}
-        <View style={styles.cardActionsRow}>
-          <View style={styles.cardActionsMain}>
-            <Pressable
-              onPress={() => onToggleFav(entry.id)}
-              style={({ pressed }) => [
-                styles.actionBtn,
-                pressed && styles.actionBtnPressed,
+        {/* Image at top when expanded (reference: G'day card) */}
+        {expanded && hasImage && (
+          <View style={styles.cardImageWrap}>
+            <Image
+              source={slangImageMap[entry.image!]}
+              style={[
+                styles.cardImageTop,
+                imageAspectRatio != null && { aspectRatio: imageAspectRatio },
               ]}
-            >
-            <Ionicons
-              name={isFav ? 'heart' : 'heart-outline'}
-              size={38}
-              color={isFav ? '#d95b6e' : ACCENT_BLUE}
+              contentFit="cover"
+              onLoad={handleImageLoad}
             />
-            </Pressable>
+          </View>
+        )}
+
+        <View style={styles.cardInner}>
+          <Text style={[styles.cardTitle, { color: colors.text }]}>
+            {entry.buttonTitle}
+          </Text>
+          <Text style={[styles.cardExplanation, { color: colors.text }]}>
+            {entry.explanation}
+          </Text>
+
+          {/* Action row: 3 main buttons (heart, play, slow) + smaller separate expand/collapse */}
+          <View style={styles.cardActionsRow}>
+            <View style={styles.cardActionsMain}>
+              <Pressable
+                onPress={() => onToggleFav(entry.id)}
+                style={({ pressed }) => [
+                  styles.actionBtn,
+                  pressed && styles.actionBtnPressed,
+                ]}
+              >
+                <Ionicons
+                  name={isFav ? "heart" : "heart-outline"}
+                  size={38}
+                  color={isFav ? "#d95b6e" : ACCENT_BLUE}
+                />
+              </Pressable>
+              <Pressable
+                onPress={handlePlay}
+                style={({ pressed }) => [
+                  styles.actionBtn,
+                  playing && styles.actionBtnActive,
+                  pressed && styles.actionBtnPressed,
+                ]}
+              >
+                <Ionicons
+                  name={playing ? "stop" : "volume-high"}
+                  size={40}
+                  color={playing ? "#fff" : ACCENT_BLUE}
+                />
+              </Pressable>
+              <Pressable
+                onPress={handlePlaySlow}
+                style={({ pressed }) => [
+                  styles.actionBtn,
+                  playingSlow && styles.actionBtnActive,
+                  pressed && styles.actionBtnPressed,
+                ]}
+              >
+                {playingSlow ? (
+                  <Ionicons name="stop" size={38} color="#fff" />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="snail"
+                    size={38}
+                    color={ACCENT_BLUE}
+                  />
+                )}
+              </Pressable>
+            </View>
             <Pressable
-              onPress={handlePlay}
+              onPress={toggleExpand}
               style={({ pressed }) => [
-                styles.actionBtn,
-                playing && styles.actionBtnActive,
+                styles.actionBtnExpand,
                 pressed && styles.actionBtnPressed,
               ]}
             >
               <Ionicons
-                name={playing ? 'stop' : 'volume-high'}
-                size={40}
-                color={playing ? '#fff' : ACCENT_BLUE}
+                name={expanded ? "chevron-up" : "chevron-down"}
+                size={22}
+                color={ACCENT_BLUE}
               />
             </Pressable>
-            <Pressable
-              onPress={handlePlaySlow}
-              style={({ pressed }) => [
-                styles.actionBtn,
-                playingSlow && styles.actionBtnActive,
-                pressed && styles.actionBtnPressed,
-              ]}
-            >
-              {playingSlow ? (
-                <Ionicons name="stop" size={38} color="#fff" />
-              ) : (
-                <MaterialCommunityIcons name="snail" size={38} color={ACCENT_BLUE} />
-              )}
-            </Pressable>
           </View>
-          <Pressable
-            onPress={toggleExpand}
-            style={({ pressed }) => [
-              styles.actionBtnExpand,
-              pressed && styles.actionBtnPressed,
-            ]}
-          >
-            <Ionicons
-              name={expanded ? 'chevron-up' : 'chevron-down'}
-              size={22}
-              color={ACCENT_BLUE}
-            />
-          </Pressable>
-        </View>
 
-        {expanded && (
-          <View style={styles.cardBody}>
-            {entry.notes.length > 0 && (
-              <View style={styles.notesSection}>
-                <Text style={[styles.sectionLabel, { color: ACCENT_BLUE }]}>Notes</Text>
-                {entry.notes.map((note, i) => (
-                  <View key={i} style={styles.noteRow}>
-                    <Text style={[styles.noteText, { color: colors.text }]}>{note}</Text>
-                  </View>
-                ))}
-              </View>
-            )}
-            {entry.examples.length > 0 && (
-              <View style={styles.examplesSection}>
-                <Text style={[styles.sectionLabel, { color: ACCENT_BLUE }]}>Examples</Text>
-                {entry.examples.map((ex, i) => (
-                  <View key={i} style={styles.exampleRow}>
-                    <Text style={[styles.exampleQuote, { color: colors.text }]}>"{ex}"</Text>
-                  </View>
-                ))}
-              </View>
-            )}
-          </View>
-        )}
-      </View>
+          {expanded && (
+            <View style={styles.cardBody}>
+              {entry.notes.length > 0 && (
+                <View style={styles.notesSection}>
+                  <Text style={[styles.sectionLabel, { color: ACCENT_BLUE }]}>
+                    Notes
+                  </Text>
+                  {entry.notes.map((note, i) => (
+                    <View key={i} style={styles.noteRow}>
+                      <Text style={[styles.noteText, { color: colors.text }]}>
+                        {note}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+              {entry.examples.length > 0 && (
+                <View style={styles.examplesSection}>
+                  <Text style={[styles.sectionLabel, { color: ACCENT_BLUE }]}>
+                    Examples
+                  </Text>
+                  {entry.examples.map((ex, i) => (
+                    <View key={i} style={styles.exampleRow}>
+                      <Text
+                        style={[styles.exampleQuote, { color: colors.text }]}
+                      >
+                        "{ex}"
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -248,7 +273,10 @@ function CategoryCell({
           />
         )}
         <Text
-          style={[styles.gridCellLabel, { color: colors.text, fontSize: labelFontSize }]}
+          style={[
+            styles.gridCellLabel,
+            { color: colors.text, fontSize: labelFontSize },
+          ]}
           numberOfLines={1}
         >
           {category.displayName}
@@ -262,7 +290,7 @@ function CategoryCell({
 
 export default function QuotesScreen() {
   const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
+  const colors = Colors[colorScheme ?? "light"];
   const insets = useSafeAreaInsets();
   const { width: screenWidth } = useWindowDimensions();
 
@@ -270,13 +298,16 @@ export default function QuotesScreen() {
     const gridInner = screenWidth - GRID_HORIZ_PADDING;
     const cell = (gridInner - GRID_GAP * (NUM_COLUMNS - 1)) / NUM_COLUMNS;
     const icon = Math.round(cell * 0.42);
-    const labelSize = Math.max(FontSizes.small, Math.min(FontSizes.body, Math.round(cell * 0.14)));
+    const labelSize = Math.max(
+      FontSizes.small,
+      Math.min(FontSizes.body, Math.round(cell * 0.14)),
+    );
     return { cellSize: cell, iconSize: icon, labelFontSize: labelSize };
   }, [screenWidth]);
 
   const categories = useMemo(() => getCategories(), []);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [favourites, setFavourites] = useState<Set<string>>(new Set());
   const [showFavsOnly, setShowFavsOnly] = useState(false);
@@ -285,10 +316,10 @@ export default function QuotesScreen() {
   useFocusEffect(
     useCallback(() => {
       setSelectedCategory(null);
-      setSearchQuery('');
+      setSearchQuery("");
       setShowSearch(false);
       setShowFavsOnly(false);
-    }, [])
+    }, []),
   );
 
   useEffect(() => {
@@ -329,14 +360,19 @@ export default function QuotesScreen() {
         cardColor={SLANG_CARD_COLORS[index % SLANG_CARD_COLORS.length]}
       />
     ),
-    [favourites, handleToggleFav, colors]
+    [favourites, handleToggleFav, colors],
   );
 
   const containerBg = colors.background;
   return (
     <View style={[styles.container, { backgroundColor: containerBg }]}>
       {/* Blue header — fixed height, left slot same width in all states */}
-      <View style={[styles.header, { paddingTop: insets.top + 8, backgroundColor: ACCENT_BLUE }]}>
+      <View
+        style={[
+          styles.header,
+          { paddingTop: insets.top + 8, backgroundColor: ACCENT_BLUE },
+        ]}
+      >
         <View style={styles.headerRow}>
           <View style={styles.headerLeftSlot}>
             {selectedCategory !== null || showSearch || showFavsOnly ? (
@@ -355,12 +391,12 @@ export default function QuotesScreen() {
                 <TouchableOpacity
                   onPress={() => {
                     setShowFavsOnly((p) => !p);
-                    setSearchQuery('');
+                    setSearchQuery("");
                   }}
                   style={styles.headerBtn}
                 >
                   <Ionicons
-                    name={showFavsOnly ? 'heart' : 'heart-outline'}
+                    name={showFavsOnly ? "heart" : "heart-outline"}
                     size={24}
                     color="#fff"
                   />
@@ -368,7 +404,7 @@ export default function QuotesScreen() {
                 <TouchableOpacity
                   onPress={() => {
                     setShowSearch((p) => !p);
-                    if (showSearch) setSearchQuery('');
+                    if (showSearch) setSearchQuery("");
                   }}
                   style={styles.headerBtn}
                 >
@@ -383,12 +419,13 @@ export default function QuotesScreen() {
           <View style={styles.headerTitleWrap} pointerEvents="none">
             <Text style={styles.headerTitle} numberOfLines={1}>
               {showFavsOnly
-                ? 'Favourites'
+                ? "Favourites"
                 : showSearch
-                ? 'Search'
-                : selectedCategory != null
-                ? (categories.find((c) => c.name === selectedCategory)?.displayName ?? 'Slang')
-                : 'Slang'}
+                  ? "Search"
+                  : selectedCategory != null
+                    ? (categories.find((c) => c.name === selectedCategory)
+                        ?.displayName ?? "Slang")
+                    : "Slang"}
             </Text>
           </View>
         </View>
@@ -412,7 +449,7 @@ export default function QuotesScreen() {
       <View
         style={[
           styles.content,
-          !showGrid && { backgroundColor: '#fff' },
+          !showGrid && { backgroundColor: "#fff" },
           showGrid && styles.contentGridCentered,
         ]}
       >
@@ -437,17 +474,20 @@ export default function QuotesScreen() {
             data={currentQuotes}
             keyExtractor={(item) => item.id}
             renderItem={renderCard}
-            contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + 80 }]}
+            contentContainerStyle={[
+              styles.listContent,
+              { paddingBottom: insets.bottom + 80 },
+            ]}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
               <View style={styles.emptyState}>
                 <Ionicons name="search-outline" size={48} color={colors.icon} />
                 <Text style={[styles.emptyText, { color: colors.icon }]}>
                   {showFavsOnly
-                    ? 'No favourites yet.'
+                    ? "No favourites yet."
                     : searchQuery
-                    ? `No results for "${searchQuery}"`
-                    : 'No quotes in this category.'}
+                      ? `No results for "${searchQuery}"`
+                      : "No quotes in this category."}
                 </Text>
               </View>
             }
@@ -470,15 +510,15 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   headerRow: {
-    position: 'relative',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    position: "relative",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     minHeight: 44,
   },
   headerLeftSlot: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 4,
     width: 80,
     minWidth: 80,
@@ -486,22 +526,22 @@ const styles = StyleSheet.create({
   headerRight: {
     width: 80,
     minWidth: 80,
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
   headerTitleWrap: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerTitle: {
     fontSize: 22,
     fontFamily: HeadingFont,
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
   },
   headerBtn: {
     padding: 6,
@@ -510,12 +550,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: "rgba(255,255,255,0.2)",
     borderRadius: 12,
   },
   searchInput: {
     fontSize: 16,
-    color: '#fff',
+    color: "#fff",
     paddingVertical: 0,
   },
   content: {
@@ -524,45 +564,55 @@ const styles = StyleSheet.create({
     paddingTop: 24,
   },
   contentGridCentered: {
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   gridCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 20,
     paddingVertical: 16,
     paddingHorizontal: 0,
-    overflow: 'hidden',
+    overflow: "hidden",
     ...Platform.select({
-      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 8 },
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+      },
       android: { elevation: 4 },
     }),
   },
   grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: GRID_GAP,
   },
   gridCell: {
     borderRadius: 14,
-    overflow: 'hidden',
+    overflow: "hidden",
     ...Platform.select({
-      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 4 },
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.06,
+        shadowRadius: 4,
+      },
       android: { elevation: 2 },
     }),
   },
   gridCellInner: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 8,
   },
   gridCellLabel: {
     fontFamily: ButtonFont,
-    textAlign: 'center',
+    textAlign: "center",
   },
   listContent: {
     paddingBottom: 24, // extra space; list view adds insets.bottom + 80 via inline style
@@ -572,7 +622,7 @@ const styles = StyleSheet.create({
     marginBottom: 48,
     ...Platform.select({
       ios: {
-        shadowColor: '#000',
+        shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -582,19 +632,19 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.06)',
+    borderColor: "rgba(0,0,0,0.06)",
   },
   cardImageWrap: {
-    overflow: 'hidden',
+    overflow: "hidden",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
   cardImageTop: {
-    width: '100%',
+    width: "100%",
     minHeight: 200,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
   },
   cardInner: {
     padding: 16,
@@ -602,35 +652,35 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: FontSizes.display,
     fontFamily: SlangDisplayFont,
-    marginTop: 16,
-    marginBottom: 14,
+    marginTop: 20,
+    marginBottom: 16,
   },
   cardExplanation: {
     fontSize: 18,
     lineHeight: 22,
-    marginBottom: 24,
+    marginBottom: 30,
     fontFamily: CardBodyFont,
   },
   cardActionsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   cardActionsMain: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 16,
   },
   actionBtn: {
     width: 78,
     height: 78,
     borderRadius: 39,
-    backgroundColor: 'rgba(255, 255, 255, 0.58)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(255, 255, 255, 0.58)",
+    alignItems: "center",
+    justifyContent: "center",
     ...Platform.select({
       ios: {
-        shadowColor: '#8a8782',
+        shadowColor: "#8a8782",
         shadowOffset: { width: 4, height: 6 },
         shadowOpacity: 0.35,
         shadowRadius: 8,
@@ -652,11 +702,11 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     ...Platform.select({
       ios: {
-        shadowColor: '#8a8782',
+        shadowColor: "#8a8782",
         shadowOffset: { width: 3, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 6,
@@ -665,13 +715,13 @@ const styles = StyleSheet.create({
     }),
   },
   cardBody: {
-    marginTop: 16,
+    marginTop: 20,
     paddingTop: 16,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: 'rgba(0,0,0,0.08)',
+    borderTopColor: "rgba(0,0,0,0.08)",
   },
   notesSection: {
-    marginBottom: 16,
+    marginBottom: 10,
   },
   sectionLabel: {
     fontSize: 16,
@@ -679,14 +729,11 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   noteRow: {
-    marginBottom: 6,
-  },
-  examplesSection: {
-    gap: 6,
+    marginBottom: 8,
   },
   noteText: {
     fontSize: 16,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     fontFamily: CardBodyFont,
   },
   exampleRow: {
@@ -698,14 +745,14 @@ const styles = StyleSheet.create({
     fontFamily: CardBodyFont,
   },
   emptyState: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 60,
     gap: 12,
   },
   emptyText: {
     fontSize: 15,
-    textAlign: 'center',
+    textAlign: "center",
     fontFamily: BodyFont,
   },
 });
