@@ -790,6 +790,8 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     textAlign: "center",
     width: "100%",
+    // textWrap supported on web; RN TextStyle types may not include it
+    ...({ textWrap: "balance" } as Record<string, unknown>),
   },
   paragraphSecond: {
     marginTop: 8,
@@ -882,8 +884,10 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#fff",
   },
-  // Vue .slide9
+  // Vue .slide9 – full width so Begin button stretches to 32px padding
   slide9: {
+    width: "100%",
+    alignSelf: "stretch",
     alignItems: "center",
     paddingTop: 16,
     paddingBottom: 24,
