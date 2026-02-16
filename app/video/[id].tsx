@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { Audio, InterruptionModeIOS } from "expo-av";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
@@ -102,7 +103,8 @@ export default function VideoPlayerScreen() {
           ]}
           hitSlop={16}
         >
-          <ThemedText style={styles.backText}> {'‹'} Back</ThemedText>
+          <Ionicons name="chevron-back" size={24} color="#fff" style={styles.backIcon} />
+          <ThemedText style={styles.backText}>Back</ThemedText>
         </Pressable>
         <View style={styles.headerTitleWrap}>
           <ThemedText style={styles.headerTitle} numberOfLines={1}>
@@ -168,9 +170,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     minWidth: 70,
   },
+  backIcon: {
+    marginRight: 4,
+  },
   backText: {
     color: "#fff",
     fontSize: 17,
+    marginRight: 4,
     fontFamily: ButtonFont,
   },
   headerTitleWrap: {
