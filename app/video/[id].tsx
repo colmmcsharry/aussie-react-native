@@ -102,8 +102,7 @@ export default function VideoPlayerScreen() {
           ]}
           hitSlop={16}
         >
-          <ThemedText style={styles.backIcon}>{"‹"}</ThemedText>
-          <ThemedText style={styles.backText}>Back</ThemedText>
+          <ThemedText style={styles.backText}> {'‹'} Back</ThemedText>
         </Pressable>
         <View style={styles.headerTitleWrap}>
           <ThemedText style={styles.headerTitle} numberOfLines={1}>
@@ -168,13 +167,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     minWidth: 70,
-  },
-  backIcon: {
-    color: "#fff",
-    fontSize: 32,
-    top: 7,
-    fontWeight: "500",
-    marginRight: 4,
   },
   backText: {
     color: "#fff",
