@@ -457,13 +457,15 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
               >
                 Optimising...
               </Animated.Text>
-              <LottieView
-                ref={lottieBrainRef}
-                source={LottieBrain}
-                style={styles.lottieBrain}
-                loop
-                autoPlay
-              />
+              <View style={styles.lottieBrainWrap}>
+                <LottieView
+                  ref={lottieBrainRef}
+                  source={LottieBrain}
+                  style={styles.lottieBrain}
+                  loop
+                  autoPlay
+                />
+              </View>
             </Animated.View>
           </View>
         )}
@@ -706,7 +708,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 32,
     alignItems: "center",
     justifyContent: "center",
     minHeight: Dimensions.get("window").height - 120,
@@ -837,10 +838,14 @@ const styles = StyleSheet.create({
   braindiv: {
     alignItems: "center",
   },
-  lottieBrain: {
-    width: 180,
-    height: 180,
+  lottieBrainWrap: {
+    width: 250,
+    height: 250,
     marginTop: 8,
+  },
+  lottieBrain: {
+    width: "100%",
+    height: "100%",
   },
   // Vue .slide8
   slide8: {
@@ -859,10 +864,10 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 0,
     alignSelf: "stretch",
+    ...({ textWrap: "balance" } as Record<string, unknown>),
   },
   tipThird: {
-    marginTop: 24,
-    marginBottom: 16,
+    marginBottom: 32,
   },
   flumargin: {
     marginBottom: 24,
