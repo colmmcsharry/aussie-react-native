@@ -306,6 +306,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
       ]}
     >
       <ScrollView
+        style={styles.scrollView}
         contentContainerStyle={[
           styles.scrollContent,
           step === "reviews" && styles.scrollContentReviews,
@@ -313,6 +314,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
+        <View style={styles.scrollContentInner}>
         {/* Step: grouphello – all three mounted, only opacity animated so angle never changes */}
         {step === "grouphello" && (
           <View style={styles.slide1} key="grouphello">
@@ -696,6 +698,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
             </Pressable>
           </Animated.View>
         )}
+        </View>
       </ScrollView>
     </View>
   );
@@ -704,13 +707,24 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
 const styles = StyleSheet.create({
   outerWrapper: {
     flex: 1,
+    width: "100%",
     paddingHorizontal: 32,
+    overflow: "hidden",
+  },
+  scrollView: {
+    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
     alignItems: "center",
     justifyContent: "center",
     minHeight: Dimensions.get("window").height - 120,
+    width: "100%",
+  },
+  scrollContentInner: {
+    width: "100%",
+    paddingHorizontal: 24,
+    alignItems: "center",
   },
   scrollContentReviews: {
     minHeight: undefined,
@@ -791,6 +805,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     textAlign: "center",
     width: "100%",
+    maxWidth: 300,
     // textWrap supported on web; RN TextStyle types may not include it
     ...({ textWrap: "balance" } as Record<string, unknown>),
   },
@@ -879,6 +894,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     marginTop: 16,
     marginBottom: 8,
+    minWidth: 300,
+    maxWidth: 300,
     borderRadius: 12,
     backgroundColor: ONBOARDING_BUTTON_BLUE,
     alignItems: "center",
@@ -919,13 +936,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    maxWidth: 280,
+    maxWidth: 250,
     minHeight: 56,
   },
   wreathCenter: {
     flex: 0,
     minWidth: 125,
-    maxWidth: 220,
+    maxWidth: 100,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 8,
