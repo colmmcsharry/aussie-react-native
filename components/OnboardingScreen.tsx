@@ -21,11 +21,6 @@ import Animated, {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
-  setHasSeenOnboarding,
-  setUserLevel,
-  type UserLevel,
-} from "@/services/onboarding";
-import {
   BodyFont,
   ButtonFont,
   Colors,
@@ -34,6 +29,11 @@ import {
   SlangDisplayFont,
 } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import {
+  setHasSeenOnboarding,
+  setUserLevel,
+  type UserLevel,
+} from "@/services/onboarding";
 
 // Lottie assets (copied from slang-src/assets)
 const LottieGroupHello = require("../assets/lottie/grouphello.json");
@@ -404,7 +404,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
                   Before we start...
                 </Animated.Text>
                 <Animated.Text
-                  entering={FadeIn.delay(400).duration(600)}
+                  entering={FadeIn.delay(800).duration(600)}
                   style={[
                     styles.paragraphFadeIn,
                     styles.paragraphSecond,
@@ -702,7 +702,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
 const styles = StyleSheet.create({
   outerWrapper: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 32,
   },
   scrollContent: {
     flexGrow: 1,
@@ -783,10 +783,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     minHeight: 280,
-    paddingHorizontal: 16,
   },
   paragraphFadeIn: {
-    fontFamily: ButtonFont,
+    fontFamily: HeadingFont,
     fontSize: 20,
     marginBottom: 24,
     textAlign: "center",
@@ -799,21 +798,24 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontStyle: "italic",
   },
-  // Vue .slide6 level
+  // Vue .slide6 level – full width so levelContainer + buttons stretch to 32px padding
   slideLevel: {
+    width: "100%",
+    alignSelf: "stretch",
     alignItems: "center",
     justifyContent: "center",
     minHeight: 320,
   },
   levelContainer: {
-    alignItems: "center",
+    alignSelf: "stretch",
+    alignItems: "stretch",
     width: "100%",
-    maxWidth: 320,
+    gap: 16,
   },
   levelButton: {
     marginVertical: 10,
     width: "100%",
-    minWidth: 300,
+    alignSelf: "stretch",
     paddingVertical: 20,
     paddingHorizontal: 20,
     borderRadius: 12,
@@ -843,10 +845,8 @@ const styles = StyleSheet.create({
     minHeight: 320,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 16,
   },
   learner: {
-    maxWidth: 290,
     alignItems: "center",
     width: "100%",
   },
@@ -856,7 +856,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     marginTop: 16,
     marginBottom: 0,
-    paddingLeft: 2,
     alignSelf: "stretch",
   },
   tipThird: {
@@ -868,8 +867,7 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     width: "100%",
-    minWidth: 270,
-    maxWidth: "86%",
+    alignSelf: "stretch",
     paddingVertical: 20,
     paddingHorizontal: 24,
     marginTop: 16,
@@ -897,7 +895,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   seeSubtitle: {
-    fontFamily: ButtonFont,
+    fontFamily: HeadingFont,
     fontSize: 20,
     marginBottom: 20,
     textAlign: "center",
@@ -991,9 +989,8 @@ const styles = StyleSheet.create({
   beginButton: {
     marginTop: 24,
     marginBottom: 20,
-    minWidth: 270,
     width: "100%",
-    maxWidth: "86%",
+    alignSelf: "stretch",
     paddingVertical: 20,
     paddingHorizontal: 24,
     borderRadius: 12,
