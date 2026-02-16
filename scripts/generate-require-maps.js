@@ -69,7 +69,7 @@ for (const file of [...referencedImages].sort()) {
 }
 
 // Also add category icons
-const categories = ['Greetings', 'General', 'Drinking', 'Food', 'Compliments', 'Regional', 'People', 'Homonyms', 'Fighting', 'Sports', 'Rude'];
+const categories = ['Greetings', 'General', 'Drinking', 'Food', 'Compliments', 'Regional', 'People', 'Homonyms', 'Fighting', 'Sports', 'Rude', 'sex'];
 for (const cat of categories) {
   const file = `${cat}.png`;
   if (existingImages.has(file)) {

@@ -471,7 +471,11 @@ export default function QuotesScreen() {
             )}
           </View>
           <View style={styles.headerRight}>
-            <Ionicons name="trophy" size={24} color="#FFD700" />
+            <MaterialCommunityIcons
+              name="crown"
+              size={24}
+              color="#FFD700"
+            />
           </View>
           <View style={styles.headerTitleWrap} pointerEvents="none">
             <Text style={styles.headerTitle} numberOfLines={1}>

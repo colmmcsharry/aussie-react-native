@@ -27,4 +27,5 @@ export const slangImageMap: Record<string, any> = {
   'Fighting.png': require('@/assets/slang-images/Fighting.png'),
   'Sports.png': require('@/assets/slang-images/Sports.png'),
   'Rude.png': require('@/assets/slang-images/Rude.png'),
+  'sex.png': require('@/assets/slang-images/sex.png'),
 };

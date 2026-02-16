@@ -36,7 +36,7 @@ const CATEGORY_DISPLAY: Record<string, { displayName: string; icon: string }> = 
   Fighting: { displayName: 'Fighting', icon: 'Fighting.png' },
   Sports: { displayName: 'Sports', icon: 'Sports.png' },
   Rude: { displayName: 'Rude', icon: 'Rude.png' },
-  sex: { displayName: '18+', icon: 'Rude.png' }, // Uses same icon as Rude
+  sex: { displayName: '18+', icon: 'sex.png' },
 };
 
 export function getCategories(): SlangCategory[] {
