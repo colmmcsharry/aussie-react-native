@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Audio, InterruptionModeIOS } from "expo-av";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
@@ -111,7 +111,9 @@ export default function VideoPlayerScreen() {
             {title || "Video"}
           </ThemedText>
         </View>
-        <View style={styles.headerSpacer} />
+        <View style={styles.headerSpacer}>
+          <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
+        </View>
       </View>
 
       {/* WebView player */}
@@ -190,6 +192,7 @@ const styles = StyleSheet.create({
   },
   headerSpacer: {
     minWidth: 70,
+    alignItems: "flex-end",
   },
   playerContainer: {
     flex: 1,

@@ -24,7 +24,7 @@ const PROGRESS_LAYOUT_ANIM = {
 };
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createAudioPlayer, AudioPlayer } from 'expo-audio';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -362,7 +362,7 @@ export default function QuizGameplay() {
         <Text style={[styles.headerTitle, { color: colors.text }]} numberOfLines={1}>
           {quiz.name}
         </Text>
-        <View style={{ width: 32 }} />
+        <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
       </View>
 
       {showResults ? (

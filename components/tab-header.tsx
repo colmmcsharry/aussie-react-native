@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { HeadingFont } from '@/constants/theme';
 
@@ -24,7 +25,11 @@ export function TabHeader({ title, left, right }: TabHeaderProps) {
     >
       <View style={styles.headerRow}>
         <View style={styles.headerLeftSlot}>{left ?? null}</View>
-        <View style={styles.headerRight}>{right ?? null}</View>
+        <View style={styles.headerRight}>
+          {right ?? (
+            <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
+          )}
+        </View>
         <View style={styles.headerTitleWrap} pointerEvents="none">
           <Text style={styles.headerTitle} numberOfLines={1}>
             {title}
