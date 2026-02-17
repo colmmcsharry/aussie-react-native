@@ -218,6 +218,9 @@ export function PaywallModal({
                 </Text>
               </Pressable>
             </View>
+            <Text style={[styles.terms, { color: colors.icon }]}>
+              You'll get a reminder before your trial ends.
+            </Text>
 
             {onRestore && (
               <Pressable onPress={onRestore} style={styles.restoreButton}>
@@ -239,9 +242,6 @@ export function PaywallModal({
               </Text>
             </Pressable>
 
-            <Text style={[styles.terms, { color: colors.icon }]}>
-              You'll get a reminder before your trial ends.
-            </Text>
           </ScrollView>
         </View>
       </View>
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
   },
   planLabel: {
     fontFamily: ButtonFont,
-    fontSize: 15,
+    fontSize: 16,
     color: "#333",
     marginBottom: 4,
   },
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
   },
   planPrice: {
     fontFamily: ButtonFont,
-    fontSize: 14,
+    fontSize: 16,
     color: "#333",
   },
   restoreButton: {
@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
     borderColor: PAYWALL_BLUE_LIGHT,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 8,
+    marginTop: 8,
     borderWidth: 1,
   },
   continueText: {
@@ -418,8 +418,10 @@ const styles = StyleSheet.create({
   },
   terms: {
     fontFamily: BodyFont,
-    fontSize: 13,
+    fontSize: 15,
+    marginTop: 8,
     textAlign: "center",
     lineHeight: 16,
+    marginBottom: 10,
   },
 });

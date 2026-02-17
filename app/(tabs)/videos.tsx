@@ -8,8 +8,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -67,13 +65,6 @@ export default function VideosScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const listRef = useRef<FlatList<LatestItem> | null>(null);
-
-  useFocusEffect(
-    useCallback(() => {
-      setViewMode('latest');
-      listRef.current?.scrollToOffset({ offset: 0, animated: false });
-    }, [])
-  );
 
   const subtextColor = useThemeColor({ light: '#687076', dark: '#9BA1A6' }, 'icon');
 
@@ -301,6 +292,10 @@ export default function VideosScreen() {
           {TEACHER_KEYS.map((key) => {
             const profile = teachers[key];
             const teacherVideos = vimeoByTeacher[key] ?? [];
+            const youtubeCount = profile.youtubeVideos?.length ?? 0;
+            const hasVideos = teacherVideos.length > 0 || youtubeCount > 0;
+            if (!hasVideos) return null;
+
             const thumbIndex = Math.min(
               profile.thumbnailFromVimeoIndex ?? 0,
               Math.max(0, teacherVideos.length - 1)

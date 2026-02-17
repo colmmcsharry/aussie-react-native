@@ -25,7 +25,7 @@ export interface TeacherProfile {
   thumbnailFromVimeoIndex?: number;
 }
 
-export const TEACHER_KEYS = ['aussieslanggang', 'amanda', 'aussieenglish', 'ozziemcguire'] as const;
+export const TEACHER_KEYS = ['aussieslanggang', 'amanda', 'aussieenglish', 'ozziemcguire', 'anna', 'josh'] as const;
 export type TeacherKey = (typeof TEACHER_KEYS)[number];
 
 export const teachers: Record<TeacherKey, TeacherProfile> = {
@@ -83,6 +83,18 @@ export const teachers: Record<TeacherKey, TeacherProfile> = {
     youtubeVideos: [
       { id: 'om-youtube-1', type: 'youtube', youtubeId: 'd1OFaY2xUpE', name: 'Aussie Words Challenge' },
     ],
+  },
+  anna: {
+    key: 'anna',
+    name: 'Anna',
+    bio: "Anna is an English Language teacher from Australia who helps people from all over the world with the slang and nuances of 'Aussie English'.",
+    youtubeVideos: [],
+  },
+  josh: {
+    key: 'josh',
+    name: 'Josh',
+    bio: "Josh is an Aussie creator who helps newcomers to Oz with the local lingo.",
+    youtubeVideos: [],
   },
 };
 
