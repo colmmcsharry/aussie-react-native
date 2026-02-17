@@ -182,17 +182,21 @@ export function PaywallModal({
                 onPress={onPurchaseWeekly}
                 style={({ pressed }) => [
                   styles.planButton,
+                  styles.planButtonRow,
                   { opacity: loadingWeekly ? 0.7 : pressed ? 0.9 : 1 },
                 ]}
                 disabled={loadingWeekly}
               >
-                <Text style={styles.planLabel}>Weekly</Text>
-                <Image
-                  source={require("@/assets/dollar.png")}
-                  style={styles.planButtonIcon}
-                  resizeMode="contain"
-                />
-                <View style={styles.planTrialSpacer} />
+                <View style={styles.planButtonLeft}>
+                  <View style={styles.planButtonTitleRow}>
+                    <Text style={styles.planLabelInline}>Weekly</Text>
+                    <Image
+                      source={require("@/assets/dollar.png")}
+                      style={styles.planButtonIconInline}
+                      resizeMode="contain"
+                    />
+                  </View>
+                </View>
                 <Text style={styles.planPrice}>
                   {loadingWeekly ? "Loading..." : weeklyPrice}
                 </Text>
@@ -201,18 +205,22 @@ export function PaywallModal({
                 onPress={onPurchaseLifetime}
                 style={({ pressed }) => [
                   styles.planButton,
-                  styles.planButtonLifetime,
+                  styles.planButtonRow,
                   { opacity: loadingLifetime ? 0.7 : pressed ? 0.9 : 1 },
                 ]}
                 disabled={loadingLifetime}
               >
-                <Text style={styles.planLabel}>Lifetime</Text>
-                <Image
-                  source={require("@/assets/pitcher.png")}
-                  style={styles.planButtonIcon}
-                  resizeMode="contain"
-                />
-                <Text style={styles.planTrialText}>7 days free,</Text>
+                <View style={styles.planButtonLeft}>
+                  <View style={styles.planButtonTitleRow}>
+                    <Text style={styles.planLabelInline}>Lifetime</Text>
+                    <Image
+                      source={require("@/assets/pitcher.png")}
+                      style={styles.planButtonIconInline}
+                      resizeMode="contain"
+                    />
+                  </View>
+                  <Text style={styles.planTrialText}>7 days free</Text>
+                </View>
                 <Text style={styles.planPrice}>
                   {loadingLifetime ? "Loading..." : lifetimePrice}
                 </Text>
@@ -339,45 +347,50 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonRow: {
-    flexDirection: "row",
+    flexDirection: "column",
     gap: 12,
     marginBottom: 12,
   },
   planButton: {
-    flex: 1,
     backgroundColor: "#eef6ff",
     paddingVertical: 16,
     borderWidth: 3,
     borderColor: PAYWALL_BLUE_LIGHT,
-    paddingHorizontal: 12,
+    paddingHorizontal: 20,
     borderRadius: 13,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
     minHeight: 80,
   },
-  planButtonLifetime: {
-    backgroundColor: "#eef6ff",
+  planButtonRow: {
+    flexDirection: "row",
   },
-  planLabel: {
+  planButtonLeft: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  planButtonTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  planLabelInline: {
     fontFamily: ButtonFont,
     fontSize: 16,
     color: "#333",
-    marginBottom: 4,
   },
-  planButtonIcon: {
+  planButtonIconInline: {
     width: 32,
     height: 32,
-    marginVertical: 6,
   },
   planTrialText: {
     fontFamily: BodyFont,
     fontSize: 11,
     color: "#777",
-    marginBottom: 2,
-  },
-  planTrialSpacer: {
-    height: 15,
-    marginBottom: 2,
+    marginTop: 4,
+    position: "absolute",
+    bottom: -7,
+    left: 2,
   },
   planPrice: {
     fontFamily: ButtonFont,
@@ -422,6 +435,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: "center",
     lineHeight: 16,
-    marginBottom: 10,
+    marginBottom: 18,
   },
 });
