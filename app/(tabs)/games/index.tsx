@@ -5,8 +5,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 
+import { usePaywall } from '@/context/PaywallContext';
 import { BodyFont, ContentBg, HeadingFont } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
+import { getPremiumState } from '@/services/revenuecat';
 
 const GAME_IMAGES = {
   conversation: require('@/assets/games/conversations.png'),
@@ -35,6 +37,16 @@ const GAMES = [
 export default function GamesScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { openPaywall } = usePaywall();
+
+  const handleGamePress = async (gameId: string) => {
+    const { isPremium } = await getPremiumState();
+    if (!isPremium) {
+      openPaywall();
+      return;
+    }
+    router.push(`/games/${gameId}` as any);
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: ContentBg }]}>
@@ -50,7 +62,7 @@ export default function GamesScreen() {
           <TouchableOpacity
             key={game.id}
             style={styles.gameCard}
-            onPress={() => router.push(`/games/${game.id}` as any)}
+            onPress={() => handleGamePress(game.id)}
             activeOpacity={0.8}
           >
             <View style={styles.gameImageWrap}>

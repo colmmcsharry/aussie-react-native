@@ -45,14 +45,14 @@ const FEATURES = [
   { label: "New content added regularly", premium: true, free: false },
   { label: "Annoying ads", premium: false, free: true },
   { label: "Helps me improve the app", premium: true, free: false },
-  { label: "Beer money for me 🙂", premium: true, free: false },
+  { label: "Beer money for me", premium: true, free: false },
 ];
 
 export function PaywallModal({
   visible,
   onClose,
   onContinueFree,
-  weeklyPrice = "$1.00/week",
+  weeklyPrice = "$1.00",
   lifetimePrice = "$30.00",
   loadingWeekly = false,
   loadingLifetime = false,
@@ -387,19 +387,30 @@ const styles = StyleSheet.create({
   restoreButton: {
     alignSelf: "center",
     paddingVertical: 8,
+    borderRadius: 50,
+    borderColor: PAYWALL_BLUE_LIGHT,
+    borderWidth: 1,
+    width: 250,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 8,
   },
   restoreText: {
     fontFamily: ButtonFont,
     fontSize: 15,
   },
   continueButton: {
-    alignSelf: "stretch",
+    alignSelf: "center",
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 50,
+    width: 250,
     borderColor: PAYWALL_BLUE_LIGHT,
     alignItems: "center",
+    justifyContent: "center",
     marginBottom: 8,
+    borderWidth: 1,
   },
   continueText: {
     fontFamily: ButtonFont,

@@ -1,12 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { usePaywall } from '@/context/PaywallContext';
-import { HeadingFont } from '@/constants/theme';
+import { HeadingFont } from "@/constants/theme";
+import { usePaywall } from "@/context/PaywallContext";
 
-const ACCENT_BLUE = '#194F89'; // Australian blue
+const ACCENT_BLUE = "#194F89"; // Australian blue
 
 type TabHeaderProps = {
   title: string;
@@ -53,15 +53,15 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   headerRow: {
-    position: 'relative' as const,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    position: "relative" as const,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     minHeight: 44,
   },
   headerLeftSlot: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 4,
     width: 80,
     minWidth: 80,
@@ -69,21 +69,21 @@ const styles = StyleSheet.create({
   headerRight: {
     width: 80,
     minWidth: 80,
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
   headerTitleWrap: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerTitle: {
     fontSize: 22,
     fontFamily: HeadingFont,
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
   },
 });

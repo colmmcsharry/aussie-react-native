@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
+import { usePaywall } from '@/context/PaywallContext';
 import { TabHeader } from '@/components/tab-header';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors, BodyFont, CardPalette, HeadingFont } from '@/constants/theme';
@@ -37,6 +38,7 @@ export default function QuizMenuScreen() {
   const colors = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { openPaywall } = usePaywall();
 
   const [scores, setScores] = useState<Record<number, number>>({});
   const scrollRef = useRef<ScrollView>(null);
@@ -145,9 +147,11 @@ export default function QuizMenuScreen() {
             const bgColor = LOCKED_QUIZ_COLORS[index % LOCKED_QUIZ_COLORS.length];
 
             return (
-              <View
+              <TouchableOpacity
                 key={quiz.id}
                 style={[styles.quizButton, styles.quizButtonLocked, { backgroundColor: bgColor }]}
+                onPress={openPaywall}
+                activeOpacity={0.7}
               >
                 <Text style={[styles.quizName, styles.quizNameLocked, { color: colors.icon }]}>
                   {quiz.name}
@@ -173,7 +177,7 @@ export default function QuizMenuScreen() {
                 </Text>
 
                 <Ionicons name="lock-closed" size={20} color={colors.icon} style={styles.lockIcon} />
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>

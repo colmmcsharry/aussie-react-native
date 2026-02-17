@@ -16,7 +16,6 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { usePaywall } from "@/context/PaywallContext";
 import {
   BodyFont,
   ButtonFont,
@@ -24,8 +23,10 @@ import {
   Colors,
   FontSizes,
   HeadingFont,
+  mainAussieBlue,
   SlangDisplayFont,
 } from "@/constants/theme";
+import { usePaywall } from "@/context/PaywallContext";
 import { slangImageMap } from "@/data/image-map";
 import {
   getCategories,
@@ -276,11 +277,7 @@ function CategoryCell({
     >
       {isPremium && (
         <View style={styles.gridCellPremiumCrown} pointerEvents="none">
-          <MaterialCommunityIcons
-            name="crown"
-            size={24}
-            color="#F4B744"
-          />
+          <MaterialCommunityIcons name="crown" size={24} color="#F4B744" />
         </View>
       )}
       <View style={styles.gridCellInner} pointerEvents="none">
@@ -317,8 +314,7 @@ export default function QuotesScreen() {
   const [gridContainerWidth, setGridContainerWidth] = useState(0);
 
   const { cellSize, iconSize, labelFontSize } = useMemo(() => {
-    const isNarrowAndroid =
-      Platform.OS === "android" && screenWidth < 400;
+    const isNarrowAndroid = Platform.OS === "android" && screenWidth < 400;
     const iconScale = isNarrowAndroid ? 0.36 : 0.42;
     const labelScale = isNarrowAndroid ? 0.12 : 0.14;
     // On Android use measured width so 3 columns always fit; on iOS use original formula so look is unchanged
@@ -327,7 +323,7 @@ export default function QuotesScreen() {
         ? gridContainerWidth
         : screenWidth - (isNarrowAndroid ? 64 : GRID_HORIZ_PADDING);
     const cell = Math.floor(
-      (availableWidth - GRID_GAP * (NUM_COLUMNS - 1)) / NUM_COLUMNS
+      (availableWidth - GRID_GAP * (NUM_COLUMNS - 1)) / NUM_COLUMNS,
     );
     const icon = Math.round(cell * iconScale);
     const labelSize = Math.max(
@@ -358,9 +354,7 @@ export default function QuotesScreen() {
   // When entering Regional, select first region; when leaving, clear
   useEffect(() => {
     if (selectedCategory === "Regional") {
-      setSelectedRegionalCounty(
-        (prev) => prev ?? regionalCounties[0] ?? null,
-      );
+      setSelectedRegionalCounty((prev) => prev ?? regionalCounties[0] ?? null);
     } else {
       setSelectedRegionalCounty(null);
     }
@@ -392,7 +386,8 @@ export default function QuotesScreen() {
 
   const handleCategoryPress = useCallback(
     async (categoryName: string) => {
-      const isPremiumCategory = categoryName === "Rude" || categoryName === "sex";
+      const isPremiumCategory =
+        categoryName === "Rude" || categoryName === "sex";
       if (isPremiumCategory) {
         const { isPremium } = await getPremiumState();
         if (!isPremium) {
@@ -402,7 +397,7 @@ export default function QuotesScreen() {
       }
       setSelectedCategory(categoryName);
     },
-    [openPaywall]
+    [openPaywall],
   );
 
   const currentQuotes = useMemo(() => {
@@ -419,13 +414,8 @@ export default function QuotesScreen() {
     if (!selectedCategory) return [];
     const cat = categories.find((c) => c.name === selectedCategory);
     const quotes = cat?.quotes ?? [];
-    if (
-      selectedCategory === "Regional" &&
-      selectedRegionalCounty != null
-    ) {
-      return quotes.filter(
-        (q) => q.regionalCounty === selectedRegionalCounty,
-      );
+    if (selectedCategory === "Regional" && selectedRegionalCounty != null) {
+      return quotes.filter((q) => q.regionalCounty === selectedRegionalCounty);
     }
     return quotes;
   }, [
@@ -509,11 +499,7 @@ export default function QuotesScreen() {
               hitSlop={12}
               activeOpacity={0.7}
             >
-              <MaterialCommunityIcons
-                name="crown"
-                size={26}
-                color="#F4B744"
-              />
+              <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
             </TouchableOpacity>
           </View>
           <View style={styles.headerTitleWrap} pointerEvents="none">
@@ -603,9 +589,7 @@ export default function QuotesScreen() {
                       {regionalCounties.map((county) => (
                         <TouchableOpacity
                           key={county}
-                          onPress={() =>
-                            setSelectedRegionalCounty(county)
-                          }
+                          onPress={() => setSelectedRegionalCounty(county)}
                           style={[
                             styles.regionChip,
                             selectedRegionalCounty === county &&
@@ -629,26 +613,20 @@ export default function QuotesScreen() {
                   )}
                 <View style={styles.collapseAllRow}>
                   <TouchableOpacity
-                    onPress={() =>
-                      setCardsExpandedByDefault((prev) => !prev)
-                    }
+                    onPress={() => setCardsExpandedByDefault((prev) => !prev)}
                     style={styles.collapseAllBtn}
                     hitSlop={8}
                     activeOpacity={0.7}
                   >
                     <Ionicons
                       name={
-                        cardsExpandedByDefault
-                          ? "chevron-up"
-                          : "chevron-down"
+                        cardsExpandedByDefault ? "chevron-up" : "chevron-down"
                       }
                       size={22}
                       color={ACCENT_BLUE}
                     />
                     <Text style={styles.collapseAllLabel}>
-                      {cardsExpandedByDefault
-                        ? "Collapse All"
-                        : "Expand All"}
+                      {cardsExpandedByDefault ? "Collapse All" : "Expand All"}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -656,7 +634,7 @@ export default function QuotesScreen() {
             }
             contentContainerStyle={[
               styles.listContent,
-              { paddingBottom: insets.bottom + 80 },
+              { paddingBottom: insets.bottom + 50 },
             ]}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
@@ -670,6 +648,25 @@ export default function QuotesScreen() {
                       : "No quotes in this category."}
                 </Text>
               </View>
+            }
+            ListFooterComponent={
+              selectedCategory != null ? (
+                <TouchableOpacity
+                  style={styles.premiumCard}
+                  onPress={openPaywall}
+                  activeOpacity={0.8}
+                >
+                  <MaterialCommunityIcons
+                    name="crown"
+                    size={28}
+                    color="#F4B744"
+                    style={styles.premiumCardIcon}
+                  />
+                  <Text style={styles.premiumCardText}>
+                    Get more with Premium
+                  </Text>
+                </TouchableOpacity>
+              ) : null
             }
           />
         )}
@@ -978,5 +975,24 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: "center",
     fontFamily: BodyFont,
+  },
+  premiumCard: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: mainAussieBlue,
+    borderRadius: 16,
+    paddingVertical: 18,
+    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: "rgba(25, 79, 137, 0.2)",
+  },
+  premiumCardIcon: {
+  },
+  premiumCardText: {
+    fontFamily: ButtonFont,
+    fontSize: 20,
+    color: "white",
+    fontWeight: "600",
   },
 });
