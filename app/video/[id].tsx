@@ -1,25 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Audio, InterruptionModeIOS } from "expo-av";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
-import { Pressable, StatusBar, StyleSheet, View } from "react-native";
+import { Platform, Pressable, StatusBar, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
 
 import { ThemedText } from "@/components/themed-text";
 import { BodyFont, ButtonFont, HeadingFont } from "@/constants/theme";
+import { stopAudio } from "@/services/audio";
 
 /**
  * Video player screen.
  *
- * Uses a WebView with the Vimeo embed player. The key differences from a
- * Capacitor WebView that make iPhone playback reliable:
- *
- *  - `allowsInlineMediaPlayback` — lets the video play inline instead of
- *    forcing the native fullscreen player (the main cause of issues on iOS).
- *  - `mediaPlaybackRequiresUserAction={false}` — enables autoplay.
- *  - `allowsFullscreenVideo` — still lets the user go fullscreen if they want.
- *  - Proper viewport meta tag in the injected HTML.
+ * WebView with Vimeo or YouTube embed. iOS-only: for Vimeo we force autoplay=0 and
+ * add a big play overlay so the video actually starts (WebView inline is broken on iOS).
+ * Android uses the default embed (autoplay, no overlay).
  */
 export default function VideoPlayerScreen() {
   const { title, embedUrl, isPortrait } = useLocalSearchParams<{
@@ -36,15 +31,52 @@ export default function VideoPlayerScreen() {
   const webViewRef = useRef<WebView>(null);
   const portrait = isPortrait === "1";
 
-  // Reset audio session so WebView video can play (expo-av slow-mo can leave iOS session in a state that blocks video)
+  // Release the audio session so WebView video can play (stops any slang/slow-mo).
   useEffect(() => {
-    Audio.setAudioModeAsync({
-      interruptionModeIOS: InterruptionModeIOS.MixWithOthers,
-      playsInSilentModeIOS: true,
-    }).catch(() => {});
+    stopAudio();
   }, []);
 
-  // Build an HTML page that embeds the Vimeo player with optimal settings
+  const isIOS = Platform.OS === "ios";
+  const isVimeo = typeof embedUrl === "string" && embedUrl.includes("vimeo.com");
+  let iframeSrc = embedUrl || "";
+  // iOS only: Vimeo disable autoplay + play overlay (inline playback is broken on iOS).
+  if (isVimeo && isIOS) {
+    iframeSrc = iframeSrc.replace("autoplay=1", "autoplay=0");
+    if (!iframeSrc.includes("autoplay=")) {
+      iframeSrc += (iframeSrc.includes("?") ? "&" : "?") + "autoplay=0";
+    }
+    iframeSrc = iframeSrc.replace("playsinline=0", "playsinline=1");
+  }
+
+  // iOS only: big centered play overlay for Vimeo (tap starts playback via Player API).
+  const playOverlayHtml = isVimeo && isIOS
+    ? `
+    <div id="vimeo-play-overlay" class="play-overlay">
+      <button type="button" class="play-button" aria-label="Play video">
+        <span class="play-icon"></span>
+      </button>
+    </div>
+    <script>
+      (function() {
+        var s = document.createElement('script');
+        s.src = 'https://player.vimeo.com/api/player.js';
+        s.onload = function() {
+          var overlay = document.getElementById('vimeo-play-overlay');
+          var iframe = document.getElementById('vimeo-iframe');
+          if (!overlay || !iframe || typeof Vimeo === 'undefined') return;
+          overlay.addEventListener('click', function() {
+            try {
+              var player = new Vimeo.Player(iframe);
+              player.play();
+              overlay.style.display = 'none';
+            } catch (e) {}
+          });
+        };
+        document.head.appendChild(s);
+      })();
+    <\/script>`
+    : "";
+
   const playerHtml = `
 <!DOCTYPE html>
 <html>
@@ -73,18 +105,52 @@ export default function VideoPlayerScreen() {
           : "width: 100%; height: 100%;"
       }
     }
+    .play-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.3);
+      cursor: pointer;
+    }
+    .play-button {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .play-button:active { opacity: 0.9; }
+    .play-icon {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 16px 0 16px 28px;
+      border-color: transparent transparent transparent #111;
+      margin-left: 6px;
+    }
   </style>
 </head>
 <body>
   <div class="player-wrap">
     <iframe
-      src="${embedUrl}"
+      id="${isVimeo && isIOS ? "vimeo-iframe" : ""}"
+      src="${iframeSrc}"
       allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
       allowfullscreen
       playsinline
       webkitallowfullscreen
       mozallowfullscreen
     ></iframe>
+    ${playOverlayHtml}
   </div>
 </body>
 </html>`;
@@ -123,9 +189,8 @@ export default function VideoPlayerScreen() {
           originWhitelist={["*"]}
           javaScriptEnabled
           domStorageEnabled
-          // -- These three props are critical for iOS video playback --
           allowsInlineMediaPlayback
-          mediaPlaybackRequiresUserAction={false}
+          mediaPlaybackRequiresUserAction={isIOS}
           allowsFullscreenVideo
           // --------------------------------------------------------
           allowsBackForwardNavigationGestures={false}
@@ -133,7 +198,6 @@ export default function VideoPlayerScreen() {
           scrollEnabled={false}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
-          mediaContentMode="recommended"
           contentMode="mobile"
           // Allow mixed content for Vimeo CDN assets
           mixedContentMode="compatibility"
