@@ -15,8 +15,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { BodyFont, ButtonFont, Colors, HeadingFont } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { BodyFont, ButtonFont, HeadingFont, mainAussieBlue } from "@/constants/theme";
 
 const PAYWALL_GREEN = "#78C57C";
 const PAYWALL_GREEN_DARK = "#5aab5e";
@@ -60,8 +59,6 @@ export function PaywallModal({
   onPurchaseLifetime,
   onRestore,
 }: PaywallModalProps) {
-  const colorScheme = useColorScheme();
-  const colors = colorScheme === "dark" ? Colors.dark : Colors.light;
   const closeOpacity = useSharedValue(0);
 
   useEffect(() => {
@@ -83,14 +80,14 @@ export function PaywallModal({
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.mask}>
-        <View style={[styles.card, { backgroundColor: colors.background }]}>
+        <View style={[styles.card, { backgroundColor: mainAussieBlue }]}>
           <Animated.View style={[styles.closeWrap, closeButtonStyle]}>
             <Pressable
               onPress={onClose}
               style={styles.closeButton}
               hitSlop={16}
             >
-              <Ionicons name="close" size={24} color={colors.icon} />
+              <Ionicons name="close" size={24} color="#fff" />
             </Pressable>
           </Animated.View>
 
@@ -99,7 +96,7 @@ export function PaywallModal({
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
-            <Text style={[styles.heading, { color: colors.text }]}>
+            <Text style={styles.heading}>
               Try a week Free Trial of
             </Text>
             <View style={styles.premiumBlock}>
@@ -109,7 +106,7 @@ export function PaywallModal({
                 color="#F4B744"
                 style={styles.premiumCrown}
               />
-              <Text style={[styles.premiumTitle, { color: colors.text }]}>
+              <Text style={styles.premiumTitle}>
                 Premium
               </Text>
               <Image
@@ -130,7 +127,7 @@ export function PaywallModal({
                   />
                 </View>
                 <View style={styles.tableCellIcon}>
-                  <Text style={[styles.tableHeader, { color: colors.text }]}>
+                  <Text style={styles.tableHeader}>
                     Free
                   </Text>
                 </View>
@@ -140,12 +137,12 @@ export function PaywallModal({
                   key={i}
                   style={[
                     styles.tableRow,
-                    i % 2 === 0 && { backgroundColor: "rgba(0,0,0,0.04)" },
+                    i % 2 === 0 && { backgroundColor: "rgba(255,255,255,0.08)" },
                   ]}
                 >
                   <View style={styles.tableCell}>
                     <Text
-                      style={[styles.tableLabel, { color: colors.text }]}
+                      style={styles.tableLabel}
                       numberOfLines={1}
                     >
                       {row.label}
@@ -226,13 +223,13 @@ export function PaywallModal({
                 </Text>
               </Pressable>
             </View>
-            <Text style={[styles.terms, { color: colors.icon }]}>
+            <Text style={styles.terms}>
               You'll get a reminder before your trial ends.
             </Text>
 
             {onRestore && (
               <Pressable onPress={onRestore} style={styles.restoreButton}>
-                <Text style={[styles.restoreText, { color: colors.icon }]}>
+                <Text style={styles.restoreText}>
                   Restore Purchase
                 </Text>
               </Pressable>
@@ -245,7 +242,7 @@ export function PaywallModal({
                 { opacity: pressed ? 0.9 : 1 },
               ]}
             >
-              <Text style={[styles.continueText, { color: "#687076" }]}>
+              <Text style={styles.continueText}>
                 Continue with free version
               </Text>
             </Pressable>
@@ -268,7 +265,7 @@ const styles = StyleSheet.create({
     width: "95%",
     height: "90%",
     maxWidth: 500,
-    borderRadius: 12,
+    borderRadius: 20,
     overflow: "hidden",
   },
   closeWrap: {
@@ -299,6 +296,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     marginBottom: 8,
+    color: "#fff",
   },
   premiumBlock: {
     alignItems: "center",
@@ -308,8 +306,11 @@ const styles = StyleSheet.create({
   premiumTitle: {
     fontFamily: HeadingFont,
     fontSize: 22,
+    color: "#fff",
   },
   premiumUnderline: {
+    top: -3,
+    left: 2,
     width: 114,
     height: 14,
   },
@@ -323,6 +324,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 7,
     paddingHorizontal: 8,
+    borderRadius: 3,
   },
   tableCell: {
     flex: 1,
@@ -340,22 +342,22 @@ const styles = StyleSheet.create({
   tableHeader: {
     fontFamily: ButtonFont,
     fontSize: 13,
+    color: "#fff",
   },
   tableLabel: {
     fontFamily: ButtonFont,
     fontSize: 15,
     flex: 1,
+    color: "#fff",
   },
   buttonRow: {
     flexDirection: "column",
-    gap: 12,
+    gap: 14,
     marginBottom: 12,
   },
   planButton: {
     backgroundColor: "#eef6ff",
     paddingVertical: 16,
-    borderWidth: 3,
-    borderColor: PAYWALL_BLUE_LIGHT,
     paddingHorizontal: 20,
     borderRadius: 13,
     alignItems: "center",
@@ -412,6 +414,7 @@ const styles = StyleSheet.create({
   restoreText: {
     fontFamily: ButtonFont,
     fontSize: 15,
+    color: "#fff",
   },
   continueButton: {
     alignSelf: "center",
@@ -428,6 +431,7 @@ const styles = StyleSheet.create({
   continueText: {
     fontFamily: ButtonFont,
     fontSize: 15,
+    color: "#fff",
   },
   terms: {
     fontFamily: BodyFont,
@@ -436,5 +440,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 16,
     marginBottom: 18,
+    color: "#fff",
   },
 });
