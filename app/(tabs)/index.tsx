@@ -224,7 +224,7 @@ export default function FeedScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <TabHeader title="Feed" />
-      <Pressable
+      {/* <Pressable
         style={({ pressed }) => [
           styles.previewOnboardingBanner,
           { backgroundColor: colors.tint, opacity: pressed ? 0.9 : 1 },
@@ -232,7 +232,7 @@ export default function FeedScreen() {
         onPress={() => router.push("/onboarding-preview")}
       >
         <Text style={styles.previewOnboardingText}>Preview onboarding</Text>
-      </Pressable>
+      </Pressable> */}
       <SlangDetailModal
         visible={showSlangModal}
         entry={slangOfTheDay}
