@@ -752,15 +752,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     overflow: "hidden",
     width: "100%",
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 8,
-      },
-      android: { elevation: 4 },
-    }),
   },
   gridCardAndroidTight: {
     marginHorizontal: 0,
