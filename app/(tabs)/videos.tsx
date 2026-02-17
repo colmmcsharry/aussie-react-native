@@ -11,7 +11,7 @@ import {
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { BodyFont, ButtonFont, CardPalette, ContentBg, HeadingFont } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
@@ -28,12 +28,14 @@ import {
   fetchProjectVideos,
   formatDuration,
   getEmbedUrl,
+  getTeacherKeyFromVideo,
   getThumbnail,
   getVideoId,
   groupVimeoVideosByTeacher,
   type VimeoVideo,
 } from '@/services/vimeo';
-import { teachers, TEACHER_KEYS } from '@/data/teachers';
+import { usePaywall } from '@/context/PaywallContext';
+import { teachers, TEACHER_KEYS, PREMIUM_TEACHER_KEYS } from '@/data/teachers';
 import { getSortableTimestamp } from '@/utils/date';
 
 const LIST_THUMB_WIDTH = 160;
@@ -147,6 +149,7 @@ export default function VideosScreen() {
     [router]
   );
 
+  const { openPaywall } = usePaywall();
   const openLink = useCallback((url: string) => {
     Linking.openURL(url);
   }, []);
@@ -184,10 +187,12 @@ export default function VideosScreen() {
       const { video } = item;
       const thumbnail = getThumbnail(video, 960);
       const duration = formatDuration(video.duration);
+      const teacherKey = getTeacherKeyFromVideo(video);
+      const isPremiumVideo = teacherKey != null && PREMIUM_TEACHER_KEYS.includes(teacherKey);
       return (
         <View style={styles.videoCard}>
           <Pressable
-            onPress={() => handleVideoPress(video)}
+            onPress={() => (isPremiumVideo ? openPaywall() : handleVideoPress(video))}
             style={({ pressed }) => [styles.row, { opacity: pressed ? 0.6 : 1 }]}
           >
             <View style={styles.listThumbWrap}>
@@ -200,6 +205,11 @@ export default function VideosScreen() {
               <View style={styles.durationBadge}>
                 <ThemedText style={styles.durationText}>{duration}</ThemedText>
               </View>
+              {isPremiumVideo && (
+                <View style={styles.premiumLockOverlay}>
+                  <Ionicons name="lock-closed" size={72} color="rgba(0,0,0,0.6)" />
+                </View>
+              )}
             </View>
             <View style={styles.info}>
               <ThemedText style={styles.title} numberOfLines={2}>{video.name}</ThemedText>
@@ -208,12 +218,17 @@ export default function VideosScreen() {
                   {formatUploadDate(video.created_time)}
                 </ThemedText>
               ) : null}
+              {isPremiumVideo && (
+                <View style={styles.premiumCrownBadge}>
+                  <MaterialCommunityIcons name="crown" size={22} color="#F4B744" />
+                </View>
+              )}
             </View>
           </Pressable>
         </View>
       );
     },
-    [subtextColor, handleYouTubePress, handleVideoPress]
+    [subtextColor, handleYouTubePress, handleVideoPress, openPaywall]
   );
 
   if (loading) {
@@ -452,9 +467,24 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
   },
   durationText: { color: '#fff', fontSize: 11, fontWeight: '600', fontFamily: BodyFont },
+  premiumLockOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   info: { flex: 1, marginLeft: 14, paddingTop: 2 },
   title: { fontSize: 16, lineHeight: 22, fontFamily: ButtonFont },
   meta: { fontSize: 13, marginTop: 4, fontFamily: BodyFont },
+  premiumCrownBadge: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    backgroundColor: '#194F89',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 8,
+  },
 
   teacherCard: {
     backgroundColor: '#fff',

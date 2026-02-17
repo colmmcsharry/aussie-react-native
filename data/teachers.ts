@@ -25,8 +25,11 @@ export interface TeacherProfile {
   thumbnailFromVimeoIndex?: number;
 }
 
-export const TEACHER_KEYS = ['aussieslanggang', 'amanda', 'aussieenglish', 'ozziemcguire', 'anna', 'josh'] as const;
+export const TEACHER_KEYS = ['aussieslanggang', 'amanda', 'aussieenglish', 'ozziemcguire', 'anna', 'josh', 'leah', 'james'] as const;
 export type TeacherKey = (typeof TEACHER_KEYS)[number];
+
+/** AI / premium-only teachers: videos tagged with these show lock + crown. */
+export const PREMIUM_TEACHER_KEYS: readonly string[] = ['anna', 'josh', 'leah', 'james'];
 
 export const teachers: Record<TeacherKey, TeacherProfile> = {
   aussieslanggang: {
@@ -94,6 +97,18 @@ export const teachers: Record<TeacherKey, TeacherProfile> = {
     key: 'josh',
     name: 'Josh',
     bio: "Josh is an Aussie creator who helps newcomers to Oz with the local lingo.",
+    youtubeVideos: [],
+  },
+  leah: {
+    key: 'leah',
+    name: 'Leah',
+    bio: "Leah is an Australian English teacher who creates videos to help learners around the world with Aussie slang and the nuances of Australian English.",
+    youtubeVideos: [],
+  },
+  james: {
+    key: 'james',
+    name: 'James',
+    bio: "James is an Australian English teacher who creates videos to help learners around the world with Aussie slang and the nuances of Australian English.",
     youtubeVideos: [],
   },
 };
