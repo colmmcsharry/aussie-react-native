@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: "95%",
-    height: "95%",
+    height: "90%",
     maxWidth: 500,
     borderRadius: 12,
     overflow: "hidden",
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
   planTrialText: {
     fontFamily: BodyFont,
     fontSize: 11,
-    color: "#888",
+    color: "#777",
     marginBottom: 2,
   },
   planTrialSpacer: {
@@ -387,7 +387,6 @@ const styles = StyleSheet.create({
   restoreButton: {
     alignSelf: "center",
     paddingVertical: 8,
-    marginBottom: 8,
   },
   restoreText: {
     fontFamily: ButtonFont,
@@ -395,12 +394,12 @@ const styles = StyleSheet.create({
   },
   continueButton: {
     alignSelf: "stretch",
-    paddingVertical: 14,
+    paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 50,
     borderColor: PAYWALL_BLUE_LIGHT,
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: 8,
   },
   continueText: {
     fontFamily: ButtonFont,

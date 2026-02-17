@@ -37,6 +37,7 @@ import {
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { playAudio, playAudioSlow, stopAudio } from "@/services/audio";
 import { loadFavourites, toggleFavourite } from "@/services/favourites";
+import { getPremiumState } from "@/services/revenuecat";
 
 const ACCENT_BLUE = "#194F89"; // Australian blue
 const GRID_GAP = 12;
@@ -389,6 +390,21 @@ export default function QuotesScreen() {
     });
   }, []);
 
+  const handleCategoryPress = useCallback(
+    async (categoryName: string) => {
+      const isPremiumCategory = categoryName === "Rude" || categoryName === "sex";
+      if (isPremiumCategory) {
+        const { isPremium } = await getPremiumState();
+        if (!isPremium) {
+          openPaywall();
+          return;
+        }
+      }
+      setSelectedCategory(categoryName);
+    },
+    [openPaywall]
+  );
+
   const currentQuotes = useMemo(() => {
     if (searchQuery.trim()) return searchQuotes(searchQuery);
     if (showFavsOnly) {
@@ -560,7 +576,7 @@ export default function QuotesScreen() {
               renderItem={({ item: cat }) => (
                 <CategoryCell
                   category={cat}
-                  onPress={() => setSelectedCategory(cat.name)}
+                  onPress={() => handleCategoryPress(cat.name)}
                   colors={colors}
                   cellSize={cellSize}
                   iconSize={iconSize}
