@@ -315,389 +315,407 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.scrollContentInner}>
-        {/* Step: grouphello – all three mounted, only opacity animated so angle never changes */}
-        {step === "grouphello" && (
-          <View style={styles.slide1} key="grouphello">
-            <Animated.View style={[styles.slangLeft, grouphelloAnimatedStyle0]}>
-              <Text style={[styles.slangText, { color: SLANG_LEFT_COLOR }]}>
-                G'day mate!
-              </Text>
-            </Animated.View>
-            <Animated.View
-              style={[styles.slangMiddle, grouphelloAnimatedStyle1]}
-            >
-              <Text style={[styles.slangText, { color: SLANG_MIDDLE_COLOR }]}>
-                How ya goin?
-              </Text>
-            </Animated.View>
-            <Animated.View
-              style={[styles.slangRight, grouphelloAnimatedStyle2]}
-            >
-              <Text style={[styles.slangText, { color: SLANG_RIGHT_COLOR }]}>
-                I'll flamin' belt ya!
-              </Text>
-            </Animated.View>
-            <View style={styles.lottieWrap}>
-              <LottieView
-                ref={lottieGroupRef}
-                source={LottieGroupHello}
-                style={styles.lottieGroupHello}
-                loop
-                autoPlay
-              />
-            </View>
-          </View>
-        )}
-
-        {/* Step: confused – Vue slide2: just Lottie */}
-        {step === "confused" && (
-          <View style={styles.slide2} key="confused">
-            <LottieView
-              ref={lottieConfusedRef}
-              source={LottieConfused}
-              style={styles.lottieConfused}
-              loop
-              autoPlay
-            />
-          </View>
-        )}
-
-        {/* Step: understanding – Vue slide3: paragraph-fade-in */}
-        {step === "understanding" && (
-          <View style={styles.slide3} key="understanding">
-            <Animated.Text
-              entering={FadeIn.duration(600)}
-              style={[styles.paragraphFadeIn, { color: colors.text }]}
-            >
-              Understanding Australian people is hard.
-            </Animated.Text>
-            <Animated.Text
-              entering={FadeIn.delay(950).duration(600)}
-              style={[
-                styles.paragraphFadeIn,
-                styles.paragraphSecond,
-                { color: colors.text },
-              ]}
-            >
-              This app will help.
-            </Animated.Text>
-            <Animated.Text
-              entering={FadeIn.delay(2100).duration(600)}
-              style={[
-                styles.paragraphFadeIn,
-                styles.paragraphSecond,
-                { color: colors.text },
-              ]}
-            >
-              (and it's good fun for Aussies too!)
-            </Animated.Text>
-          </View>
-        )}
-
-        {/* Step: level – Vue slide6: question then level buttons with colours */}
-        {step === "level" && (
-          <View style={styles.slideLevel} key="level">
-            {levelPhase === "text" && (
-              <>
-                <Animated.Text
-                  entering={FadeIn.duration(600)}
-                  style={[styles.paragraphFadeIn, { color: colors.text }]}
-                >
-                  Before we start...
-                </Animated.Text>
-                <Animated.Text
-                  entering={FadeIn.delay(800).duration(600)}
-                  style={[
-                    styles.paragraphFadeIn,
-                    styles.paragraphSecond,
-                    { color: colors.text },
-                  ]}
-                >
-                  What is your level of English?
-                </Animated.Text>
-              </>
-            )}
-            {levelPhase === "buttons" && (
+          {/* Step: grouphello – all three mounted, only opacity animated so angle never changes */}
+          {step === "grouphello" && (
+            <View style={styles.slide1} key="grouphello">
               <Animated.View
-                entering={FadeIn.duration(600)}
-                style={styles.levelContainer}
+                style={[styles.slangLeft, grouphelloAnimatedStyle0]}
               >
-                {(
-                  ["elementary", "intermediate", "advanced", "fluent"] as const
-                ).map((level) => (
-                  <Pressable
-                    key={level}
-                    onPress={() => goToLevel(level)}
-                    style={({ pressed }) => [
-                      styles.levelButton,
-                      {
-                        backgroundColor: LEVEL_COLORS[level],
-                        opacity: pressed ? 0.85 : 1,
-                      },
-                    ]}
-                  >
-                    <Text style={styles.levelButtonText}>
-                      {level.charAt(0).toUpperCase() + level.slice(1)}
-                    </Text>
-                  </Pressable>
-                ))}
+                <Text style={[styles.slangText, { color: SLANG_LEFT_COLOR }]}>
+                  G'day mate!
+                </Text>
               </Animated.View>
-            )}
-          </View>
-        )}
-
-        {/* Step: processing – Vue slide7 braindiv: Optimising + brain Lottie */}
-        {step === "processing" && (
-          <View style={styles.slide7} key="processing">
-            <Animated.View
-              entering={FadeIn.delay(200).duration(500)}
-              style={styles.braindiv}
-            >
-              <Animated.Text
-                entering={FadeIn.duration(400)}
-                style={[styles.paragraphFadeIn, { color: colors.text }]}
+              <Animated.View
+                style={[styles.slangMiddle, grouphelloAnimatedStyle1]}
               >
-                Optimising...
-              </Animated.Text>
-              <View style={styles.lottieBrainWrap}>
+                <Text style={[styles.slangText, { color: SLANG_MIDDLE_COLOR }]}>
+                  How ya goin?
+                </Text>
+              </Animated.View>
+              <Animated.View
+                style={[styles.slangRight, grouphelloAnimatedStyle2]}
+              >
+                <Text style={[styles.slangText, { color: SLANG_RIGHT_COLOR }]}>
+                  I'll flamin' belt ya!
+                </Text>
+              </Animated.View>
+              <View style={styles.lottieWrap}>
                 <LottieView
-                  ref={lottieBrainRef}
-                  source={LottieBrain}
-                  style={styles.lottieBrain}
+                  ref={lottieGroupRef}
+                  source={LottieGroupHello}
+                  style={styles.lottieGroupHello}
                   loop
                   autoPlay
                 />
               </View>
-            </Animated.View>
-          </View>
-        )}
-
-        {/* Step: final – Vue slide8 learner/fluent */}
-        {step === "final" && (
-          <View style={styles.slide8} key="final">
-            {!isFluent ? (
-              <View style={styles.learner}>
-                <Animated.Text
-                  entering={FadeIn.duration(600)}
-                  style={[styles.paragraphFadeIn, { color: colors.text }]}
-                >
-                  {userLevel === "advanced"
-                    ? "Since you are not quite fluent, here are some tips"
-                    : "Since you are still learning, here are some tips"}
-                </Animated.Text>
-                <Animated.Text
-                  entering={FadeIn.delay(950).duration(600)}
-                  style={[styles.tip, { color: colors.text }]}
-                >
-                  Video and Audio can be played in Slow-Motion 🐌
-                </Animated.Text>
-                <Animated.Text
-                  entering={FadeIn.delay(1600).duration(600)}
-                  style={[styles.tip, { color: colors.text }]}
-                >
-                  Focus on learning just ONE phrase a day, we can send you
-                  reminders!
-                </Animated.Text>
-                <Animated.Text
-                  entering={FadeIn.delay(2250).duration(600)}
-                  style={[styles.tip, { color: colors.text }]}
-                >
-                  At the end of the year you&apos;ll have mastered 365 new
-                  phrases!
-                </Animated.Text>
-                <Animated.Text
-                  entering={FadeIn.delay(2900).duration(600)}
-                  style={[styles.tip, styles.tipThird, { color: colors.text }]}
-                >
-                  Test yourself with one quiz per day, re-take until you get
-                  100%
-                </Animated.Text>
-                <Pressable
-                  onPress={goToReviews}
-                  style={({ pressed }) => [
-                    styles.nextButton,
-                    { opacity: pressed ? 0.9 : 1 },
-                  ]}
-                >
-                  <Text style={styles.nextButtonText}>Next</Text>
-                </Pressable>
-              </View>
-            ) : (
-              <>
-                <Animated.Text
-                  entering={FadeIn.duration(600)}
-                  style={[
-                    styles.paragraphFadeIn,
-                    styles.flumargin,
-                    { color: colors.text },
-                  ]}
-                >
-                  Since you are fluent, let's crack on!
-                </Animated.Text>
-                <Pressable
-                  onPress={goToReviews}
-                  style={({ pressed }) => [
-                    styles.nextButton,
-                    { opacity: pressed ? 0.9 : 1 },
-                  ]}
-                >
-                  <Text style={styles.nextButtonText}>Next</Text>
-                </Pressable>
-              </>
-            )}
-          </View>
-        )}
-
-        {/* Step: reviews – first title only (centered), then it fades out and rest appears without heading */}
-        {step === "reviews" && reviewsPhase === "title" && (
-          <Animated.View
-            style={[styles.reviewsTitleOnly, reviewsTitleAnimatedStyle]}
-            key="reviews-title"
-          >
-            <Animated.Text
-              entering={FadeIn.duration(500)}
-              style={[
-                styles.seeSubtitle,
-                styles.reviewsTitleCentered,
-                { color: colors.text },
-              ]}
-            >
-              Great, ready to get cracking.
-            </Animated.Text>
-            <Animated.Text
-              entering={FadeIn.delay(900).duration(500)}
-              style={[
-                styles.seeSubtitle,
-                styles.reviewsTitleCentered,
-                { color: colors.text },
-              ]}
-            >
-              Here&apos;s what&apos;s in store...
-            </Animated.Text>
-          </Animated.View>
-        )}
-        {step === "reviews" && reviewsPhase === "content" && (
-          <Animated.View
-            entering={FadeIn.duration(500)}
-            style={styles.slide9}
-            key="reviews-content"
-          >
-            <View style={styles.testimColumn}>
-              <View style={styles.wreathRow}>
-                <Image
-                  source={FloralWreath}
-                  style={[styles.wreathImg, styles.wreathLeft]}
-                  resizeMode="contain"
-                />
-                <View style={styles.wreathCenter}>
-                  <Text style={[styles.featureHeading, { color: colors.text }]}>
-                    Over 500 Slang Words & Phrases
-                  </Text>
-                </View>
-                <Image
-                  source={FloralWreath}
-                  style={[styles.wreathImg, styles.wreathRight]}
-                  resizeMode="contain"
-                />
-              </View>
-              <View style={styles.wreathRow}>
-                <Image
-                  source={FloralWreath}
-                  style={[styles.wreathImg, styles.wreathLeft]}
-                  resizeMode="contain"
-                />
-                <View style={styles.wreathCenter}>
-                  <Text style={[styles.featureHeading, { color: colors.text }]}>
-                    200 Quiz Questions & 50+ Videos
-                  </Text>
-                  <Text style={[styles.featureMore, { color: colors.icon }]}>
-                    + much more!
-                  </Text>
-                </View>
-                <Image
-                  source={FloralWreath}
-                  style={[styles.wreathImg, styles.wreathRight]}
-                  resizeMode="contain"
-                />
-              </View>
             </View>
-            <View style={styles.testimonialSwiperWrap}>
-              <FlatList
-                data={TESTIMONIALS}
-                keyExtractor={(item) => String(item.id)}
-                horizontal
-                pagingEnabled
-                showsHorizontalScrollIndicator={false}
-                snapToInterval={TESTIMONIAL_SLIDE_WIDTH}
-                snapToAlignment="start"
-                decelerationRate="fast"
-                contentContainerStyle={styles.testimonialListContent}
-                onMomentumScrollEnd={(e) => {
-                  const i = Math.round(
-                    e.nativeEvent.contentOffset.x / TESTIMONIAL_SLIDE_WIDTH,
-                  );
-                  setTestimonialIndex(
-                    Math.min(Math.max(0, i), TESTIMONIALS.length - 1),
-                  );
-                }}
-                renderItem={({ item: t }) => (
-                  <View
-                    style={[
-                      styles.testimonialCard,
-                      {
-                        backgroundColor:
-                          colorScheme === "dark"
-                            ? "rgba(255,255,255,0.06)"
-                            : "rgba(0,0,0,0.04)",
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.testimonialHeading,
-                        { color: colors.text },
-                      ]}
-                    >
-                      {t.heading}
-                    </Text>
-                    <Text
-                      style={[styles.testimonialBody, { color: colors.text }]}
-                    >
-                      {t.testi}
-                    </Text>
-                    <Text
-                      style={[styles.testimonialAuthor, { color: colors.icon }]}
-                    >
-                      – {t.author}
-                    </Text>
-                  </View>
-                )}
+          )}
+
+          {/* Step: confused – Vue slide2: just Lottie */}
+          {step === "confused" && (
+            <View style={styles.slide2} key="confused">
+              <LottieView
+                ref={lottieConfusedRef}
+                source={LottieConfused}
+                style={styles.lottieConfused}
+                loop
+                autoPlay
               />
             </View>
-            <View style={styles.paginationDots}>
-              {TESTIMONIALS.map((_, i) => (
-                <View
-                  key={i}
-                  style={[
-                    styles.dot,
-                    i === testimonialIndex
-                      ? [styles.dotActive, { backgroundColor: "#78C57C" }]
-                      : { backgroundColor: colors.icon },
-                  ]}
-                />
-              ))}
+          )}
+
+          {/* Step: understanding – Vue slide3: paragraph-fade-in */}
+          {step === "understanding" && (
+            <View style={styles.slide3} key="understanding">
+              <Animated.Text
+                entering={FadeIn.duration(600)}
+                style={[styles.paragraphFadeIn, { color: colors.text }]}
+              >
+                Understanding Australian people is hard.
+              </Animated.Text>
+              <Animated.Text
+                entering={FadeIn.delay(950).duration(600)}
+                style={[
+                  styles.paragraphFadeIn,
+                  styles.paragraphSecond,
+                  { color: colors.text },
+                ]}
+              >
+                This app will help.
+              </Animated.Text>
+              <Animated.Text
+                entering={FadeIn.delay(2100).duration(600)}
+                style={[
+                  styles.paragraphFadeIn,
+                  styles.paragraphSecond,
+                  { color: colors.text },
+                ]}
+              >
+                (and it's good fun for Aussies too!)
+              </Animated.Text>
             </View>
-            <Pressable
-              onPress={handleBegin}
-              style={({ pressed }) => [
-                styles.beginButton,
-                { opacity: pressed ? 0.9 : 1 },
-              ]}
+          )}
+
+          {/* Step: level – Vue slide6: question then level buttons with colours */}
+          {step === "level" && (
+            <View style={styles.slideLevel} key="level">
+              {levelPhase === "text" && (
+                <>
+                  <Animated.Text
+                    entering={FadeIn.duration(600)}
+                    style={[styles.paragraphFadeIn, { color: colors.text }]}
+                  >
+                    Before we start...
+                  </Animated.Text>
+                  <Animated.Text
+                    entering={FadeIn.delay(800).duration(400)}
+                    style={[
+                      styles.paragraphFadeIn,
+                      styles.paragraphSecond,
+                      { color: colors.text },
+                    ]}
+                  >
+                    What is your level of English?
+                  </Animated.Text>
+                </>
+              )}
+              {levelPhase === "buttons" && (
+                <Animated.View
+                  entering={FadeIn.duration(600)}
+                  style={styles.levelContainer}
+                >
+                  {(
+                    [
+                      "elementary",
+                      "intermediate",
+                      "advanced",
+                      "fluent",
+                    ] as const
+                  ).map((level) => (
+                    <Pressable
+                      key={level}
+                      onPress={() => goToLevel(level)}
+                      style={({ pressed }) => [
+                        styles.levelButton,
+                        {
+                          backgroundColor: LEVEL_COLORS[level],
+                          opacity: pressed ? 0.85 : 1,
+                        },
+                      ]}
+                    >
+                      <Text style={styles.levelButtonText}>
+                        {level.charAt(0).toUpperCase() + level.slice(1)}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </Animated.View>
+              )}
+            </View>
+          )}
+
+          {/* Step: processing – Vue slide7 braindiv: Optimising + brain Lottie */}
+          {step === "processing" && (
+            <View style={styles.slide7} key="processing">
+              <Animated.View
+                entering={FadeIn.delay(200).duration(500)}
+                style={styles.braindiv}
+              >
+                <Animated.Text
+                  entering={FadeIn.duration(400)}
+                  style={[styles.paragraphFadeIn, { color: colors.text }]}
+                >
+                  Optimising...
+                </Animated.Text>
+                <View style={styles.lottieBrainWrap}>
+                  <LottieView
+                    ref={lottieBrainRef}
+                    source={LottieBrain}
+                    style={styles.lottieBrain}
+                    loop
+                    autoPlay
+                  />
+                </View>
+              </Animated.View>
+            </View>
+          )}
+
+          {/* Step: final – Vue slide8 learner/fluent */}
+          {step === "final" && (
+            <View style={styles.slide8} key="final">
+              {!isFluent ? (
+                <View style={styles.learner}>
+                  <Animated.Text
+                    entering={FadeIn.duration(600)}
+                    style={[styles.paragraphFadeIn, { color: colors.text }]}
+                  >
+                    {userLevel === "advanced"
+                      ? "Since you are not quite fluent, here are some tips"
+                      : "Since you are still learning, here are some tips"}
+                  </Animated.Text>
+                  <Animated.Text
+                    entering={FadeIn.delay(950).duration(600)}
+                    style={[styles.tip, { color: colors.text }]}
+                  >
+                    Video and Audio can be played in Slow-Motion 🐌
+                  </Animated.Text>
+                  <Animated.Text
+                    entering={FadeIn.delay(1600).duration(600)}
+                    style={[styles.tip, { color: colors.text }]}
+                  >
+                    Focus on learning just ONE phrase a day, we can send you
+                    reminders!
+                  </Animated.Text>
+                  <Animated.Text
+                    entering={FadeIn.delay(2250).duration(600)}
+                    style={[styles.tip, { color: colors.text }]}
+                  >
+                    At the end of the year you&apos;ll have mastered 365 new
+                    phrases!
+                  </Animated.Text>
+                  <Animated.Text
+                    entering={FadeIn.delay(2900).duration(600)}
+                    style={[
+                      styles.tip,
+                      styles.tipThird,
+                      { color: colors.text },
+                    ]}
+                  >
+                    Test yourself with one quiz per week, re-take until you get
+                    100%
+                  </Animated.Text>
+                  <Pressable
+                    onPress={goToReviews}
+                    style={({ pressed }) => [
+                      styles.nextButton,
+                      { opacity: pressed ? 0.9 : 1 },
+                    ]}
+                  >
+                    <Text style={styles.nextButtonText}>Next</Text>
+                  </Pressable>
+                </View>
+              ) : (
+                <>
+                  <Animated.Text
+                    entering={FadeIn.duration(600)}
+                    style={[
+                      styles.paragraphFadeIn,
+                      styles.flumargin,
+                      { color: colors.text },
+                    ]}
+                  >
+                    Since you are fluent, let's crack on!
+                  </Animated.Text>
+                  <Pressable
+                    onPress={goToReviews}
+                    style={({ pressed }) => [
+                      styles.nextButton,
+                      { opacity: pressed ? 0.9 : 1 },
+                    ]}
+                  >
+                    <Text style={styles.nextButtonText}>Next</Text>
+                  </Pressable>
+                </>
+              )}
+            </View>
+          )}
+
+          {/* Step: reviews – first title only (centered), then it fades out and rest appears without heading */}
+          {step === "reviews" && reviewsPhase === "title" && (
+            <Animated.View
+              style={[styles.reviewsTitleOnly, reviewsTitleAnimatedStyle]}
+              key="reviews-title"
             >
-              <Text style={styles.beginButtonText}>Begin!</Text>
-            </Pressable>
-          </Animated.View>
-        )}
+              <Animated.Text
+                entering={FadeIn.duration(500)}
+                style={[
+                  styles.seeSubtitle,
+                  styles.reviewsTitleCentered,
+                  { color: colors.text },
+                ]}
+              >
+                Great, ready to get cracking.
+              </Animated.Text>
+              <Animated.Text
+                entering={FadeIn.delay(900).duration(500)}
+                style={[
+                  styles.seeSubtitle,
+                  styles.reviewsTitleCentered,
+                  { color: colors.text },
+                ]}
+              >
+                Here&apos;s what&apos;s in store...
+              </Animated.Text>
+            </Animated.View>
+          )}
+          {step === "reviews" && reviewsPhase === "content" && (
+            <Animated.View
+              entering={FadeIn.duration(500)}
+              style={styles.slide9}
+              key="reviews-content"
+            >
+              <View style={styles.testimColumn}>
+                <View style={styles.wreathRow}>
+                  <Image
+                    source={FloralWreath}
+                    style={[styles.wreathImg, styles.wreathLeft]}
+                    resizeMode="contain"
+                  />
+                  <View style={styles.wreathCenter}>
+                    <Text
+                      style={[styles.featureHeading, { color: colors.text }]}
+                    >
+                      Over 500 Slang Words & Phrases
+                    </Text>
+                  </View>
+                  <Image
+                    source={FloralWreath}
+                    style={[styles.wreathImg, styles.wreathRight]}
+                    resizeMode="contain"
+                  />
+                </View>
+                <View style={styles.wreathRow}>
+                  <Image
+                    source={FloralWreath}
+                    style={[styles.wreathImg, styles.wreathLeft]}
+                    resizeMode="contain"
+                  />
+                  <View style={styles.wreathCenter}>
+                    <Text
+                      style={[styles.featureHeading, { color: colors.text }]}
+                    >
+                      200 Quiz Questions & 50+ Videos
+                    </Text>
+                    <Text style={[styles.featureMore, { color: colors.icon }]}>
+                      + much more!
+                    </Text>
+                  </View>
+                  <Image
+                    source={FloralWreath}
+                    style={[styles.wreathImg, styles.wreathRight]}
+                    resizeMode="contain"
+                  />
+                </View>
+              </View>
+              <View style={styles.testimonialSwiperWrap}>
+                <FlatList
+                  data={TESTIMONIALS}
+                  keyExtractor={(item) => String(item.id)}
+                  horizontal
+                  pagingEnabled
+                  showsHorizontalScrollIndicator={false}
+                  snapToInterval={TESTIMONIAL_SLIDE_WIDTH}
+                  snapToAlignment="start"
+                  decelerationRate="fast"
+                  contentContainerStyle={styles.testimonialListContent}
+                  onMomentumScrollEnd={(e) => {
+                    const i = Math.round(
+                      e.nativeEvent.contentOffset.x / TESTIMONIAL_SLIDE_WIDTH,
+                    );
+                    setTestimonialIndex(
+                      Math.min(Math.max(0, i), TESTIMONIALS.length - 1),
+                    );
+                  }}
+                  renderItem={({ item: t }) => (
+                    <View
+                      style={[
+                        styles.testimonialCard,
+                        {
+                          backgroundColor:
+                            colorScheme === "dark"
+                              ? "rgba(255,255,255,0.06)"
+                              : "rgba(0,0,0,0.04)",
+                        },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.testimonialHeading,
+                          { color: colors.text },
+                        ]}
+                      >
+                        {t.heading}
+                      </Text>
+                      <Text
+                        style={[styles.testimonialBody, { color: colors.text }]}
+                      >
+                        {t.testi}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.testimonialAuthor,
+                          { color: colors.icon },
+                        ]}
+                      >
+                        – {t.author}
+                      </Text>
+                    </View>
+                  )}
+                />
+              </View>
+              <View style={styles.paginationDots}>
+                {TESTIMONIALS.map((_, i) => (
+                  <View
+                    key={i}
+                    style={[
+                      styles.dot,
+                      i === testimonialIndex
+                        ? [styles.dotActive, { backgroundColor: "#78C57C" }]
+                        : { backgroundColor: colors.icon },
+                    ]}
+                  />
+                ))}
+              </View>
+              <Pressable
+                onPress={handleBegin}
+                style={({ pressed }) => [
+                  styles.beginButton,
+                  { opacity: pressed ? 0.9 : 1 },
+                ]}
+              >
+                <Text style={styles.beginButtonText}>Begin!</Text>
+              </Pressable>
+            </Animated.View>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -749,7 +767,7 @@ const styles = StyleSheet.create({
   },
   slangLeft: {
     position: "absolute",
-    left: 43,
+    left: 3,
     top: Platform.OS === "ios" ? 72 : 56,
     transform: [{ rotate: "-10deg" }],
     zIndex: 999,
@@ -764,7 +782,7 @@ const styles = StyleSheet.create({
   },
   slangRight: {
     position: "absolute",
-    right: 20,
+    right: 0,
     top: Platform.OS === "ios" ? 68 : 54,
     transform: [{ rotate: "10deg" }],
     zIndex: 999,
@@ -775,9 +793,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   lottieWrap: {
-    marginTop: 60,
-    width: 280,
-    height: 280,
+    marginTop: 34,
+    width: 300,
+    height: 300,
   },
   lottieGroupHello: {
     width: "100%",
@@ -944,8 +962,8 @@ const styles = StyleSheet.create({
   },
   wreathCenter: {
     flex: 0,
-    minWidth: 109,
-    maxWidth: 120,
+    minWidth: 111,
+    maxWidth: 125,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 6,
