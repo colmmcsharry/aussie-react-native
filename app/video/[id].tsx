@@ -1,4 +1,4 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { Audio, InterruptionModeIOS } from "expo-av";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
@@ -7,7 +7,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
 
 import { ThemedText } from "@/components/themed-text";
-import { usePaywall } from "@/context/PaywallContext";
 import { BodyFont, ButtonFont, HeadingFont } from "@/constants/theme";
 
 /**
@@ -31,8 +30,6 @@ export default function VideoPlayerScreen() {
     isPortrait: string;
     source?: string;
   }>();
-
-  const { openPaywall } = usePaywall();
 
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -114,11 +111,7 @@ export default function VideoPlayerScreen() {
             {title || "Video"}
           </ThemedText>
         </View>
-        <View style={styles.headerSpacer}>
-          <Pressable onPress={openPaywall} hitSlop={12}>
-            <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
-          </Pressable>
-        </View>
+        <View style={styles.headerSpacer} />
       </View>
 
       {/* WebView player */}
@@ -178,11 +171,11 @@ const styles = StyleSheet.create({
     minWidth: 70,
   },
   backIcon: {
-    marginRight: 4,
+    marginRight: 2,
   },
   backText: {
     color: "#fff",
-    fontSize: 17,
+    fontSize: 13,
     marginRight: 4,
     fontFamily: ButtonFont,
   },

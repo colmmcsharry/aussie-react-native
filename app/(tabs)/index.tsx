@@ -22,7 +22,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SlangDetailModal } from "@/components/slang-detail-modal";
 import { TabHeader } from "@/components/tab-header";
-import { Colors, CardPalette, BodyFont, ButtonFont, FontSizes, HeadingFont, SlangDisplayFont } from "@/constants/theme";
+import {
+  BodyFont,
+  ButtonFont,
+  CardPalette,
+  Colors,
+  FontSizes,
+  HeadingFont,
+  SlangDisplayFont,
+} from "@/constants/theme";
 import { quizImageMap } from "@/data/quiz-assets";
 import { quizzes, type QuizQuestion } from "@/data/quiz-data";
 import { getCategories } from "@/data/slang";
@@ -34,13 +42,12 @@ import {
   getYouTubeThumbnail,
   type YouTubeVideoEntry,
 } from "@/services/youtube-gist";
-import { getSortableTimestamp } from "@/utils/date";
 
 const ACCENT_BLUE = "#194F89"; // Australian blue
 
 // Matches slang-src/pages/feed.vue aussieQuotes (full text, no abbreviations)
 const AUSSIE_QUOTES: { text: string; author: string }[] = [
-  { text: "She'll be right, mate.", author: "Australian Proverb" },
+  { text: "She'll be right, mate.", author: "Australian Saying" },
   {
     text: "We're not here for a long time, we're here for a good time.",
     author: "Australian Saying",
@@ -94,7 +101,7 @@ const AUSSIE_QUOTES: { text: string; author: string }[] = [
     text: "Australia is a nation of 23 million people, mostly of whom live in a narrow strip of land along the coast and spend their time trying to convince the rest of the world that they live in the Outback.",
     author: "Bill Bryson",
   },
-  { text: "Tall poppies get cut down.", author: "Australian Proverb" },
+  { text: "Tall poppies get cut down.", author: "Australian Saying" },
   {
     text: "If you're not having fun, you're doing it wrong.",
     author: "Australian Saying",
@@ -222,7 +229,7 @@ export default function FeedScreen() {
           styles.previewOnboardingBanner,
           { backgroundColor: colors.tint, opacity: pressed ? 0.9 : 1 },
         ]}
-        onPress={() => router.push('/onboarding-preview')}
+        onPress={() => router.push("/onboarding-preview")}
       >
         <Text style={styles.previewOnboardingText}>Preview onboarding</Text>
       </Pressable>
@@ -246,173 +253,181 @@ export default function FeedScreen() {
         {/* Slang of the Day */}
         <View style={styles.cardWrapper}>
           <View style={[styles.card, styles.slangCard]}>
-          <Pressable
-            style={({ pressed }) => [pressed && styles.cardPressed]}
-            onPress={() => slangOfTheDay && setShowSlangModal(true)}
-          >
-            <View style={styles.cardHeader}>
-              <Ionicons name="book-outline" size={28} color="#333" />
-              <Text style={[styles.cardTitle, { color: colors.text }]}>
-                Slang of the Day
+            <Pressable
+              style={({ pressed }) => [pressed && styles.cardPressed]}
+              onPress={() => slangOfTheDay && setShowSlangModal(true)}
+            >
+              <View style={styles.cardHeader}>
+                <Ionicons name="book-outline" size={28} color="#333" />
+                <Text style={[styles.cardTitle, { color: colors.text }]}>
+                  Slang of the Day
+                </Text>
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={[styles.slangTerm, { color: ACCENT_BLUE }]}>
+                  {slangOfTheDay?.buttonTitle ?? "Loading..."}
+                </Text>
+                <Text style={[styles.slangHint, { color: colors.icon }]}>
+                  Tap to see full explanation →
+                </Text>
+              </View>
+            </Pressable>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={goToSlang}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.actionButtonText}>
+                See All Aussie Slang →
               </Text>
-            </View>
-            <View style={styles.cardContent}>
-              <Text style={[styles.slangTerm, { color: ACCENT_BLUE }]}>
-                {slangOfTheDay?.buttonTitle ?? "Loading..."}
-              </Text>
-              <Text style={[styles.slangHint, { color: colors.icon }]}>
-                Tap to see full explanation →
-              </Text>
-            </View>
-          </Pressable>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={goToSlang}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.actionButtonText}>See All Aussie Slang →</Text>
-          </TouchableOpacity>
+            </TouchableOpacity>
           </View>
         </View>
 
         {/* Video of the Day */}
         {videoOfTheDay && (
           <View style={styles.cardWrapper}>
-          <View style={[styles.card, styles.videoCard]}>
-            <Pressable
-              style={({ pressed }) => [pressed && styles.cardPressed]}
-              onPress={playVideoOfTheDay}
-            >
-              <View style={styles.cardHeader}>
-                <Ionicons name="play-circle-outline" size={28} color="#333" />
-                <Text style={[styles.cardTitle, { color: colors.text }]}>
-                  Video of the Day
-                </Text>
-              </View>
-              <View style={styles.videoCardContent}>
-                <Image
-                  source={{ uri: getYouTubeThumbnail(videoOfTheDay.youtubeId) }}
-                  style={styles.videoThumb}
-                  contentFit="cover"
-                />
-                <Text
-                  style={[styles.videoTitle, { color: colors.text }]}
-                  numberOfLines={2}
-                >
-                  {videoOfTheDay.title}
-                </Text>
-                <Text style={[styles.videoHint, { color: colors.icon }]}>
-                  Tap to watch →
-                </Text>
-              </View>
-            </Pressable>
-            <TouchableOpacity
-              style={styles.actionButton}
-              onPress={() => router.push("/(tabs)/videos")}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.actionButtonText}>See All Videos →</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={[styles.card, styles.videoCard]}>
+              <Pressable
+                style={({ pressed }) => [pressed && styles.cardPressed]}
+                onPress={playVideoOfTheDay}
+              >
+                <View style={styles.cardHeader}>
+                  <Ionicons name="play-circle-outline" size={28} color="#333" />
+                  <Text style={[styles.cardTitle, { color: colors.text }]}>
+                    Video of the Day
+                  </Text>
+                </View>
+                <View style={styles.videoCardContent}>
+                  <Image
+                    source={{
+                      uri: getYouTubeThumbnail(videoOfTheDay.youtubeId),
+                    }}
+                    style={styles.videoThumb}
+                    contentFit="cover"
+                  />
+                  <Text
+                    style={[styles.videoTitle, { color: colors.text }]}
+                    numberOfLines={2}
+                  >
+                    {videoOfTheDay.title}
+                  </Text>
+                  <Text style={[styles.videoHint, { color: colors.icon }]}>
+                    Tap to watch →
+                  </Text>
+                </View>
+              </Pressable>
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={() => router.push("/(tabs)/videos")}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.actionButtonText}>See All Videos →</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
 
         {/* Question of the Day */}
         <View style={styles.cardWrapper}>
-        <View style={[styles.card, styles.quizCard]}>
-          <View style={styles.cardHeader}>
-            <Ionicons name="help-circle-outline" size={28} color="#333" />
-            <Text style={[styles.cardTitle, { color: colors.text }]}>
-              Question of the Day
-            </Text>
-          </View>
-          {quizQuestion && (
-            <View style={styles.cardContent}>
-              <Text style={[styles.quizQuestionText, { color: colors.text }]}>
-                {quizQuestion.text}
+          <View style={[styles.card, styles.quizCard]}>
+            <View style={styles.cardHeader}>
+              <Ionicons name="help-circle-outline" size={28} color="#333" />
+              <Text style={[styles.cardTitle, { color: colors.text }]}>
+                Question of the Day
               </Text>
-              {quizQuestion.image && quizImageMap[quizQuestion.image] && (
-                <Image
-                  source={quizImageMap[quizQuestion.image]}
-                  style={styles.quizImage}
-                  contentFit="cover"
-                />
-              )}
-              <View style={styles.optionsWrap}>
-                {quizQuestion.answers.map((answer, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={[
-                      styles.optionButton,
-                      {
-                        borderColor: colors.icon + "40",
-                        backgroundColor: colors.background,
-                      },
-                      getAnswerStyle(index),
-                    ]}
-                    onPress={() => selectAnswer(index)}
-                    disabled={hasAnswered}
-                    activeOpacity={0.7}
-                  >
+            </View>
+            {quizQuestion && (
+              <View style={styles.cardContent}>
+                <Text style={[styles.quizQuestionText, { color: colors.text }]}>
+                  {quizQuestion.text}
+                </Text>
+                {quizQuestion.image && quizImageMap[quizQuestion.image] && (
+                  <Image
+                    source={quizImageMap[quizQuestion.image]}
+                    style={styles.quizImage}
+                    contentFit="cover"
+                  />
+                )}
+                <View style={styles.optionsWrap}>
+                  {quizQuestion.answers.map((answer, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={[
+                        styles.optionButton,
+                        {
+                          borderColor: colors.icon + "40",
+                          backgroundColor: colors.background,
+                        },
+                        getAnswerStyle(index),
+                      ]}
+                      onPress={() => selectAnswer(index)}
+                      disabled={hasAnswered}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.optionText,
+                          { color: colors.text },
+                          getAnswerStyle(index) === styles.optionCorrect &&
+                            styles.optionTextCorrect,
+                          getAnswerStyle(index) === styles.optionIncorrect &&
+                            styles.optionTextIncorrect,
+                        ]}
+                      >
+                        {["A", "B", "C", "D"][index]}. {answer}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+                {hasAnswered && (
+                  <View style={styles.resultWrap}>
                     <Text
                       style={[
-                        styles.optionText,
-                        { color: colors.text },
-                        getAnswerStyle(index) === styles.optionCorrect &&
-                          styles.optionTextCorrect,
-                        getAnswerStyle(index) === styles.optionIncorrect &&
-                          styles.optionTextIncorrect,
+                        styles.resultText,
+                        isCorrect ? styles.correctMsg : styles.incorrectMsg,
                       ]}
                     >
-                      {["A", "B", "C", "D"][index]}. {answer}
+                      {isCorrect
+                        ? "✓ Correct!"
+                        : `✗ Wrong! The answer was: ${quizQuestion.correctAnswer}`}
                     </Text>
-                  </TouchableOpacity>
-                ))}
+                  </View>
+                )}
               </View>
-              {hasAnswered && (
-                <View style={styles.resultWrap}>
-                  <Text
-                    style={[
-                      styles.resultText,
-                      isCorrect ? styles.correctMsg : styles.incorrectMsg,
-                    ]}
-                  >
-                    {isCorrect
-                      ? "✓ Correct!"
-                      : `✗ Wrong! The answer was: ${quizQuestion.correctAnswer}`}
-                  </Text>
-                </View>
-              )}
-            </View>
-          )}
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={goToQuiz}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.actionButtonText}>See All Quizzes →</Text>
-          </TouchableOpacity>
-        </View>
+            )}
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={goToQuiz}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.actionButtonText}>See All Quizzes →</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Aussie Quote of the Day */}
         <View style={styles.cardWrapper}>
-        <View style={[styles.card, styles.quoteCard]}>
-          <View style={styles.cardHeader}>
-            <Ionicons name="chatbox-ellipses-outline" size={28} color="#333" />
-            <Text style={[styles.cardTitle, { color: colors.text }]}>
-              Aussie Quote of the Day
-            </Text>
+          <View style={[styles.card, styles.quoteCard]}>
+            <View style={styles.cardHeader}>
+              <Ionicons
+                name="chatbox-ellipses-outline"
+                size={28}
+                color="#333"
+              />
+              <Text style={[styles.cardTitle, { color: colors.text }]}>
+                Aussie Quote of the Day
+              </Text>
+            </View>
+            <View style={styles.cardContent}>
+              <Text style={[styles.quoteText, { color: colors.text }]}>
+                {`"${aussieQuote.text}"`}
+              </Text>
+              <Text style={[styles.quoteAuthor, { color: colors.icon }]}>
+                — {aussieQuote.author}
+              </Text>
+            </View>
           </View>
-          <View style={styles.cardContent}>
-            <Text style={[styles.quoteText, { color: colors.text }]}>
-              {`"${aussieQuote.text}"`}
-            </Text>
-            <Text style={[styles.quoteAuthor, { color: colors.icon }]}>
-              — {aussieQuote.author}
-            </Text>
-          </View>
-        </View>
         </View>
       </ScrollView>
     </View>
