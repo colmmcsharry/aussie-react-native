@@ -1,3 +1,4 @@
+import * as StoreReview from "expo-store-review";
 import LottieView from "lottie-react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -234,6 +235,16 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
     timersRef.current.push(t);
     return () => clearTimeout(t);
   }, [step]);
+
+  // Auto-open native store review (stars) when testimonials step content is visible
+  useEffect(() => {
+    if (step !== "reviews" || reviewsPhase !== "content") return;
+    const t = setTimeout(async () => {
+      const available = await StoreReview.isAvailableAsync();
+      if (available) StoreReview.requestReview();
+    }, 700);
+    return () => clearTimeout(t);
+  }, [step, reviewsPhase]);
 
   // Play Lottie when step mounts
   useEffect(() => {
@@ -1034,7 +1045,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
   beginButton: {
-    marginTop: 24,
+    marginTop: 16,
     marginBottom: 20,
     width: "100%",
     alignSelf: "stretch",
