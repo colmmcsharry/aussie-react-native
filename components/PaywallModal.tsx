@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import {
   Image,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -253,6 +254,14 @@ export function PaywallModal({
                   Continue with free version
                 </Text>
               </Pressable>
+
+              {Platform.OS === "android" && (
+                <Text style={styles.androidDisclaimer}>
+                  Trial will automatically convert to paid unless cancelled at
+                  least 24 hours before end of trial. You'll get an email
+                  reminder. Cancel in the Play Store or your app settings.
+                </Text>
+              )}
             </View>
           </ScrollView>
         </View>
@@ -468,5 +477,15 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     marginBottom: 18,
     color: "#fff",
+  },
+  androidDisclaimer: {
+    fontFamily: BodyFont,
+    fontSize: 11,
+    color: "rgba(255,255,255,0.6)",
+    textAlign: "center",
+    lineHeight: 14,
+    marginTop: 16,
+    marginBottom: 24,
+    paddingHorizontal: 16,
   },
 });

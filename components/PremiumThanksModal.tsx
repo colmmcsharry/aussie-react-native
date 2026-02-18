@@ -37,7 +37,7 @@ export function PremiumThanksModal({
       <Pressable style={styles.overlay} onPress={onClose}>
         <Pressable style={styles.card} onPress={(e) => e.stopPropagation()}>
           <View style={styles.iconsRow}>
-            <PremiumCrown size={36} />
+            <PremiumCrown size={43} />
             <MaterialCommunityIcons
               name="check-decagram-outline"
               size={38}
@@ -45,7 +45,7 @@ export function PremiumThanksModal({
             />
           </View>
           <Text style={styles.text}>
-            You are on the Premium version, Thanks for supporting the app!
+            You've got the Premium version. Thanks for supporting the app!
           </Text>
           <TouchableOpacity
             style={styles.button}
