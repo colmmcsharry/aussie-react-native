@@ -354,19 +354,16 @@ export default function QuotesScreen() {
     }
   }, [selectedCategory, regionalCounties]);
 
-  // When user taps Slang tab, reset to main categories view
+  // When user taps Slang tab, reset to main categories view and refresh favourites
   useFocusEffect(
     useCallback(() => {
       setSelectedCategory(null);
       setSearchQuery("");
       setShowSearch(false);
       setShowFavsOnly(false);
+      loadFavourites().then(setFavourites);
     }, []),
   );
-
-  useEffect(() => {
-    loadFavourites().then(setFavourites);
-  }, []);
 
   const handleToggleFav = useCallback(async (id: string) => {
     const isFav = await toggleFavourite(id);

@@ -282,12 +282,9 @@ export default function FeedScreen() {
   useFocusEffect(
     useCallback(() => {
       scrollRef.current?.scrollTo({ y: 0, animated: false });
+      loadFavourites().then(setFavourites);
     }, []),
   );
-
-  useEffect(() => {
-    loadFavourites().then(setFavourites);
-  }, []);
 
   const handleToggleFav = useCallback(async (id: string) => {
     const isFav = await toggleFavourite(id);
@@ -457,7 +454,7 @@ export default function FeedScreen() {
                   {slangOfTheDay?.buttonTitle ?? "Loading..."}
                 </Text>
                 <Text style={[styles.slangHint, { color: colors.icon }]}>
-                  Tap to see full explanation →
+                  Tap to see explanation →
                 </Text>
               </View>
             </Pressable>
