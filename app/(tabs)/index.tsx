@@ -1,5 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker, {
+  DateTimePickerAndroid,
+} from "@react-native-community/datetimepicker";
 import { useFocusEffect } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
@@ -24,6 +26,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SlangDetailModal } from "@/components/slang-detail-modal";
+import { StyledAlertModal } from "@/components/StyledAlertModal";
 import { TabHeader } from "@/components/tab-header";
 import {
   BodyFont,
@@ -158,6 +161,10 @@ export default function FeedScreen() {
     d.setHours(9, 0, 0, 0);
     return d;
   });
+  const [styledAlert, setStyledAlert] = useState<{
+    title: string;
+    message: string;
+  } | null>(null);
   const scrollRef = useRef<ScrollView>(null);
   const { consumeOpenSlang } = useOpenSlangFromNotification();
 
@@ -184,7 +191,10 @@ export default function FeedScreen() {
       const id = await scheduleDailyReminder(hour, minute);
       await refreshReminderState();
       if (id) {
-        Alert.alert("Reminder set", `Daily reminder is now at ${label}.`);
+        setStyledAlert({
+          title: "Reminder set",
+          message: `Daily reminder is now at ${label}.`,
+        });
       }
     },
     [refreshReminderState],
@@ -201,11 +211,34 @@ export default function FeedScreen() {
       ]);
       return;
     }
+    if (Platform.OS === "android") {
+      getNextReminderDate().then((initialDate) => {
+        const value = initialDate ?? new Date(new Date().setHours(9, 0, 0, 0));
+        DateTimePickerAndroid.open({
+          value,
+          mode: "time",
+          onChange: (event, date) => {
+            if (event.type === "set" && date) {
+              const label = date.toLocaleTimeString([], {
+                hour: "numeric",
+                minute: "2-digit",
+              });
+              scheduleAt(date.getHours(), date.getMinutes(), label);
+              setStyledAlert({
+                title: "Reminder set",
+                message: `Daily reminder is now at ${label}.`,
+              });
+            }
+          },
+        });
+      });
+      return;
+    }
     getNextReminderDate().then((d) => {
       if (d) setPickerTime(d);
       setShowTimePicker(true);
     });
-  }, []);
+  }, [scheduleAt]);
 
   const confirmPickerTime = useCallback(async () => {
     setShowTimePicker(false);
@@ -222,15 +255,17 @@ export default function FeedScreen() {
     const id = await scheduleDailyReminder();
     if (id) {
       await refreshReminderState();
-      Alert.alert(
-        "Daily reminder on",
-        'You\'ll get a notification every day. Tap "Change time" to pick 9am, 12pm, 6pm, or another time.',
-      );
+      setStyledAlert({
+        title: "Daily reminder on",
+        message:
+          'You\'ll get a notification every day. Tap "Change time" to pick a time that suits you.',
+      });
     } else {
-      Alert.alert(
-        "Notifications off",
-        "Enable notifications in your device Settings to get daily reminders.",
-      );
+      setStyledAlert({
+        title: "Notifications off",
+        message:
+          "Enable notifications in your device Settings to get daily reminders.",
+      });
     }
   }, [refreshReminderState]);
 
@@ -386,6 +421,14 @@ export default function FeedScreen() {
           </Pressable>
         </Pressable>
       </Modal>
+      {styledAlert && (
+        <StyledAlertModal
+          visible={!!styledAlert}
+          title={styledAlert.title}
+          message={styledAlert.message}
+          onClose={() => setStyledAlert(null)}
+        />
+      )}
       <ScrollView
         ref={scrollRef}
         style={styles.scroll}
@@ -795,7 +838,7 @@ const styles = StyleSheet.create({
     fontFamily: ButtonFont,
   },
   reminderRow: {
-    marginTop: 12,
+    marginTop: 16,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -814,7 +857,7 @@ const styles = StyleSheet.create({
   reminderCta: {
     fontFamily: BodyFont,
     fontSize: FontSizes.small,
-    marginTop: 8,
+    marginTop: 12,
     textAlign: "center",
     textDecorationLine: "underline",
   },
