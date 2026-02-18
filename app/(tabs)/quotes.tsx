@@ -90,28 +90,19 @@ function SlangCard({
 
   const handlePlay = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    if (playing) {
-      stopAudio();
-      setPlaying(false);
-    } else {
-      setPlayingSlow(false);
-      setPlaying(true);
-      playAudio(entry.audioFile);
-      setTimeout(() => setPlaying(false), 1000);
-    }
-  }, [entry.audioFile, playing]);
+    setPlayingSlow(false);
+    setPlaying(true);
+    playAudio(entry.audioFile);
+    setTimeout(() => setPlaying(false), 1000);
+  }, [entry.audioFile]);
 
   const handlePlaySlow = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    if (playingSlow) {
-      stopAudio();
-      setPlayingSlow(false);
-    } else {
-      setPlayingSlow(true);
-      stopAudio();
-      playAudioSlow(entry.audioFile, () => setPlayingSlow(false));
-    }
-  }, [entry.audioFile, playingSlow]);
+    setPlaying(false);
+    setPlayingSlow(true);
+    playAudioSlow(entry.audioFile);
+    setTimeout(() => setPlayingSlow(false), 1000);
+  }, [entry.audioFile]);
 
   const handleFavPress = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
