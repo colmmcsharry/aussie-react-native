@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useFocusEffect } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
@@ -10,6 +11,8 @@ import React, {
   useState,
 } from "react";
 import {
+  Alert,
+  Modal,
   Platform,
   Pressable,
   ScrollView,
@@ -31,11 +34,17 @@ import {
   HeadingFont,
   SlangDisplayFont,
 } from "@/constants/theme";
+import { useOpenSlangFromNotification } from "@/context/OpenSlangFromNotificationContext";
 import { quizImageMap } from "@/data/quiz-assets";
 import { quizzes, type QuizQuestion } from "@/data/quiz-data";
-import { getCategories } from "@/data/slang";
+import { getCategories, getSlangOfTheDayForDate } from "@/data/slang";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { loadFavourites, toggleFavourite } from "@/services/favourites";
+import {
+  cancelDailyReminder,
+  getNextReminderDate,
+  scheduleDailyReminder,
+} from "@/services/notifications";
 import {
   fetchAussieYouTubeVideos,
   getYouTubeProxyEmbedUrl,
@@ -125,7 +134,9 @@ export default function FeedScreen() {
     [],
   );
 
-  const [slangOfTheDay] = useState(() => pickRandom(allSlang));
+  // One phrase per day: same phrase for everyone on the same calendar day
+  const slangOfTheDay =
+    allSlang.length > 0 ? getSlangOfTheDayForDate(new Date()) : null;
   const [showSlangModal, setShowSlangModal] = useState(false);
   const [favourites, setFavourites] = useState<Set<string>>(new Set());
   const [quizQuestion, setQuizQuestion] = useState<QuizQuestion | null>(() =>
@@ -139,7 +150,89 @@ export default function FeedScreen() {
   const [videoOfTheDay, setVideoOfTheDay] = useState<YouTubeVideoEntry | null>(
     null,
   );
+  const [dailyReminderOn, setDailyReminderOn] = useState(false);
+  const [nextReminderTime, setNextReminderTime] = useState<string | null>(null);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [pickerTime, setPickerTime] = useState(() => {
+    const d = new Date();
+    d.setHours(9, 0, 0, 0);
+    return d;
+  });
   const scrollRef = useRef<ScrollView>(null);
+  const { consumeOpenSlang } = useOpenSlangFromNotification();
+
+  const refreshReminderState = useCallback(async () => {
+    const next = await getNextReminderDate();
+    setDailyReminderOn(!!next);
+    setNextReminderTime(
+      next
+        ? next.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })
+        : null,
+    );
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      refreshReminderState();
+      if (consumeOpenSlang()) setShowSlangModal(true);
+    }, [refreshReminderState, consumeOpenSlang]),
+  );
+
+  const scheduleAt = useCallback(
+    async (hour: number, minute: number, label: string) => {
+      await cancelDailyReminder();
+      const id = await scheduleDailyReminder(hour, minute);
+      await refreshReminderState();
+      if (id) {
+        Alert.alert("Reminder set", `Daily reminder is now at ${label}.`);
+      }
+    },
+    [refreshReminderState],
+  );
+
+  const showChangeTimePicker = useCallback(() => {
+    if (Platform.OS === "web") {
+      Alert.alert("Change reminder time", "Pick a time", [
+        { text: "9:00 AM", onPress: () => scheduleAt(9, 0, "9:00 AM") },
+        { text: "12:00 PM", onPress: () => scheduleAt(12, 0, "12:00 PM") },
+        { text: "6:00 PM", onPress: () => scheduleAt(18, 0, "6:00 PM") },
+        { text: "7:45 PM", onPress: () => scheduleAt(19, 45, "7:45 PM") },
+        { text: "Cancel", style: "cancel" as const },
+      ]);
+      return;
+    }
+    getNextReminderDate().then((d) => {
+      if (d) setPickerTime(d);
+      setShowTimePicker(true);
+    });
+  }, []);
+
+  const confirmPickerTime = useCallback(async () => {
+    setShowTimePicker(false);
+    const hour = pickerTime.getHours();
+    const minute = pickerTime.getMinutes();
+    const label = pickerTime.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+    await scheduleAt(hour, minute, label);
+  }, [pickerTime, scheduleAt]);
+
+  const enableDailyReminder = useCallback(async () => {
+    const id = await scheduleDailyReminder();
+    if (id) {
+      await refreshReminderState();
+      Alert.alert(
+        "Daily reminder on",
+        'You\'ll get a notification every day. Tap "Change time" to pick 9am, 12pm, 6pm, or another time.',
+      );
+    } else {
+      Alert.alert(
+        "Notifications off",
+        "Enable notifications in your device Settings to get daily reminders.",
+      );
+    }
+  }, [refreshReminderState]);
 
   useEffect(() => {
     fetchAussieYouTubeVideos()
@@ -241,6 +334,58 @@ export default function FeedScreen() {
         onClose={() => setShowSlangModal(false)}
         colors={colors}
       />
+      <Modal
+        visible={showTimePicker}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowTimePicker(false)}
+      >
+        <Pressable
+          style={styles.timePickerOverlay}
+          onPress={() => setShowTimePicker(false)}
+        >
+          <Pressable
+            style={[
+              styles.timePickerCard,
+              { backgroundColor: colors.background },
+            ]}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <Text style={[styles.timePickerTitle, { color: colors.text }]}>
+              Daily reminder time
+            </Text>
+            <DateTimePicker
+              value={pickerTime}
+              mode="time"
+              onChange={(_, date) => date && setPickerTime(date)}
+              display={Platform.OS === "ios" ? "spinner" : "default"}
+            />
+            <View style={styles.timePickerActions}>
+              <TouchableOpacity
+                style={[styles.timePickerButton, styles.timePickerButtonCancel]}
+                onPress={() => setShowTimePicker(false)}
+                activeOpacity={0.8}
+              >
+                <Text
+                  style={[
+                    styles.timePickerButtonTextCancel,
+                    { color: colors.text },
+                  ]}
+                >
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.timePickerButton, styles.timePickerButtonSet]}
+                onPress={confirmPickerTime}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.timePickerButtonTextSet}>Set reminder</Text>
+              </TouchableOpacity>
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
       <ScrollView
         ref={scrollRef}
         style={styles.scroll}
@@ -281,6 +426,30 @@ export default function FeedScreen() {
                 See All Aussie Slang →
               </Text>
             </TouchableOpacity>
+            {dailyReminderOn ? (
+              <View style={styles.reminderRow}>
+                <Text style={[styles.reminderLabel, { color: colors.icon }]}>
+                  Daily reminder at {nextReminderTime ?? "…"} ✓
+                </Text>
+                <Pressable
+                  onPress={showChangeTimePicker}
+                  style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+                >
+                  <Text style={[styles.reminderChange, { color: ACCENT_BLUE }]}>
+                    Change time
+                  </Text>
+                </Pressable>
+              </View>
+            ) : (
+              <Pressable
+                onPress={enableDailyReminder}
+                style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+              >
+                <Text style={[styles.reminderCta, { color: ACCENT_BLUE }]}>
+                  Remind me daily
+                </Text>
+              </Pressable>
+            )}
           </View>
         </View>
 
@@ -624,5 +793,75 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.body,
     fontWeight: "700",
     fontFamily: ButtonFont,
+  },
+  reminderRow: {
+    marginTop: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  reminderLabel: {
+    fontFamily: BodyFont,
+    fontSize: FontSizes.small,
+    textAlign: "center",
+  },
+  reminderChange: {
+    fontFamily: BodyFont,
+    fontSize: FontSizes.small,
+    textDecorationLine: "underline",
+  },
+  reminderCta: {
+    fontFamily: BodyFont,
+    fontSize: FontSizes.small,
+    marginTop: 8,
+    textAlign: "center",
+    textDecorationLine: "underline",
+  },
+  timePickerOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 24,
+  },
+  timePickerCard: {
+    borderRadius: 16,
+    padding: 24,
+    width: "100%",
+    maxWidth: 320,
+    alignItems: "center",
+  },
+  timePickerTitle: {
+    fontFamily: HeadingFont,
+    fontSize: 18,
+    marginBottom: 16,
+  },
+  timePickerActions: {
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 16,
+    width: "100%",
+    justifyContent: "center",
+  },
+  timePickerButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 10,
+  },
+  timePickerButtonCancel: {
+    backgroundColor: "transparent",
+  },
+  timePickerButtonSet: {
+    backgroundColor: ACCENT_BLUE,
+  },
+  timePickerButtonTextCancel: {
+    fontFamily: ButtonFont,
+    fontSize: 16,
+  },
+  timePickerButtonTextSet: {
+    fontFamily: ButtonFont,
+    fontSize: 16,
+    color: "#fff",
   },
 });

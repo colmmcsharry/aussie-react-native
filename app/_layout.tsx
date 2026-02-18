@@ -11,7 +11,9 @@ import ConfettiCannon from "react-native-confetti-cannon";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
+import { NotificationResponseHandler } from "@/components/NotificationResponseHandler";
 import { ConfettiProvider } from "@/context/ConfettiContext";
+import { OpenSlangFromNotificationProvider } from "@/context/OpenSlangFromNotificationContext";
 import { PaywallProvider } from "@/context/PaywallContext";
 import { FredokaOne_400Regular } from "@expo-google-fonts/fredoka-one";
 import { Nunito_500Medium } from "@expo-google-fonts/nunito/500Medium";
@@ -228,6 +230,8 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <ConfettiProvider triggerConfetti={triggerConfetti}>
+        <OpenSlangFromNotificationProvider>
+          <NotificationResponseHandler />
         <PaywallProvider openPaywall={openPaywall} isPremium={isPremium} refreshPremiumState={refreshPremiumState} openPremiumThanksModal={openPremiumThanksModal}>
           <PremiumThanksModal visible={showPremiumThanks} onClose={() => setShowPremiumThanks(false)} />
           {showConfetti && (
@@ -291,6 +295,7 @@ export default function RootLayout() {
             />
           </Stack>
         </PaywallProvider>
+        </OpenSlangFromNotificationProvider>
         </ConfettiProvider>
         <StatusBar style="auto" />
       </ThemeProvider>

@@ -65,6 +65,21 @@ export function getAllQuotes(): SlangEntry[] {
   return categories.flatMap((c) => c.quotes);
 }
 
+/**
+ * Deterministic "one phrase per day" for marketing: same date = same phrase for everyone.
+ * Uses a simple date seed so the phrase is stable per calendar day.
+ */
+export function getSlangOfTheDayForDate(date: Date): SlangEntry {
+  const all = getAllQuotes();
+  if (all.length === 0) throw new Error("No slang entries");
+  const y = date.getFullYear();
+  const m = date.getMonth();
+  const d = date.getDate();
+  const seed = y * 10000 + m * 100 + d;
+  const index = Math.abs((seed * 2654435761) >>> 0) % all.length;
+  return all[index];
+}
+
 export function searchQuotes(query: string): SlangEntry[] {
   const q = query.toLowerCase().trim();
   if (!q) return [];
