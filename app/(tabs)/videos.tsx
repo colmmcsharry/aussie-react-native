@@ -11,7 +11,7 @@ import {
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import { BodyFont, ButtonFont, CardPalette, ContentBg, HeadingFont } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
@@ -34,6 +34,7 @@ import {
   groupVimeoVideosByTeacher,
   type VimeoVideo,
 } from '@/services/vimeo';
+import { PremiumCrown } from '@/components/PremiumCrown';
 import { usePaywall } from '@/context/PaywallContext';
 import { teachers, TEACHER_KEYS, PREMIUM_TEACHER_KEYS } from '@/data/teachers';
 import { getSortableTimestamp } from '@/utils/date';
@@ -149,7 +150,7 @@ export default function VideosScreen() {
     [router]
   );
 
-  const { openPaywall } = usePaywall();
+  const { openPaywall, isPremium } = usePaywall();
   const openLink = useCallback((url: string) => {
     Linking.openURL(url);
   }, []);
@@ -189,10 +190,11 @@ export default function VideosScreen() {
       const duration = formatDuration(video.duration);
       const teacherKey = getTeacherKeyFromVideo(video);
       const isPremiumVideo = teacherKey != null && PREMIUM_TEACHER_KEYS.includes(teacherKey);
+      const showLock = isPremiumVideo && !isPremium;
       return (
         <View style={styles.videoCard}>
           <Pressable
-            onPress={() => (isPremiumVideo ? openPaywall() : handleVideoPress(video))}
+            onPress={() => (showLock ? openPaywall() : handleVideoPress(video))}
             style={({ pressed }) => [styles.row, { opacity: pressed ? 0.6 : 1 }]}
           >
             <View style={styles.listThumbWrap}>
@@ -205,7 +207,7 @@ export default function VideosScreen() {
               <View style={styles.durationBadge}>
                 <ThemedText style={styles.durationText}>{duration}</ThemedText>
               </View>
-              {isPremiumVideo && (
+              {showLock && (
                 <View style={styles.premiumLockOverlay}>
                   <Ionicons name="lock-closed" size={72} color="rgba(0,0,0,0.6)" />
                 </View>
@@ -218,9 +220,9 @@ export default function VideosScreen() {
                   {formatUploadDate(video.created_time)}
                 </ThemedText>
               ) : null}
-              {isPremiumVideo && (
+              {showLock && (
                 <View style={styles.premiumCrownBadge}>
-                  <MaterialCommunityIcons name="crown" size={22} color="#F4B744" />
+                  <PremiumCrown size={22} />
                 </View>
               )}
             </View>
@@ -228,7 +230,7 @@ export default function VideosScreen() {
         </View>
       );
     },
-    [subtextColor, handleYouTubePress, handleVideoPress, openPaywall]
+    [subtextColor, handleYouTubePress, handleVideoPress, openPaywall, isPremium]
   );
 
   if (loading) {

@@ -1,4 +1,4 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { PremiumCrown } from "@/components/PremiumCrown";
 import { TabHeader } from "@/components/tab-header";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -84,7 +85,7 @@ export default function TeacherDetailScreen() {
     return list;
   }, [vimeoVideos, profile?.youtubeVideos]);
 
-  const { openPaywall } = usePaywall();
+  const { openPaywall, isPremium } = usePaywall();
   const openLink = useCallback((url: string) => {
     Linking.openURL(url);
   }, []);
@@ -207,6 +208,7 @@ export default function TeacherDetailScreen() {
               const duration = formatDuration(video.duration);
               const isPremiumTeacher =
                 key != null && PREMIUM_TEACHER_KEYS.includes(key);
+              const showLock = isPremiumTeacher && !isPremium;
               return (
                 <Pressable
                   key={video.uri}
@@ -215,7 +217,7 @@ export default function TeacherDetailScreen() {
                     pressed && { opacity: 0.7 },
                   ]}
                   onPress={() =>
-                    isPremiumTeacher ? openPaywall() : handlePressVimeo(video)
+                    showLock ? openPaywall() : handlePressVimeo(video)
                   }
                 >
                   <View style={styles.listThumbWrap}>
@@ -229,7 +231,7 @@ export default function TeacherDetailScreen() {
                         {duration}
                       </ThemedText>
                     </View>
-                    {isPremiumTeacher && (
+                    {showLock && (
                       <View style={styles.premiumLockOverlay}>
                         <Ionicons
                           name="lock-closed"
@@ -247,13 +249,9 @@ export default function TeacherDetailScreen() {
                       {video.stats.plays}{" "}
                       {video.stats.plays === 1 ? "view" : "views"}
                     </ThemedText>
-                    {isPremiumTeacher && (
+                    {showLock && (
                       <View style={styles.premiumCrownBadge}>
-                        <MaterialCommunityIcons
-                          name="crown"
-                          size={22}
-                          color="#F4B744"
-                        />
+                        <PremiumCrown size={22} />
                       </View>
                     )}
                   </View>

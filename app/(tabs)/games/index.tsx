@@ -2,13 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 
+import { PremiumCrown } from '@/components/PremiumCrown';
 import { usePaywall } from '@/context/PaywallContext';
 import { BodyFont, ContentBg, HeadingFont } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
-import { getPremiumState } from '@/services/revenuecat';
 
 const GAME_IMAGES = {
   conversation: require('@/assets/games/conversations.png'),
@@ -37,10 +36,9 @@ const GAMES = [
 export default function GamesScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { openPaywall } = usePaywall();
+  const { openPaywall, isPremium } = usePaywall();
 
-  const handleGamePress = async (gameId: string) => {
-    const { isPremium } = await getPremiumState();
+  const handleGamePress = (gameId: string) => {
     if (!isPremium) {
       openPaywall();
       return;
@@ -69,12 +67,7 @@ export default function GamesScreen() {
               <Image source={GAME_IMAGES[game.id]} style={styles.gameImage} contentFit="cover" />
             </View>
             <View style={styles.gameTextWrap}>
-              <MaterialCommunityIcons
-                name="crown"
-                size={24}
-                color="#F4B744"
-                style={styles.gameCrown}
-              />
+              <PremiumCrown size={24} style={styles.gameCrown} />
               <Text style={styles.gameTitle}>{game.title}</Text>
               <Text style={styles.gameDescription}>{game.description}</Text>
             </View>

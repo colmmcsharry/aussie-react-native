@@ -1,4 +1,4 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import {
   Image,
@@ -15,6 +15,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import { PremiumCrown } from "@/components/PremiumCrown";
 import { BodyFont, ButtonFont, HeadingFont, mainAussieBlue } from "@/constants/theme";
 
 const PAYWALL_GREEN = "#78C57C";
@@ -100,12 +101,7 @@ export function PaywallModal({
               Try a week Free Trial of
             </Text>
             <View style={styles.premiumBlock}>
-              <MaterialCommunityIcons
-                name="crown"
-                size={36}
-                color="#F4B744"
-                style={styles.premiumCrown}
-              />
+              <PremiumCrown size={36} style={styles.premiumCrown} />
               <Text style={styles.premiumTitle}>
                 Premium
               </Text>
@@ -120,11 +116,7 @@ export function PaywallModal({
               <View style={styles.tableRow}>
                 <View style={styles.tableCell} />
                 <View style={styles.tableCellIcon}>
-                  <MaterialCommunityIcons
-                    name="crown"
-                    size={20}
-                    color="#F4B744"
-                  />
+                  <PremiumCrown size={20} />
                 </View>
                 <View style={styles.tableCellIcon}>
                   <Text style={styles.tableHeader}>

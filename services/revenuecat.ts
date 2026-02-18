@@ -8,14 +8,21 @@
  *    - Weekly subscription: e.g. $0.99 AUD/week (identifier like "aussie_weekly" or use RevenueCat's default weekly).
  *    - Lifetime: e.g. $29.99 AUD one-time (identifier like "aussie_lifetime" or use default lifetime).
  * 3. In RevenueCat dashboard → Products, add these product IDs and attach to the default Offering.
- * 4. Replace the API keys below with your RevenueCat iOS and Android API keys.
+ * 4. For production: use platform-specific API keys (Project → API keys).
+ *    For testing without store setup: use the Test Store API key for both (Apps and providers → Test configuration).
  */
 import Constants from "expo-constants";
 import { Platform } from "react-native";
 
-// Replace with your RevenueCat API keys from dashboard (Project → API keys)
+/** Test Store key – one key for iOS and Android. Never use in production/release builds. */
+const REVENUECAT_TEST_STORE_API_KEY = "test_gpAvCaoiAbataLnyLICagJBGBZn";
+
+// Production keys (replace before release; then use USE_TEST_STORE = false)
 const REVENUECAT_API_KEY_IOS = "appl_YOUR_IOS_API_KEY";
 const REVENUECAT_API_KEY_ANDROID = "goog_YOUR_ANDROID_API_KEY";
+
+/** Set to true to use Test Store for dev/testing. Must be false for App Store / Play Store builds. */
+const USE_TEST_STORE = true;
 
 export type PremiumState = {
   isPremium: boolean;
@@ -30,27 +37,41 @@ let configured = false;
 async function getPurchases(): Promise<
   typeof import("react-native-purchases") | null
 > {
-  // Skip in Expo Go – react-native-purchases uses native code not included in Expo Go.
-  // This prevents "could not connect" / "unknown error" when opening the app in Expo Go.
-  const executionEnvironment = Constants.executionEnvironment;
-  if (executionEnvironment === "storeClient") return null;
   if (Platform.OS !== "ios" && Platform.OS !== "android") return null;
   try {
-    return require("react-native-purchases").default;
-  } catch {
+    const Purchases = require("react-native-purchases").default;
+    return Purchases;
+  } catch (e) {
+    // Expo Go doesn't include the native module; dev/production builds do.
+    const env = Constants.executionEnvironment;
+    if (__DEV__ && env !== "storeClient") {
+      console.warn(
+        "[RevenueCat] Native module not available:",
+        e instanceof Error ? e.message : e,
+        "| executionEnvironment:",
+        env
+      );
+    }
     return null;
   }
+}
+
+/** True if the RevenueCat SDK is available (e.g. in a dev build). False in Expo Go. */
+export async function isPurchasesAvailable(): Promise<boolean> {
+  const Purchases = await getPurchases();
+  return Purchases != null;
 }
 
 export async function configureRevenueCat(): Promise<void> {
   const Purchases = await getPurchases();
   if (!Purchases || configured) return;
   try {
-    const apiKey =
-      Platform.OS === "ios"
+    const apiKey = USE_TEST_STORE
+      ? REVENUECAT_TEST_STORE_API_KEY
+      : Platform.OS === "ios"
         ? REVENUECAT_API_KEY_IOS
         : REVENUECAT_API_KEY_ANDROID;
-    if (apiKey.startsWith("appl_YOUR_") || apiKey.startsWith("goog_YOUR_"))
+    if (!USE_TEST_STORE && (apiKey.startsWith("appl_YOUR_") || apiKey.startsWith("goog_YOUR_")))
       return;
     Purchases.configure({ apiKey });
     configured = true;

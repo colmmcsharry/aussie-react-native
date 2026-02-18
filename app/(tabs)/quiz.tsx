@@ -10,8 +10,9 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
+import { PremiumCrown } from '@/components/PremiumCrown';
 import { usePaywall } from '@/context/PaywallContext';
 import { TabHeader } from '@/components/tab-header';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -38,7 +39,7 @@ export default function QuizMenuScreen() {
   const colors = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { openPaywall } = usePaywall();
+  const { openPaywall, isPremium } = usePaywall();
 
   const [scores, setScores] = useState<Record<number, number>>({});
   const scrollRef = useRef<ScrollView>(null);
@@ -133,18 +134,50 @@ export default function QuizMenuScreen() {
 
         {/* Premium Only section */}
         <View style={styles.premiumSection}>
-          <MaterialCommunityIcons name="crown" size={36} color="#F4B744" />
+          <PremiumCrown size={36} />
           <Text style={[styles.premiumLabel, { color: colors.text }]}>
             Premium Only
           </Text>
         </View>
 
-        {/* Locked premium quizzes */}
+        {/* Premium quizzes: unlocked when isPremium, otherwise locked */}
         <View style={styles.quizGrid}>
           {premiumQuizzes.map((quiz, index) => {
             const score = scores[quiz.id];
             const hasScore = score !== undefined;
             const bgColor = LOCKED_QUIZ_COLORS[index % LOCKED_QUIZ_COLORS.length];
+
+            if (isPremium) {
+              return (
+                <TouchableOpacity
+                  key={quiz.id}
+                  style={[styles.quizButton, { backgroundColor: bgColor }]}
+                  onPress={() => router.push(`/quiz/${quiz.id}` as any)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[styles.quizName, { color: colors.text }]}>
+                    {quiz.name}
+                  </Text>
+                  {hasScore ? (
+                    <View
+                      style={[
+                        styles.scoreBadge,
+                        { backgroundColor: getScoreColor(score) },
+                      ]}
+                    >
+                      <Text style={styles.scoreText}>
+                        {score}/{quiz.questions.length}
+                      </Text>
+                    </View>
+                  ) : (
+                    <View style={styles.scoreBadgePlaceholder} />
+                  )}
+                  <Text style={[styles.quizCount, { color: colors.icon }]}>
+                    {quiz.questions.length} questions
+                  </Text>
+                </TouchableOpacity>
+              );
+            }
 
             return (
               <TouchableOpacity
@@ -156,7 +189,6 @@ export default function QuizMenuScreen() {
                 <Text style={[styles.quizName, styles.quizNameLocked, { color: colors.icon }]}>
                   {quiz.name}
                 </Text>
-
                 {hasScore ? (
                   <View
                     style={[
@@ -171,11 +203,9 @@ export default function QuizMenuScreen() {
                 ) : (
                   <View style={styles.scoreBadgePlaceholder} />
                 )}
-
                 <Text style={[styles.quizCount, styles.quizCountLocked, { color: colors.icon }]}>
                   {quiz.questions.length} questions
                 </Text>
-
                 <Ionicons name="lock-closed" size={20} color={colors.icon} style={styles.lockIcon} />
               </TouchableOpacity>
             );

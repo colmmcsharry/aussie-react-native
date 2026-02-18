@@ -6,6 +6,7 @@ import {
 import { Stack, useGlobalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useEffect, useState } from "react";
+import { Alert } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
@@ -24,6 +25,7 @@ import { setHasSeenPaywallOnce } from "@/services/paywall";
 import {
   configureRevenueCat,
   getPremiumState,
+  isPurchasesAvailable,
   purchaseLifetime,
   purchaseWeekly,
   restorePurchases,
@@ -68,8 +70,22 @@ export default function RootLayout() {
   const [paywallLifetimePrice, setPaywallLifetimePrice] = useState("$30.00");
   const [paywallLoadingWeekly, setPaywallLoadingWeekly] = useState(false);
   const [paywallLoadingLifetime, setPaywallLoadingLifetime] = useState(false);
+  const [isPremium, setIsPremium] = useState(false);
   // On web, read URL on init so we can show onboarding on first paint when testing
   const [forceOnboarding, setForceOnboarding] = useState(getForceOnboarding);
+
+  const refreshPremiumState = useCallback(async () => {
+    try {
+      const s = await getPremiumState();
+      setIsPremium(s.isPremium);
+    } catch {
+      setIsPremium(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshPremiumState();
+  }, [refreshPremiumState]);
 
   useEffect(() => {
     setForceOnboarding(
@@ -116,7 +132,16 @@ export default function RootLayout() {
     setPaywallLoadingWeekly(true);
     try {
       const { success } = await purchaseWeekly();
-      if (success) handlePaywallClose();
+      if (success) {
+        await refreshPremiumState();
+        Alert.alert("Purchase successful", "You now have access to all Premium content.");
+        handlePaywallClose();
+      } else if (!(await isPurchasesAvailable())) {
+        Alert.alert(
+          "Purchases unavailable",
+          "In-app purchases need a development build. In Expo Go the RevenueCat SDK isn't available.\n\nRun 'npx expo run:ios' or 'npx expo run:android' to create a dev build, then test purchases with the Test Store."
+        );
+      }
     } finally {
       setPaywallLoadingWeekly(false);
     }
@@ -126,15 +151,27 @@ export default function RootLayout() {
     setPaywallLoadingLifetime(true);
     try {
       const { success } = await purchaseLifetime();
-      if (success) handlePaywallClose();
+      if (success) {
+        await refreshPremiumState();
+        Alert.alert("Purchase successful", "You now have access to all Premium content.");
+        handlePaywallClose();
+      } else if (!(await isPurchasesAvailable())) {
+        Alert.alert(
+          "Purchases unavailable",
+          "In-app purchases need a development build. In Expo Go the RevenueCat SDK isn't available.\n\nRun 'npx expo run:ios' or 'npx expo run:android' to create a dev build, then test purchases with the Test Store."
+        );
+      }
     } finally {
       setPaywallLoadingLifetime(false);
     }
   };
 
   const handleRestore = async () => {
-    const { isPremium } = await restorePurchases();
-    if (isPremium) handlePaywallClose();
+    const { isPremium: restored } = await restorePurchases();
+    if (restored) {
+      await refreshPremiumState();
+      handlePaywallClose();
+    }
   };
 
   const openPaywall = useCallback(() => setShowPaywall(true), []);
@@ -171,7 +208,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <PaywallProvider openPaywall={openPaywall}>
+        <PaywallProvider openPaywall={openPaywall} isPremium={isPremium} refreshPremiumState={refreshPremiumState}>
           <PaywallModal
             visible={showPaywall}
             onClose={handlePaywallClose}

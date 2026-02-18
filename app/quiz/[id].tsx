@@ -25,9 +25,10 @@ const PROGRESS_LAYOUT_ANIM = {
 };
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { createAudioPlayer, AudioPlayer } from 'expo-audio';
 
+import { PremiumCrown } from '@/components/PremiumCrown';
 import { usePaywall } from '@/context/PaywallContext';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { BodyFont, ButtonFont, Colors, HeadingFont } from '@/constants/theme';
@@ -366,7 +367,7 @@ export default function QuizGameplay() {
           {quiz.name}
         </Text>
         <Pressable onPress={openPaywall} hitSlop={12}>
-          <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
+          <PremiumCrown size={26} />
         </Pressable>
       </View>
 

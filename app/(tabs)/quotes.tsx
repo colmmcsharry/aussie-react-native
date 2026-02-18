@@ -4,6 +4,7 @@ import { Image } from "expo-image";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FlatList,
+  Modal,
   Platform,
   Pressable,
   ScrollView,
@@ -26,6 +27,7 @@ import {
   mainAussieBlue,
   SlangDisplayFont,
 } from "@/constants/theme";
+import { PremiumCrown } from "@/components/PremiumCrown";
 import { usePaywall } from "@/context/PaywallContext";
 import { slangImageMap } from "@/data/image-map";
 import {
@@ -38,7 +40,6 @@ import {
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { playAudio, playAudioSlow, stopAudio } from "@/services/audio";
 import { loadFavourites, toggleFavourite } from "@/services/favourites";
-import { getPremiumState } from "@/services/revenuecat";
 
 const ACCENT_BLUE = "#194F89"; // Australian blue
 const GRID_GAP = 12;
@@ -261,7 +262,6 @@ function CategoryCell({
   labelFontSize: number;
 }) {
   const iconSource = slangImageMap[category.icon];
-  const isPremium = category.name === "Rude" || category.name === "sex";
   return (
     <TouchableOpacity
       style={[
@@ -275,11 +275,6 @@ function CategoryCell({
       onPress={onPress}
       activeOpacity={0.7}
     >
-      {isPremium && (
-        <View style={styles.gridCellPremiumCrown} pointerEvents="none">
-          <MaterialCommunityIcons name="crown" size={24} color="#F4B744" />
-        </View>
-      )}
       <View style={styles.gridCellInner} pointerEvents="none">
         {iconSource && (
           <Image
@@ -308,7 +303,7 @@ export default function QuotesScreen() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? "light"];
   const insets = useSafeAreaInsets();
-  const { openPaywall } = usePaywall();
+  const { openPaywall, isPremium } = usePaywall();
   const { width: screenWidth } = useWindowDimensions();
 
   const [gridContainerWidth, setGridContainerWidth] = useState(0);
@@ -336,6 +331,7 @@ export default function QuotesScreen() {
   const categories = useMemo(() => getCategories(), []);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showPremiumThanksCard, setShowPremiumThanksCard] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [favourites, setFavourites] = useState<Set<string>>(new Set());
   const [showFavsOnly, setShowFavsOnly] = useState(false);
@@ -385,19 +381,16 @@ export default function QuotesScreen() {
   }, []);
 
   const handleCategoryPress = useCallback(
-    async (categoryName: string) => {
+    (categoryName: string) => {
       const isPremiumCategory =
         categoryName === "Rude" || categoryName === "sex";
-      if (isPremiumCategory) {
-        const { isPremium } = await getPremiumState();
-        if (!isPremium) {
-          openPaywall();
-          return;
-        }
+      if (isPremiumCategory && !isPremium) {
+        openPaywall();
+        return;
       }
       setSelectedCategory(categoryName);
     },
-    [openPaywall],
+    [openPaywall, isPremium],
   );
 
   const currentQuotes = useMemo(() => {
@@ -495,11 +488,13 @@ export default function QuotesScreen() {
           </View>
           <View style={styles.headerRight}>
             <TouchableOpacity
-              onPress={openPaywall}
+              onPress={() =>
+                isPremium ? setShowPremiumThanksCard(true) : openPaywall()
+              }
               hitSlop={12}
               activeOpacity={0.7}
             >
-              <MaterialCommunityIcons name="crown" size={26} color="#F4B744" />
+              <PremiumCrown size={26} />
             </TouchableOpacity>
           </View>
           <View style={styles.headerTitleWrap} pointerEvents="none">
@@ -532,6 +527,31 @@ export default function QuotesScreen() {
           </View>
         )}
       </View>
+
+      <Modal
+        visible={showPremiumThanksCard}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowPremiumThanksCard(false)}
+      >
+        <Pressable
+          style={styles.premiumThanksOverlay}
+          onPress={() => setShowPremiumThanksCard(false)}
+        >
+          <Pressable style={styles.premiumThanksCard} onPress={(e) => e.stopPropagation()}>
+            <Text style={styles.premiumThanksText}>
+              You are on the Premium version, thanks for supporting the app!
+            </Text>
+            <TouchableOpacity
+              style={styles.premiumThanksBtn}
+              onPress={() => setShowPremiumThanksCard(false)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.premiumThanksBtnText}>OK</Text>
+            </TouchableOpacity>
+          </Pressable>
+        </Pressable>
+      </Modal>
 
       {/* Content: grid or list */}
       <View
@@ -656,12 +676,7 @@ export default function QuotesScreen() {
                   onPress={openPaywall}
                   activeOpacity={0.8}
                 >
-                  <MaterialCommunityIcons
-                    name="crown"
-                    size={28}
-                    color="#F4B744"
-                    style={styles.premiumCardIcon}
-                  />
+                  <PremiumCrown size={28} style={styles.premiumCardIcon} />
                   <Text style={styles.premiumCardText}>
                     Get more with Premium
                   </Text>
@@ -719,6 +734,40 @@ const styles = StyleSheet.create({
     fontFamily: HeadingFont,
     color: "#fff",
     textAlign: "center",
+  },
+  premiumThanksOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 24,
+  },
+  premiumThanksCard: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 24,
+    maxWidth: 320,
+    minWidth: 280,
+  },
+  premiumThanksText: {
+    fontFamily: BodyFont,
+    fontSize: 16,
+    color: "#333",
+    textAlign: "center",
+    lineHeight: 24,
+    marginBottom: 20,
+  },
+  premiumThanksBtn: {
+    backgroundColor: ACCENT_BLUE,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 10,
+    alignSelf: "center",
+  },
+  premiumThanksBtnText: {
+    fontFamily: ButtonFont,
+    fontSize: 16,
+    color: "#fff",
   },
   headerBtn: {
     padding: 6,
@@ -779,14 +828,6 @@ const styles = StyleSheet.create({
       },
       android: { elevation: 0 },
     }),
-  },
-  gridCellPremiumCrown: {
-    position: "absolute",
-    top: -4,
-    left: 0,
-    right: 0,
-    alignItems: "center",
-    zIndex: 1,
   },
   gridCellInner: {
     position: "absolute",
