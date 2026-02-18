@@ -4,7 +4,6 @@ import { Image } from "expo-image";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FlatList,
-  Modal,
   Platform,
   Pressable,
   ScrollView,
@@ -18,6 +17,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { PremiumCrown } from "@/components/PremiumCrown";
+import { PremiumHeaderBadge } from "@/components/PremiumHeaderBadge";
 import {
   BodyFont,
   ButtonFont,
@@ -331,7 +331,6 @@ export default function QuotesScreen() {
   const categories = useMemo(() => getCategories(), []);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showPremiumThanksCard, setShowPremiumThanksCard] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [favourites, setFavourites] = useState<Set<string>>(new Set());
   const [showFavsOnly, setShowFavsOnly] = useState(false);
@@ -487,15 +486,7 @@ export default function QuotesScreen() {
             )}
           </View>
           <View style={styles.headerRight}>
-            <TouchableOpacity
-              onPress={() =>
-                isPremium ? setShowPremiumThanksCard(true) : openPaywall()
-              }
-              hitSlop={12}
-              activeOpacity={0.7}
-            >
-              <PremiumCrown size={26} />
-            </TouchableOpacity>
+            <PremiumHeaderBadge size={26} />
           </View>
           <View style={styles.headerTitleWrap} pointerEvents="none">
             <Text style={styles.headerTitle} numberOfLines={1}>
@@ -527,34 +518,6 @@ export default function QuotesScreen() {
           </View>
         )}
       </View>
-
-      <Modal
-        visible={showPremiumThanksCard}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowPremiumThanksCard(false)}
-      >
-        <Pressable
-          style={styles.premiumThanksOverlay}
-          onPress={() => setShowPremiumThanksCard(false)}
-        >
-          <Pressable
-            style={styles.premiumThanksCard}
-            onPress={(e) => e.stopPropagation()}
-          >
-            <Text style={styles.premiumThanksText}>
-              You are on the Premium version, Thanks for supporting the app!
-            </Text>
-            <TouchableOpacity
-              style={styles.premiumThanksBtn}
-              onPress={() => setShowPremiumThanksCard(false)}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.premiumThanksBtnText}>OK</Text>
-            </TouchableOpacity>
-          </Pressable>
-        </Pressable>
-      </Modal>
 
       {/* Content: grid or list */}
       <View
@@ -737,40 +700,6 @@ const styles = StyleSheet.create({
     fontFamily: HeadingFont,
     color: "#fff",
     textAlign: "center",
-  },
-  premiumThanksOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 24,
-  },
-  premiumThanksCard: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 24,
-    maxWidth: 320,
-    minWidth: 280,
-  },
-  premiumThanksText: {
-    fontFamily: BodyFont,
-    fontSize: 16,
-    color: "#333",
-    textAlign: "center",
-    lineHeight: 24,
-    marginBottom: 20,
-  },
-  premiumThanksBtn: {
-    backgroundColor: ACCENT_BLUE,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 10,
-    alignSelf: "center",
-  },
-  premiumThanksBtnText: {
-    fontFamily: ButtonFont,
-    fontSize: 16,
-    color: "#fff",
   },
   headerBtn: {
     padding: 6,

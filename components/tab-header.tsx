@@ -1,14 +1,11 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { PremiumCrown } from "@/components/PremiumCrown";
+import { PremiumHeaderBadge } from "@/components/PremiumHeaderBadge";
 import { HeadingFont } from "@/constants/theme";
-import { usePaywall } from "@/context/PaywallContext";
 
 const ACCENT_BLUE = "#194F89"; // Australian blue
-const CROWN_GOLD = "#F4B744";
 
 type TabHeaderProps = {
   title: string;
@@ -18,7 +15,6 @@ type TabHeaderProps = {
 
 export function TabHeader({ title, left, right }: TabHeaderProps) {
   const insets = useSafeAreaInsets();
-  const { openPaywall, isPremium } = usePaywall();
 
   return (
     <View
@@ -30,22 +26,7 @@ export function TabHeader({ title, left, right }: TabHeaderProps) {
       <View style={styles.headerRow}>
         <View style={styles.headerLeftSlot}>{left ?? null}</View>
         <View style={styles.headerRight}>
-          {right ?? (
-            <View style={styles.crownWrap}>
-              {isPremium ? (
-                <MaterialCommunityIcons
-                  name="check-decagram-outline"
-                  size={28}
-                  color={CROWN_GOLD}
-                />
-              ) : (
-                <>
-                  <PremiumCrown size={26} />
-                  <Pressable onPress={openPaywall} style={StyleSheet.absoluteFill} hitSlop={12} />
-                </>
-              )}
-            </View>
-          )}
+          {right ?? <PremiumHeaderBadge size={26} />}
         </View>
         <View style={styles.headerTitleWrap} pointerEvents="none">
           <Text style={styles.headerTitle} numberOfLines={1}>
@@ -83,11 +64,6 @@ const styles = StyleSheet.create({
     width: 80,
     minWidth: 80,
     alignItems: "flex-end",
-  },
-  crownWrap: {
-    position: "relative",
-    flexDirection: "row",
-    alignItems: "center",
   },
   headerTitleWrap: {
     position: "absolute",

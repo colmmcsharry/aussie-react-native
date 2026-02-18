@@ -19,6 +19,7 @@ import { useFonts } from "expo-font";
 
 import { OnboardingScreen } from "@/components/OnboardingScreen";
 import { PaywallModal } from "@/components/PaywallModal";
+import { PremiumThanksModal } from "@/components/PremiumThanksModal";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { getHasSeenOnboarding } from "@/services/onboarding";
 import { setHasSeenPaywallOnce } from "@/services/paywall";
@@ -71,6 +72,7 @@ export default function RootLayout() {
   const [paywallLoadingWeekly, setPaywallLoadingWeekly] = useState(false);
   const [paywallLoadingLifetime, setPaywallLoadingLifetime] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
+  const [showPremiumThanks, setShowPremiumThanks] = useState(false);
   // On web, read URL on init so we can show onboarding on first paint when testing
   const [forceOnboarding, setForceOnboarding] = useState(getForceOnboarding);
 
@@ -180,6 +182,8 @@ export default function RootLayout() {
     setShowPaywall(true);
   }, [isPremium]);
 
+  const openPremiumThanksModal = useCallback(() => setShowPremiumThanks(true), []);
+
   if (!fontsLoaded) {
     return null;
   }
@@ -212,7 +216,8 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <PaywallProvider openPaywall={openPaywall} isPremium={isPremium} refreshPremiumState={refreshPremiumState}>
+        <PaywallProvider openPaywall={openPaywall} isPremium={isPremium} refreshPremiumState={refreshPremiumState} openPremiumThanksModal={openPremiumThanksModal}>
+          <PremiumThanksModal visible={showPremiumThanks} onClose={() => setShowPremiumThanks(false)} />
           <PaywallModal
             visible={showPaywall}
             onClose={handlePaywallClose}
