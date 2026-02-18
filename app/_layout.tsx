@@ -5,8 +5,9 @@ import {
 } from "@react-navigation/native";
 import { Stack, useGlobalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useCallback, useEffect, useState } from "react";
-import { Alert } from "react-native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Alert, Dimensions, View } from "react-native";
+import ConfettiCannon from "react-native-confetti-cannon";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
@@ -73,6 +74,8 @@ export default function RootLayout() {
   const [paywallLoadingLifetime, setPaywallLoadingLifetime] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
   const [showPremiumThanks, setShowPremiumThanks] = useState(false);
+  const confettiRef = useRef<ConfettiCannon>(null);
+  const { width: winWidth, height: winHeight } = Dimensions.get("window");
   // On web, read URL on init so we can show onboarding on first paint when testing
   const [forceOnboarding, setForceOnboarding] = useState(getForceOnboarding);
 
@@ -130,14 +133,20 @@ export default function RootLayout() {
     setShowPaywall(false);
   };
 
+  const celebrateUnlock = useCallback(() => {
+    setHasSeenPaywallOnce();
+    setShowPaywall(false);
+    confettiRef.current?.start();
+    setShowPremiumThanks(true);
+  }, []);
+
   const handlePurchaseWeekly = async () => {
     setPaywallLoadingWeekly(true);
     try {
       const { success } = await purchaseWeekly();
       if (success) {
         await refreshPremiumState();
-        Alert.alert("Purchase successful", "You now have access to all Premium content.");
-        handlePaywallClose();
+        celebrateUnlock();
       } else if (!(await isPurchasesAvailable())) {
         Alert.alert(
           "Purchases unavailable",
@@ -155,8 +164,7 @@ export default function RootLayout() {
       const { success } = await purchaseLifetime();
       if (success) {
         await refreshPremiumState();
-        Alert.alert("Purchase successful", "You now have access to all Premium content.");
-        handlePaywallClose();
+        celebrateUnlock();
       } else if (!(await isPurchasesAvailable())) {
         Alert.alert(
           "Purchases unavailable",
@@ -172,7 +180,7 @@ export default function RootLayout() {
     const { isPremium: restored } = await restorePurchases();
     if (restored) {
       await refreshPremiumState();
-      handlePaywallClose();
+      celebrateUnlock();
     }
   };
 
@@ -218,6 +226,17 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <PaywallProvider openPaywall={openPaywall} isPremium={isPremium} refreshPremiumState={refreshPremiumState} openPremiumThanksModal={openPremiumThanksModal}>
           <PremiumThanksModal visible={showPremiumThanks} onClose={() => setShowPremiumThanks(false)} />
+          <View pointerEvents="none" style={{ position: "absolute", left: 0, top: 0, right: 0, bottom: 0, zIndex: 9999 }}>
+            <ConfettiCannon
+              ref={confettiRef}
+              count={200}
+              origin={{ x: winWidth / 2, y: winHeight / 2 }}
+              autoStart={false}
+              explosionSpeed={350}
+              fallSpeed={3000}
+              fadeOut
+            />
+          </View>
           <PaywallModal
             visible={showPaywall}
             onClose={handlePaywallClose}
