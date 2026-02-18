@@ -174,7 +174,11 @@ export default function RootLayout() {
     }
   };
 
-  const openPaywall = useCallback(() => setShowPaywall(true), []);
+  const openPaywall = useCallback(() => {
+    // Never show the paywall if the user already has Premium
+    if (isPremium) return;
+    setShowPaywall(true);
+  }, [isPremium]);
 
   if (!fontsLoaded) {
     return null;

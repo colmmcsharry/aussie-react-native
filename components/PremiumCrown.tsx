@@ -9,10 +9,13 @@ type PremiumCrownProps = {
   style?: StyleProp<ViewStyle>;
 };
 
+// Default crown icon used throughout the app when referring to Premium.
+// The special gold tick (check-decagram-outline) is only used in the header
+// when the user actually HAS premium.
 export function PremiumCrown({ size = 26, style }: PremiumCrownProps) {
   return (
     <MaterialCommunityIcons
-      name="check-decagram-outline"
+      name="crown"
       size={size}
       color={CROWN_GOLD}
       style={style}
