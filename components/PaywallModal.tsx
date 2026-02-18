@@ -287,10 +287,13 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: 32,
+    flexGrow: 1,
   },
   scrollBody: {
     paddingHorizontal: 24,
     paddingTop: 8,
+    flex: 1,
+    justifyContent: "center",
   },
   headerImageWrap: {
     width: "100%",
