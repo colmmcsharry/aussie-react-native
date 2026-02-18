@@ -17,6 +17,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { PremiumCrown } from "@/components/PremiumCrown";
 import {
   BodyFont,
   ButtonFont,
@@ -27,7 +28,6 @@ import {
   mainAussieBlue,
   SlangDisplayFont,
 } from "@/constants/theme";
-import { PremiumCrown } from "@/components/PremiumCrown";
 import { usePaywall } from "@/context/PaywallContext";
 import { slangImageMap } from "@/data/image-map";
 import {
@@ -538,9 +538,12 @@ export default function QuotesScreen() {
           style={styles.premiumThanksOverlay}
           onPress={() => setShowPremiumThanksCard(false)}
         >
-          <Pressable style={styles.premiumThanksCard} onPress={(e) => e.stopPropagation()}>
+          <Pressable
+            style={styles.premiumThanksCard}
+            onPress={(e) => e.stopPropagation()}
+          >
             <Text style={styles.premiumThanksText}>
-              You are on the Premium version, thanks for supporting the app!
+              You are on the Premium version, Thanks for supporting the app!
             </Text>
             <TouchableOpacity
               style={styles.premiumThanksBtn}
@@ -1028,8 +1031,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(25, 79, 137, 0.2)",
   },
-  premiumCardIcon: {
-  },
+  premiumCardIcon: {},
   premiumCardText: {
     fontFamily: ButtonFont,
     fontSize: 20,

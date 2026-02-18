@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Image as ExpoImage } from "expo-image";
 import React, { useEffect } from "react";
 import {
   Image,
@@ -16,7 +17,12 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { PremiumCrown } from "@/components/PremiumCrown";
-import { BodyFont, ButtonFont, HeadingFont, mainAussieBlue } from "@/constants/theme";
+import {
+  BodyFont,
+  ButtonFont,
+  HeadingFont,
+  mainAussieBlue,
+} from "@/constants/theme";
 
 const PAYWALL_GREEN = "#78C57C";
 const PAYWALL_GREEN_DARK = "#5aab5e";
@@ -97,148 +103,157 @@ export function PaywallModal({
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
-            <Text style={styles.heading}>
-              Try a week Free Trial of
-            </Text>
-            <View style={styles.premiumBlock}>
-              <PremiumCrown size={36} style={styles.premiumCrown} />
-              <Text style={styles.premiumTitle}>
-                Premium
-              </Text>
-              <Image
-                source={require("@/assets/underline.png")}
-                style={styles.premiumUnderline}
-                resizeMode="contain"
+            <View style={styles.headerImageWrap}>
+              <ExpoImage
+                source={require("@/assets/slang-images/blue-fight-dark.jpg")}
+                style={styles.headerImage}
+                contentFit="contain"
               />
-            </View>
-
-            <View style={styles.tableWrap}>
-              <View style={styles.tableRow}>
-                <View style={styles.tableCell} />
-                <View style={styles.tableCellIcon}>
-                  <PremiumCrown size={20} />
-                </View>
-                <View style={styles.tableCellIcon}>
-                  <Text style={styles.tableHeader}>
-                    Free
-                  </Text>
+              <View style={styles.headerImageContent}>
+                <Text style={styles.heading}>Try a week Free Trial of</Text>
+                <View style={styles.premiumBlock}>
+                  <PremiumCrown size={36} style={styles.premiumCrown} />
+                  <Text style={styles.premiumTitle}>Premium</Text>
+                  <Image
+                    source={require("@/assets/underline.png")}
+                    style={styles.premiumUnderline}
+                    resizeMode="contain"
+                  />
                 </View>
               </View>
-              {FEATURES.map((row, i) => (
-                <View
-                  key={i}
-                  style={[
-                    styles.tableRow,
-                    i % 2 === 0 && { backgroundColor: "rgba(255,255,255,0.08)" },
+            </View>
+
+            <View style={styles.scrollBody}>
+              <View style={styles.tableWrap}>
+                <View style={styles.tableRow}>
+                  <View style={styles.tableCell} />
+                  <View style={styles.tableCellIcon}>
+                    <PremiumCrown size={20} />
+                  </View>
+                  <View style={styles.tableCellIcon}>
+                    <Text style={styles.tableHeader}>Free</Text>
+                  </View>
+                </View>
+                {FEATURES.map((row, i) => (
+                  <View
+                    key={i}
+                    style={[
+                      styles.tableRow,
+                      i % 2 === 0 && {
+                        backgroundColor: "rgba(255,255,255,0.08)",
+                      },
+                    ]}
+                  >
+                    <View style={styles.tableCell}>
+                      <Text style={styles.tableLabel} numberOfLines={1}>
+                        {row.label}
+                      </Text>
+                    </View>
+                    <View style={styles.tableCellIcon}>
+                      {row.premium ? (
+                        <Ionicons
+                          name="checkmark-circle"
+                          size={22}
+                          color={PAYWALL_GREEN}
+                        />
+                      ) : (
+                        <Ionicons
+                          name="close-circle"
+                          size={22}
+                          color="#e57373"
+                        />
+                      )}
+                    </View>
+                    <View style={styles.tableCellIcon}>
+                      {row.free ? (
+                        <Ionicons
+                          name="checkmark-circle"
+                          size={22}
+                          color={PAYWALL_GREEN}
+                        />
+                      ) : (
+                        <Ionicons
+                          name="close-circle"
+                          size={22}
+                          color="#e57373"
+                        />
+                      )}
+                    </View>
+                  </View>
+                ))}
+              </View>
+
+              <View style={styles.buttonRow}>
+                <Pressable
+                  onPress={onPurchaseWeekly}
+                  style={({ pressed }) => [
+                    styles.planButton,
+                    styles.planButtonRow,
+                    { opacity: loadingWeekly ? 0.7 : pressed ? 0.9 : 1 },
                   ]}
+                  disabled={loadingWeekly}
                 >
-                  <View style={styles.tableCell}>
-                    <Text
-                      style={styles.tableLabel}
-                      numberOfLines={1}
-                    >
-                      {row.label}
-                    </Text>
-                  </View>
-                  <View style={styles.tableCellIcon}>
-                    {row.premium ? (
-                      <Ionicons
-                        name="checkmark-circle"
-                        size={22}
-                        color={PAYWALL_GREEN}
+                  <View style={styles.planButtonLeft}>
+                    <View style={styles.planButtonTitleRow}>
+                      <Text style={styles.planLabelInline}>Weekly</Text>
+                      <Image
+                        source={require("@/assets/dollar.png")}
+                        style={styles.planButtonIconInline}
+                        resizeMode="contain"
                       />
-                    ) : (
-                      <Ionicons name="close-circle" size={22} color="#e57373" />
-                    )}
+                    </View>
                   </View>
-                  <View style={styles.tableCellIcon}>
-                    {row.free ? (
-                      <Ionicons
-                        name="checkmark-circle"
-                        size={22}
-                        color={PAYWALL_GREEN}
+                  <Text style={styles.planPrice}>
+                    {loadingWeekly ? "Loading..." : weeklyPrice}
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={onPurchaseLifetime}
+                  style={({ pressed }) => [
+                    styles.planButton,
+                    styles.planButtonRow,
+                    { opacity: loadingLifetime ? 0.7 : pressed ? 0.9 : 1 },
+                  ]}
+                  disabled={loadingLifetime}
+                >
+                  <View style={styles.planButtonLeft}>
+                    <View style={styles.planButtonTitleRow}>
+                      <Text style={styles.planLabelInline}>Lifetime</Text>
+                      <Image
+                        source={require("@/assets/pitcher.png")}
+                        style={styles.planButtonIconInline}
+                        resizeMode="contain"
                       />
-                    ) : (
-                      <Ionicons name="close-circle" size={22} color="#e57373" />
-                    )}
+                    </View>
+                    <Text style={styles.planTrialText}>7 days free</Text>
                   </View>
-                </View>
-              ))}
-            </View>
-
-            <View style={styles.buttonRow}>
-              <Pressable
-                onPress={onPurchaseWeekly}
-                style={({ pressed }) => [
-                  styles.planButton,
-                  styles.planButtonRow,
-                  { opacity: loadingWeekly ? 0.7 : pressed ? 0.9 : 1 },
-                ]}
-                disabled={loadingWeekly}
-              >
-                <View style={styles.planButtonLeft}>
-                  <View style={styles.planButtonTitleRow}>
-                    <Text style={styles.planLabelInline}>Weekly</Text>
-                    <Image
-                      source={require("@/assets/dollar.png")}
-                      style={styles.planButtonIconInline}
-                      resizeMode="contain"
-                    />
-                  </View>
-                </View>
-                <Text style={styles.planPrice}>
-                  {loadingWeekly ? "Loading..." : weeklyPrice}
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={onPurchaseLifetime}
-                style={({ pressed }) => [
-                  styles.planButton,
-                  styles.planButtonRow,
-                  { opacity: loadingLifetime ? 0.7 : pressed ? 0.9 : 1 },
-                ]}
-                disabled={loadingLifetime}
-              >
-                <View style={styles.planButtonLeft}>
-                  <View style={styles.planButtonTitleRow}>
-                    <Text style={styles.planLabelInline}>Lifetime</Text>
-                    <Image
-                      source={require("@/assets/pitcher.png")}
-                      style={styles.planButtonIconInline}
-                      resizeMode="contain"
-                    />
-                  </View>
-                  <Text style={styles.planTrialText}>7 days free</Text>
-                </View>
-                <Text style={styles.planPrice}>
-                  {loadingLifetime ? "Loading..." : lifetimePrice}
-                </Text>
-              </Pressable>
-            </View>
-            <Text style={styles.terms}>
-              You'll get a reminder before your trial ends.
-            </Text>
-
-            {onRestore && (
-              <Pressable onPress={onRestore} style={styles.restoreButton}>
-                <Text style={styles.restoreText}>
-                  Restore Purchase
-                </Text>
-              </Pressable>
-            )}
-
-            <Pressable
-              onPress={onContinueFree}
-              style={({ pressed }) => [
-                styles.continueButton,
-                { opacity: pressed ? 0.9 : 1 },
-              ]}
-            >
-              <Text style={styles.continueText}>
-                Continue with free version
+                  <Text style={styles.planPrice}>
+                    {loadingLifetime ? "Loading..." : lifetimePrice}
+                  </Text>
+                </Pressable>
+              </View>
+              <Text style={styles.terms}>
+                You'll get a reminder before your trial ends.
               </Text>
-            </Pressable>
 
+              {onRestore && (
+                <Pressable onPress={onRestore} style={styles.restoreButton}>
+                  <Text style={styles.restoreText}>Restore Purchase</Text>
+                </Pressable>
+              )}
+
+              <Pressable
+                onPress={onContinueFree}
+                style={({ pressed }) => [
+                  styles.continueButton,
+                  { opacity: pressed ? 0.9 : 1 },
+                ]}
+              >
+                <Text style={styles.continueText}>
+                  Continue with free version
+                </Text>
+              </Pressable>
+            </View>
           </ScrollView>
         </View>
       </View>
@@ -254,15 +269,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   card: {
-    width: "95%",
-    height: "90%",
-    maxWidth: 500,
-    borderRadius: 20,
+    width: "100%",
+    height: "100%",
     overflow: "hidden",
   },
   closeWrap: {
     position: "absolute",
-    top: 12,
+    top: 40,
     left: 12,
     zIndex: 10,
   },
@@ -273,9 +286,29 @@ const styles = StyleSheet.create({
     maxHeight: "100%",
   },
   scrollContent: {
-    padding: 24,
-    paddingTop: 48,
     paddingBottom: 32,
+  },
+  scrollBody: {
+    paddingHorizontal: 24,
+    paddingTop: 8,
+  },
+  headerImageWrap: {
+    width: "100%",
+    aspectRatio: 16 / 9,
+    minHeight: 160,
+    overflow: "hidden",
+    backgroundColor: mainAussieBlue,
+  },
+  headerImage: {
+    width: "100%",
+    height: "100%",
+  },
+  headerImageContent: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    paddingTop: 24,
   },
   hey: {
     fontFamily: BodyFont,
@@ -292,7 +325,6 @@ const styles = StyleSheet.create({
   },
   premiumBlock: {
     alignItems: "center",
-    marginBottom: 20,
   },
   premiumCrown: {},
   premiumTitle: {
@@ -354,7 +386,7 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     alignItems: "center",
     justifyContent: "space-between",
-    minHeight: 80,
+    minHeight: 66,
   },
   planButtonRow: {
     flexDirection: "row",
@@ -366,7 +398,7 @@ const styles = StyleSheet.create({
   planButtonTitleRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 10,
   },
   planLabelInline: {
     fontFamily: ButtonFont,
@@ -380,7 +412,7 @@ const styles = StyleSheet.create({
   planTrialText: {
     fontFamily: BodyFont,
     fontSize: 11,
-    color: "#777",
+    color: "#999",
     marginTop: 4,
     position: "absolute",
     bottom: -7,
