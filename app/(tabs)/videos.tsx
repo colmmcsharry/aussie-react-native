@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Animated,
   FlatList,
   Linking,
   Pressable,
@@ -13,7 +14,7 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
-import { BodyFont, ButtonFont, CardPalette, ContentBg, HeadingFont } from '@/constants/theme';
+import { BodyFont, ButtonFont, ContentBg, HeadingFont, mainAussieBlue } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -68,8 +69,29 @@ export default function VideosScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const listRef = useRef<FlatList<LatestItem> | null>(null);
+  const skeletonOpacity = useRef(new Animated.Value(0.5)).current;
 
   const subtextColor = useThemeColor({ light: '#687076', dark: '#9BA1A6' }, 'icon');
+
+  useEffect(() => {
+    if (!loading) return;
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(skeletonOpacity, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+        Animated.timing(skeletonOpacity, {
+          toValue: 0.4,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [loading, skeletonOpacity]);
 
   const loadVideos = useCallback(async () => {
     setError(null);
@@ -235,10 +257,27 @@ export default function VideosScreen() {
 
   if (loading) {
     return (
-      <ThemedView style={styles.centered}>
-        <ActivityIndicator size="large" />
-        <ThemedText style={styles.loadingText}>Loading videos...</ThemedText>
-      </ThemedView>
+      <View style={[styles.container, { backgroundColor: ContentBg }]}>
+        <TabHeader title="Videos" />
+        <View style={styles.loadingContent}>
+          {[1, 2, 3, 4].map((i) => (
+            <Animated.View
+              key={i}
+              style={[styles.skeletonCard, { opacity: skeletonOpacity }]}
+            >
+              <View style={styles.skeletonThumb} />
+              <View style={styles.skeletonInfo}>
+                <View style={[styles.skeletonLine, styles.skeletonTitle]} />
+                <View style={[styles.skeletonLine, styles.skeletonMeta]} />
+              </View>
+            </Animated.View>
+          ))}
+          <View style={styles.loadingFooter}>
+            <ActivityIndicator size="small" color={mainAussieBlue} />
+            <ThemedText style={styles.loadingText}>Loading videos...</ThemedText>
+          </View>
+        </View>
+      </View>
     );
   }
 
@@ -408,7 +447,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 32,
   },
-  loadingText: { marginTop: 16, fontSize: 16, opacity: 0.7, fontFamily: BodyFont },
+  loadingContent: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 20,
+  },
+  skeletonCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 18,
+  },
+  skeletonThumb: {
+    width: LIST_THUMB_WIDTH,
+    height: LIST_THUMB_HEIGHT,
+    borderRadius: 10,
+    backgroundColor: '#e8e8e8',
+  },
+  skeletonInfo: { flex: 1, marginLeft: 14, paddingTop: 2 },
+  skeletonLine: {
+    height: 14,
+    borderRadius: 6,
+    backgroundColor: '#e8e8e8',
+  },
+  skeletonTitle: { width: '85%', marginBottom: 8 },
+  skeletonMeta: { width: '40%' },
+  loadingFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingVertical: 24,
+  },
+  loadingText: { fontSize: 15, opacity: 0.7, fontFamily: BodyFont, color: '#687076' },
   errorTitle: { fontSize: 20, fontFamily: HeadingFont, marginBottom: 8 },
   errorDetail: { fontSize: 14, opacity: 0.6, textAlign: 'center', marginBottom: 24, fontFamily: BodyFont },
   retryButton: { paddingHorizontal: 24, paddingVertical: 12, backgroundColor: '#194F89', borderRadius: 8 },
