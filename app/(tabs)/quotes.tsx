@@ -636,7 +636,7 @@ export default function QuotesScreen() {
               </View>
             }
             ListFooterComponent={
-              selectedCategory != null ? (
+              selectedCategory != null && !isPremium ? (
                 <TouchableOpacity
                   style={styles.premiumCard}
                   onPress={openPaywall}
