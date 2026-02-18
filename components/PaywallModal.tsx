@@ -128,7 +128,7 @@ export function PaywallModal({
                 <View style={styles.tableRow}>
                   <View style={styles.tableCell} />
                   <View style={styles.tableCellIcon}>
-                    <PremiumCrown size={20} />
+                    <PremiumCrown size={22} />
                   </View>
                   <View style={styles.tableCellIcon}>
                     <Text style={styles.tableHeader}>Free</Text>
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: ButtonFont,
-    fontSize: 20,
+    fontSize: 22,
     textAlign: "center",
     marginBottom: 8,
     color: "#fff",
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
   premiumCrown: {},
   premiumTitle: {
     fontFamily: HeadingFont,
-    fontSize: 22,
+    fontSize: 26,
     color: "#fff",
   },
   premiumUnderline: {
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
     height: 14,
   },
   tableWrap: {
-    marginBottom: 20,
+    marginBottom: 24,
     borderRadius: 8,
     overflow: "hidden",
   },
