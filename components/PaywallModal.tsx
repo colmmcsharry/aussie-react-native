@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     position: "absolute",
     bottom: -7,
-    left: 2,
+    left: 0,
   },
   planPrice: {
     fontFamily: ButtonFont,

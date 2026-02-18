@@ -180,8 +180,8 @@ export default function VideoPlayerScreen() {
         <View style={styles.headerSpacer} />
       </View>
 
-      {/* WebView player */}
-      <View style={styles.playerContainer}>
+      {/* WebView player — bottom padding so progress bar sits above swipe/tab area on iPhone */}
+      <View style={[styles.playerContainer, { paddingBottom: insets.bottom + 18 }]}>
         <WebView
           ref={webViewRef}
           source={{ html: playerHtml }}
