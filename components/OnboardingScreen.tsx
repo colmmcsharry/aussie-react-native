@@ -58,21 +58,21 @@ const TESTIMONIALS = [
     heading: "Really fun app!",
     testi:
       "This is a really fun app, and educational too! I learned lots of new slang words. Had some craic with the games and quizzes too.",
-    author: "Jen C, Beta Tester",
+    author: "Sally Keogh, Beta Tester",
   },
   {
     id: 2,
     heading: "Great, excellent value!",
     testi:
       "Excellent value! I speak just a little natively, and watch a lot of Aussie TV yet the slang always gets me when I visit. This is great! 👍🏼",
-    author: "Jack Malone, Beta Tester",
+    author: "Rachel Carr, Beta Tester",
   },
   {
     id: 3,
     heading: "Really cool app!",
     testi:
       "I've lived in Perth for 5 years and was so confused by the way the locals spoke. I wish this app had been released years ago!",
-    author: "Carolina A, Beta Tester",
+    author: "Brian Joyce, Beta Tester",
   },
 ];
 
