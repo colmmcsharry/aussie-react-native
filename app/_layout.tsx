@@ -11,6 +11,7 @@ import ConfettiCannon from "react-native-confetti-cannon";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
+import { ConfettiProvider } from "@/context/ConfettiContext";
 import { PaywallProvider } from "@/context/PaywallContext";
 import { FredokaOne_400Regular } from "@expo-google-fonts/fredoka-one";
 import { Nunito_500Medium } from "@expo-google-fonts/nunito/500Medium";
@@ -74,7 +75,7 @@ export default function RootLayout() {
   const [paywallLoadingLifetime, setPaywallLoadingLifetime] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
   const [showPremiumThanks, setShowPremiumThanks] = useState(false);
-  const confettiRef = useRef<ConfettiCannon>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
   const { width: winWidth, height: winHeight } = Dimensions.get("window");
   // On web, read URL on init so we can show onboarding on first paint when testing
   const [forceOnboarding, setForceOnboarding] = useState(getForceOnboarding);
@@ -136,7 +137,7 @@ export default function RootLayout() {
   const celebrateUnlock = useCallback(() => {
     setHasSeenPaywallOnce();
     setShowPaywall(false);
-    confettiRef.current?.start();
+    setShowConfetti(true);
     setShowPremiumThanks(true);
   }, []);
 
@@ -192,6 +193,8 @@ export default function RootLayout() {
 
   const openPremiumThanksModal = useCallback(() => setShowPremiumThanks(true), []);
 
+  const triggerConfetti = useCallback(() => setShowConfetti(true), []);
+
   if (!fontsLoaded) {
     return null;
   }
@@ -224,19 +227,22 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <ConfettiProvider triggerConfetti={triggerConfetti}>
         <PaywallProvider openPaywall={openPaywall} isPremium={isPremium} refreshPremiumState={refreshPremiumState} openPremiumThanksModal={openPremiumThanksModal}>
           <PremiumThanksModal visible={showPremiumThanks} onClose={() => setShowPremiumThanks(false)} />
-          <View pointerEvents="none" style={{ position: "absolute", left: 0, top: 0, right: 0, bottom: 0, zIndex: 9999 }}>
-            <ConfettiCannon
-              ref={confettiRef}
-              count={200}
-              origin={{ x: winWidth / 2, y: winHeight / 2 }}
-              autoStart={false}
-              explosionSpeed={350}
-              fallSpeed={3000}
-              fadeOut
-            />
-          </View>
+          {showConfetti && (
+            <View pointerEvents="none" style={{ position: "absolute", left: 0, top: 0, right: 0, bottom: 0, zIndex: 9999 }}>
+              <ConfettiCannon
+                count={200}
+                origin={{ x: winWidth / 2, y: winHeight / 2 }}
+                autoStart
+                explosionSpeed={350}
+                fallSpeed={3000}
+                fadeOut
+                onAnimationEnd={() => setShowConfetti(false)}
+              />
+            </View>
+          )}
           <PaywallModal
             visible={showPaywall}
             onClose={handlePaywallClose}
@@ -285,6 +291,7 @@ export default function RootLayout() {
             />
           </Stack>
         </PaywallProvider>
+        </ConfettiProvider>
         <StatusBar style="auto" />
       </ThemeProvider>
     </GestureHandlerRootView>

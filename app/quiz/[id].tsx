@@ -29,7 +29,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createAudioPlayer, AudioPlayer } from 'expo-audio';
 
 import { PremiumCrown } from '@/components/PremiumCrown';
-import { usePaywall } from '@/context/PaywallContext';
+import { useConfetti } from '@/context/ConfettiContext';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { BodyFont, ButtonFont, Colors, HeadingFont } from '@/constants/theme';
 import { getQuiz, QuizQuestion } from '@/data/quiz-data';
@@ -73,6 +73,7 @@ function ResultsView({
   const questions = getQuiz(quiz.id)?.questions ?? [];
   const bounceAnim = useRef(new Animated.Value(-300)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const { triggerConfetti } = useConfetti();
 
   useEffect(() => {
     // Animate score reveal
@@ -106,12 +107,23 @@ function ResultsView({
       // Audio playback is optional
     }
 
+    // Perfect score: confetti burst (slight delay so it lands after score reveal)
+    if (score === totalQuestions) {
+      const t = setTimeout(() => triggerConfetti(), 500);
+      return () => {
+        clearTimeout(t);
+        if (player) {
+          try { player.remove(); } catch {}
+        }
+      };
+    }
+
     return () => {
       if (player) {
         try { player.remove(); } catch {}
       }
     };
-  }, [score]);
+  }, [score, totalQuestions, triggerConfetti]);
 
   const getRatingTier = (): 'sad' | 'meh' | 'good' | 'legend' => {
     if (score < 5) return 'sad';
@@ -240,7 +252,6 @@ export default function QuizGameplay() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
-  const { openPaywall } = usePaywall();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
@@ -366,9 +377,7 @@ export default function QuizGameplay() {
         <Text style={[styles.headerTitle, { color: colors.text }]} numberOfLines={1}>
           {quiz.name}
         </Text>
-        <Pressable onPress={openPaywall} hitSlop={12}>
-          <PremiumCrown size={26} />
-        </Pressable>
+        <View style={styles.headerSpacer} />
       </View>
 
       {showResults ? (
@@ -486,6 +495,9 @@ const styles = StyleSheet.create({
   },
   backBtn: {
     padding: 4,
+  },
+  headerSpacer: {
+    width: 32,
   },
   headerTitle: {
     flex: 1,
