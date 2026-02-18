@@ -23,3 +23,17 @@ export function getSortableTimestamp(dateStr: string | undefined): number {
   }
   return 0;
 }
+
+/**
+ * Deterministic "item of the day" based on calendar date.
+ * Same date = same item for everyone. Uses same seed logic as slang of the day.
+ */
+export function getItemOfTheDay<T>(items: T[], date: Date): T | null {
+  if (items.length === 0) return null;
+  const y = date.getFullYear();
+  const m = date.getMonth();
+  const d = date.getDate();
+  const seed = y * 10000 + m * 100 + d;
+  const index = Math.abs((seed * 2654435761) >>> 0) % items.length;
+  return items[index] ?? null;
+}

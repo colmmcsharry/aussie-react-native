@@ -54,6 +54,7 @@ import {
   getYouTubeThumbnail,
   type YouTubeVideoEntry,
 } from "@/services/youtube-gist";
+import { getItemOfTheDay } from "@/utils/date";
 
 const ACCENT_BLUE = "#194F89"; // Australian blue
 
@@ -110,7 +111,7 @@ const AUSSIE_QUOTES: { text: string; author: string }[] = [
     author: "Crocodile Dundee",
   },
   {
-    text: "Australia is a nation of 23 million people, mostly of whom live in a narrow strip of land along the coast and spend their time trying to convince the rest of the world that they live in the Outback.",
+    text: "Australia is a nation of 23 million people, most of whom live in a narrow strip of land along the coast and spend their time trying to convince the rest of the world that they live in the Outback.",
     author: "Bill Bryson",
   },
   { text: "Tall poppies get cut down.", author: "Australian Saying" },
@@ -119,11 +120,6 @@ const AUSSIE_QUOTES: { text: string; author: string }[] = [
     author: "Australian Saying",
   },
 ];
-
-function pickRandom<T>(arr: T[]): T | null {
-  if (arr.length === 0) return null;
-  return arr[Math.floor(Math.random() * arr.length)];
-}
 
 export default function FeedScreen() {
   const colorScheme = useColorScheme();
@@ -137,18 +133,23 @@ export default function FeedScreen() {
     [],
   );
 
-  // One phrase per day: same phrase for everyone on the same calendar day
+  // Session-stable date so all "of the day" items use the same calendar day
+  const today = useMemo(() => new Date(), []);
+
+  // Deterministic per calendar day: same date = same content for everyone
   const slangOfTheDay =
-    allSlang.length > 0 ? getSlangOfTheDayForDate(new Date()) : null;
+    allSlang.length > 0 ? getSlangOfTheDayForDate(today) : null;
   const [showSlangModal, setShowSlangModal] = useState(false);
   const [favourites, setFavourites] = useState<Set<string>>(new Set());
-  const [quizQuestion, setQuizQuestion] = useState<QuizQuestion | null>(() =>
-    pickRandom(allQuizQuestions),
+  const quizQuestion = useMemo(
+    () => getItemOfTheDay(allQuizQuestions, today),
+    [allQuizQuestions, today],
   );
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [hasAnswered, setHasAnswered] = useState(false);
-  const [aussieQuote] = useState(
-    () => pickRandom(AUSSIE_QUOTES) ?? AUSSIE_QUOTES[0],
+  const aussieQuote = useMemo(
+    () => getItemOfTheDay(AUSSIE_QUOTES, today) ?? AUSSIE_QUOTES[0],
+    [today],
   );
   const [videoOfTheDay, setVideoOfTheDay] = useState<YouTubeVideoEntry | null>(
     null,
@@ -272,11 +273,11 @@ export default function FeedScreen() {
   useEffect(() => {
     fetchAussieYouTubeVideos()
       .then((list) => {
-        const chosen = pickRandom(list);
+        const chosen = getItemOfTheDay(list, today);
         if (chosen) setVideoOfTheDay(chosen);
       })
       .catch(() => {});
-  }, []);
+  }, [today]);
 
   useFocusEffect(
     useCallback(() => {
@@ -716,7 +717,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
   },
   videoTitle: {
-    fontSize: FontSizes.body,
+    fontSize: FontSizes.title,
     fontFamily: ButtonFont,
     marginBottom: 4,
   },
@@ -753,8 +754,8 @@ const styles = StyleSheet.create({
   },
   quizQuestionText: {
     fontSize: FontSizes.title,
-    fontWeight: "700",
-    fontFamily: BodyFont,
+    fontWeight: "800",
+    fontFamily: ButtonFont,
     marginBottom: 12,
     lineHeight: 22,
   },
@@ -773,7 +774,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderRadius: 12,
-    borderWidth: 2,
+    borderWidth: 2
   },
   optionSelected: {
     borderColor: ACCENT_BLUE,
@@ -789,7 +790,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: FontSizes.body,
-    fontFamily: BodyFont,
+    fontFamily: ButtonFont,
   },
   optionTextCorrect: {
     fontWeight: "600",
