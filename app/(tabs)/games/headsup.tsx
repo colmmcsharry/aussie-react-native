@@ -1,3 +1,9 @@
+import { Ionicons } from "@expo/vector-icons";
+import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from "expo-av";
+import Constants from "expo-constants";
+import * as Haptics from "expo-haptics";
+import { useRouter } from "expo-router";
+import { DeviceMotion } from "expo-sensors";
 import React, {
   useCallback,
   useEffect,
@@ -6,35 +12,44 @@ import React, {
   useState,
 } from "react";
 import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  Pressable,
-  Platform,
+  BackHandler,
   Dimensions,
-  ScrollView,
+  Image,
+  Linking,
   Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
-const WORD_MAX_WIDTH = Math.round(SCREEN_WIDTH * 1.22);
-import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-import { DeviceMotion } from "expo-sensors";
-import * as Haptics from "expo-haptics";
-import { Audio } from "expo-av";
 
-import { SlangDisplayFont, ButtonFont, ContentBg, HeadingFont } from "@/constants/theme";
 import {
-  HEADSUP_TOPIC_META,
+  ButtonFont,
+  ContentBg,
+  HeadingFont
+} from "@/constants/theme";
+import {
   HEADSUP_EASY_WORDS,
   HEADSUP_HARD_WORDS,
+  HEADSUP_TOPIC_META,
   HEADSUP_XXX_WORDS,
   type HeadsUpTopicId,
 } from "@/data/headsup-topics";
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const WORD_MAX_WIDTH = Math.round(SCREEN_WIDTH * 1.22);
+
+// expo-screen-orientation requires native code; not available in Expo Go
+let ScreenOrientation: typeof import("expo-screen-orientation") | null = null;
+try {
+  ScreenOrientation = require("expo-screen-orientation");
+} catch {
+  // Module unavailable
+}
 
 const ACCENT_BLUE = "#194F89";
 const GAME_BG = ACCENT_BLUE;
@@ -59,6 +74,8 @@ const SKIP_GAMMA_MAX = -15;
 const POINT_GAMMA_MIN = -165;
 const POINT_GAMMA_MAX = -125;
 const DEBOUNCE_MS = 800;
+// Prevent batched/delayed Android events from causing multiple triggers (delay-then-catch-up)
+const RESET_COOLDOWN_MS = 350;
 
 // Heads Up sound effects (from old app)
 const SOUNDS = {
@@ -136,8 +153,7 @@ export default function HeadsUpGameScreen() {
   const wordPool = useRef<string[]>([]);
   const hasTiltedDown = useRef(false);
   const hasTiltedUp = useRef(false);
-  const lastScoreTime = useRef(0);
-  const lastWordTime = useRef(0);
+  const lastTiltTime = useRef(0);
   const gameTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -179,6 +195,15 @@ export default function HeadsUpGameScreen() {
     nextWord();
   }, [currentWord, nextWord]);
 
+  // Block Android back button during gameplay to prevent accidental exit when tilting
+  useEffect(() => {
+    if (Platform.OS !== "android") return;
+    const inGame = showCountdown || (gameStarted && !gameOver);
+    if (!inGame) return;
+    const sub = BackHandler.addEventListener("hardwareBackPress", () => true);
+    return () => sub.remove();
+  }, [showCountdown, gameStarted, gameOver]);
+
   // Request motion permission then start game (matches old app: permission in user gesture)
   const startGame = useCallback(async () => {
     setMotionPermissionError(null);
@@ -191,12 +216,24 @@ export default function HeadsUpGameScreen() {
       const { granted } = await DeviceMotion.requestPermissionsAsync();
       if (!granted) {
         setMotionPermissionGranted(false);
+        const inExpoGo = Constants.executionEnvironment === "storeClient";
         setMotionPermissionError(
-          "Motion permission is needed to detect tilts. Enable it in Settings.",
+          inExpoGo
+            ? "Motion isn't available in Expo Go. Build the app (npx expo run:android) to play Heads Up with tilt detection."
+            : "Motion permission is needed to detect tilts. Enable it in Settings.",
         );
         return;
       }
       setMotionPermissionGranted(true);
+
+      // Configure audio for game sounds (helps Android play reliably)
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: false,
+        interruptionModeIOS: InterruptionModeIOS.DuckOthers,
+        interruptionModeAndroid: InterruptionModeAndroid.DuckOthers,
+        shouldDuckAndroid: true,
+      });
     } catch (e) {
       setMotionPermissionError(
         e instanceof Error ? e.message : "Could not access motion.",
@@ -215,8 +252,7 @@ export default function HeadsUpGameScreen() {
     words = shuffleArray(words);
     wordPool.current = words;
 
-    lastScoreTime.current = 0;
-    lastWordTime.current = 0;
+    lastTiltTime.current = 0;
     setShowCountdown(true);
     setCountdown(5);
     setScore(0);
@@ -283,32 +319,35 @@ export default function HeadsUpGameScreen() {
     const sub = DeviceMotion.addListener(({ rotation }) => {
       const gamma = toDeg(rotation?.gamma ?? 0);
       const now = Date.now();
+      const pastDebounce = now - lastTiltTime.current > DEBOUNCE_MS;
+      const pastResetCooldown = now - lastTiltTime.current > RESET_COOLDOWN_MS;
+
+      // Only allow hasTiltedUp/hasTiltedDown to reset after cooldown (prevents Android batched events from re-triggering)
+      if (pastResetCooldown) {
+        if (gamma <= SKIP_GAMMA_MIN || gamma >= SKIP_GAMMA_MAX)
+          hasTiltedUp.current = false;
+        if (gamma <= POINT_GAMMA_MIN || gamma >= POINT_GAMMA_MAX)
+          hasTiltedDown.current = false;
+      }
 
       // Skip (tilt up toward ceiling): gamma from -90 toward -2, detect in (-50, -10)
       if (gamma > SKIP_GAMMA_MIN && gamma < SKIP_GAMMA_MAX) {
-        if (!hasTiltedUp.current && now - lastWordTime.current > DEBOUNCE_MS) {
-          lastWordTime.current = now;
+        if (!hasTiltedUp.current && pastDebounce) {
+          lastTiltTime.current = now;
           hasTiltedUp.current = true;
           hasTiltedDown.current = false;
           handleSkip();
         }
-      } else {
-        hasTiltedUp.current = false;
       }
 
       // Point (tilt down toward floor): gamma from -90 past ±180 toward +170, detect in (120, 180)
       if (gamma > POINT_GAMMA_MIN && gamma < POINT_GAMMA_MAX) {
-        if (
-          !hasTiltedDown.current &&
-          now - lastScoreTime.current > DEBOUNCE_MS
-        ) {
-          lastScoreTime.current = now;
+        if (!hasTiltedDown.current && pastDebounce) {
+          lastTiltTime.current = now;
           hasTiltedDown.current = true;
           hasTiltedUp.current = false;
           handleCorrect();
         }
-      } else {
-        hasTiltedDown.current = false;
       }
     });
 
@@ -539,14 +578,53 @@ export default function HeadsUpGameScreen() {
             >
               <Text style={styles.startBtnText}>Start</Text>
             </TouchableOpacity>
-            {motionPermissionError != null && (
-              <Text style={styles.permissionError}>
-                {motionPermissionError}
-              </Text>
-            )}
           </View>
         </View>
       )}
+
+      <Modal
+        visible={motionPermissionError != null}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setMotionPermissionError(null)}
+      >
+        <Pressable
+          style={styles.permissionModalOverlay}
+          onPress={() => setMotionPermissionError(null)}
+        >
+          <Pressable
+            style={styles.permissionModalCard}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <Text style={styles.permissionModalTitle}>
+              Motion access needed
+            </Text>
+            <Text style={styles.permissionModalMessage}>
+              {motionPermissionError}
+            </Text>
+            {Platform.OS === "android" &&
+              motionPermissionError != null &&
+              !motionPermissionError.includes("Expo Go") && (
+                <TouchableOpacity
+                  style={styles.permissionModalSettingsBtn}
+                  onPress={() => Linking.openSettings()}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.permissionModalSettingsBtnText}>
+                    Open Settings
+                  </Text>
+                </TouchableOpacity>
+              )}
+            <TouchableOpacity
+              style={styles.permissionModalDismissBtn}
+              onPress={() => setMotionPermissionError(null)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.permissionModalDismissBtnText}>OK</Text>
+            </TouchableOpacity>
+          </Pressable>
+        </Pressable>
+      </Modal>
 
       {/* Rotated view: countdown and in-game word always in forehead orientation */}
       {showRotatedView && (
@@ -559,20 +637,8 @@ export default function HeadsUpGameScreen() {
                 height: SCREEN_WIDTH,
               },
             ]}
+            pointerEvents="box-none"
           >
-            {!showCountdown && (
-              <TouchableOpacity
-                onPress={endAndReset}
-                style={[
-                  styles.backBtnInRotated,
-                  { left: 16 + insets.top + 40, top: 12 },
-                ]}
-                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-              >
-                <Ionicons name="arrow-back" size={24} color="#11181C" />
-              </TouchableOpacity>
-            )}
-
             {showFeedback === "correct" && (
               <View style={styles.feedbackOverlay}>
                 <Image
@@ -621,6 +687,21 @@ export default function HeadsUpGameScreen() {
               </View>
             )}
           </View>
+          {/* Touch-blocking overlay: absorbs all touches except the back button */}
+          <View style={styles.touchBlocker} pointerEvents="auto" />
+          {!showCountdown && (
+            <TouchableOpacity
+              onPress={endAndReset}
+              style={[
+                styles.backBtnInRotated,
+                { left: 16 + insets.top + 40, top: 12, zIndex: 10 },
+              ]}
+              hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="arrow-back" size={24} color="#11181C" />
+            </TouchableOpacity>
+          )}
         </View>
       )}
 
@@ -721,6 +802,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
+  },
+  touchBlocker: {
+    ...StyleSheet.absoluteFillObject,
   },
   rotatedInner: {
     transform: [{ rotate: "90deg" }],
@@ -937,12 +1021,63 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "700",
   },
-  permissionError: {
-    marginTop: 12,
-    fontSize: 14,
-    color: "#c64a4a",
+  permissionModalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 24,
+  },
+  permissionModalCard: {
+    backgroundColor: ACCENT_BLUE,
+    borderRadius: 16,
+    padding: 24,
+    width: "90%",
+    maxWidth: 360,
+    borderWidth: 2,
+    borderColor: "#fff",
+  },
+  permissionModalTitle: {
+    fontFamily: HeadingFont,
+    fontSize: 18,
+    color: "#fff",
     textAlign: "center",
-    paddingHorizontal: 16,
+    marginBottom: 12,
+  },
+  permissionModalMessage: {
+    fontFamily: ButtonFont,
+    fontSize: 16,
+    color: "#fff",
+    textAlign: "center",
+    lineHeight: 24,
+  },
+  permissionModalSettingsBtn: {
+    marginTop: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  permissionModalSettingsBtnText: {
+    color: ACCENT_BLUE,
+    fontSize: 16,
+    fontWeight: "600",
+    fontFamily: ButtonFont,
+  },
+  permissionModalDismissBtn: {
+    marginTop: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    backgroundColor: "rgba(255,255,255,0.25)",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  permissionModalDismissBtnText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+    fontFamily: ButtonFont,
   },
   countdownContainer: {
     flex: 1,
@@ -1007,7 +1142,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#fff",
     textAlign: "center",
-    marginBottom: 8,
+    marginBottom: 3,
   },
   finalScore: {
     fontFamily: ButtonFont,
@@ -1015,7 +1150,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#fff",
     textAlign: "center",
-    marginBottom: 24,
+    marginBottom: 3,
   },
   resultsRow: {
     flexDirection: "row",
@@ -1038,7 +1173,7 @@ const styles = StyleSheet.create({
   resultScrollHint: {
     fontFamily: ButtonFont,
     fontSize: 16,
-    color: "rgba(255,255,255,0.8)",
+    color: "rgba(255,255,255,0.7)",
     textAlign: "center",
     marginTop: 6,
   },
@@ -1046,11 +1181,16 @@ const styles = StyleSheet.create({
     fontFamily: HeadingFont,
     fontSize: 26,
     fontWeight: "900",
-    color: "rgb(28, 149, 83)",
-    marginBottom: 8,
+    textAlign: "center",
+    padding: 4,
+    borderRadius: 42,
+    backgroundColor: "rgb(180, 237, 206)",
+    color: "rgb(48, 117, 79)",
+    marginBottom: 12,
   },
   resultTitleSkipped: {
-    color: "#c64a4a",
+    backgroundColor: "rgb(237, 180, 180)",
+    color: "rgb(117, 48, 48)"
   },
   resultItem: {
     fontFamily: ButtonFont,

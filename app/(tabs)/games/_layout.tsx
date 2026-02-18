@@ -20,6 +20,7 @@ export default function GamesLayout() {
         name="headsup"
         options={{
           animation: 'slide_from_right',
+          gestureEnabled: false,
         }}
       />
     </Stack>
