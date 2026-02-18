@@ -1,4 +1,5 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { useFocusEffect } from "@react-navigation/native";
 import { Image } from "expo-image";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -88,6 +89,7 @@ function SlangCard({
   }, []);
 
   const handlePlay = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (playing) {
       stopAudio();
       setPlaying(false);
@@ -100,6 +102,7 @@ function SlangCard({
   }, [entry.audioFile, playing]);
 
   const handlePlaySlow = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (playingSlow) {
       stopAudio();
       setPlayingSlow(false);
@@ -109,6 +112,11 @@ function SlangCard({
       playAudioSlow(entry.audioFile, () => setPlayingSlow(false));
     }
   }, [entry.audioFile, playingSlow]);
+
+  const handleFavPress = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onToggleFav(entry.id);
+  }, [entry.id, onToggleFav]);
 
   const hasImage = entry.image && slangImageMap[entry.image];
 
@@ -143,7 +151,7 @@ function SlangCard({
           <View style={styles.cardActionsRow}>
             <View style={styles.cardActionsMain}>
               <Pressable
-                onPress={() => onToggleFav(entry.id)}
+                onPress={handleFavPress}
                 style={({ pressed }) => [
                   styles.actionBtn,
                   pressed && styles.actionBtnPressed,
