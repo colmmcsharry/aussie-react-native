@@ -6,7 +6,7 @@ import {
 import { Stack, useGlobalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Alert, Dimensions, View } from "react-native";
+import { Alert, Dimensions, Platform, View } from "react-native";
 import ConfettiCannon from "react-native-confetti-cannon";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
@@ -231,7 +231,7 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <ConfettiProvider triggerConfetti={triggerConfetti}>
         <OpenSlangFromNotificationProvider>
-          <NotificationResponseHandler />
+          {Platform.OS !== "web" && <NotificationResponseHandler />}
         <PaywallProvider openPaywall={openPaywall} isPremium={isPremium} refreshPremiumState={refreshPremiumState} openPremiumThanksModal={openPremiumThanksModal}>
           <PremiumThanksModal visible={showPremiumThanks} onClose={() => setShowPremiumThanks(false)} />
           {showConfetti && (

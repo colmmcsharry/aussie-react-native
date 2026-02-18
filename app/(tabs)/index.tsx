@@ -476,6 +476,7 @@ export default function FeedScreen() {
                 </Text>
                 <Pressable
                   onPress={showChangeTimePicker}
+                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
                   style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
                 >
                   <Text style={[styles.reminderChange, { color: ACCENT_BLUE }]}>
@@ -486,6 +487,7 @@ export default function FeedScreen() {
             ) : (
               <Pressable
                 onPress={enableDailyReminder}
+                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
                 style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
               >
                 <Text style={[styles.reminderCta, { color: ACCENT_BLUE }]}>
@@ -740,7 +742,8 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.display,
     fontFamily: SlangDisplayFont,
     textAlign: "center",
-    marginBottom: 4,
+    marginVertical: 6,
+    marginBottom: 8,
   },
   slangHint: {
     fontSize: FontSizes.small,
@@ -838,7 +841,7 @@ const styles = StyleSheet.create({
     fontFamily: ButtonFont,
   },
   reminderRow: {
-    marginTop: 16,
+    marginTop: 18,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -857,7 +860,7 @@ const styles = StyleSheet.create({
   reminderCta: {
     fontFamily: BodyFont,
     fontSize: FontSizes.small,
-    marginTop: 12,
+    marginTop: 20,
     textAlign: "center",
     textDecorationLine: "underline",
   },

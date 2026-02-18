@@ -57,7 +57,7 @@ export const FontSizes = {
   /** Card titles, headings */
   title: 18,
   /** Large display (e.g. featured slang term) */
-  display: 28,
+  display: 30,
 } as const;
 
 export const Fonts = Platform.select({
