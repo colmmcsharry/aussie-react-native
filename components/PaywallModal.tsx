@@ -256,6 +256,9 @@ export function PaywallModal({
                   ]}
                   disabled={loadingYearly}
                 >
+                  <View style={styles.mostPopularPill}>
+                    <Text style={styles.mostPopularPillText}>Most popular</Text>
+                  </View>
                   <View style={styles.planCardContent}>
                     <Image
                       source={require("@/assets/pint.png")}
@@ -313,23 +316,28 @@ export function PaywallModal({
                 You'll get a reminder before your trial ends.
               </Text>
                       
-              {onRestore && (
-                <Pressable onPress={onRestore} style={styles.restoreButton}>
-                  <Text style={styles.restoreText}>Restore Purchase</Text>
+              <View style={styles.bottomButtonsRow}>
+                {onRestore && (
+                  <Pressable
+                    onPress={onRestore}
+                    style={({ pressed }) => [
+                      styles.restoreButton,
+                      { opacity: pressed ? 0.9 : 1 },
+                    ]}
+                  >
+                    <Text style={styles.restoreText}>Restore Purchase</Text>
+                  </Pressable>
+                )}
+                <Pressable
+                  onPress={onContinueFree}
+                  style={({ pressed }) => [
+                    styles.continueButton,
+                    { opacity: pressed ? 0.9 : 1 },
+                  ]}
+                >
+                  <Text style={styles.continueText}>Continue Free</Text>
                 </Pressable>
-              )}
-
-              <Pressable
-                onPress={onContinueFree}
-                style={({ pressed }) => [
-                  styles.continueButton,
-                  { opacity: pressed ? 0.9 : 1 },
-                ]}
-              >
-                <Text style={styles.continueText}>
-                  Continue with free version
-                </Text>
-              </Pressable>
+              </View>
 
               {Platform.OS === "android" && (
                 <Text style={styles.androidDisclaimer}>
@@ -427,7 +435,7 @@ const styles = StyleSheet.create({
     height: 14,
   },
   tableWrap: {
-    marginBottom: 24,
+    marginBottom: 15,
     borderRadius: 8,
     overflow: "hidden",
   },
@@ -467,7 +475,7 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     paddingVertical: 10,
     paddingHorizontal: 14,
-    marginBottom: 14,
+    marginBottom: 24,
     alignItems: "center",
   },
   launchOfferText: {
@@ -488,9 +496,25 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     paddingVertical: 14,
     paddingHorizontal: 8,
+    paddingTop: 22,
     alignItems: "center",
     justifyContent: "center",
     minHeight: 100,
+    overflow: "visible",
+  },
+  mostPopularPill: {
+    position: "absolute",
+    top: -8,
+    alignSelf: "center",
+    backgroundColor: PAYWALL_GREEN,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+  },
+  mostPopularPillText: {
+    fontFamily: ButtonFont,
+    fontSize: 11,
+    color: "#fff",
   },
   planCardContent: {
     alignItems: "center",
@@ -533,17 +557,19 @@ const styles = StyleSheet.create({
     color: "#333",
     marginTop: 4,
   },
+  bottomButtonsRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 16,
+    marginTop: 8,
+    marginBottom: 8,
+  },
   restoreButton: {
-    alignSelf: "center",
     paddingVertical: 8,
-    borderRadius: 50,
-    borderColor: PAYWALL_BLUE_LIGHT,
-    borderWidth: 1,
-    width: 250,
     paddingHorizontal: 20,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 8,
   },
   restoreText: {
     fontFamily: ButtonFont,
@@ -551,16 +577,10 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   continueButton: {
-    alignSelf: "center",
     paddingVertical: 8,
     paddingHorizontal: 20,
-    borderRadius: 50,
-    width: 250,
-    borderColor: PAYWALL_BLUE_LIGHT,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 8,
-    borderWidth: 1,
   },
   continueText: {
     fontFamily: ButtonFont,
