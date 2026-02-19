@@ -17,6 +17,7 @@ import { OpenSlangFromNotificationProvider } from "@/context/OpenSlangFromNotifi
 import { PaywallProvider } from "@/context/PaywallContext";
 import { FredokaOne_400Regular } from "@expo-google-fonts/fredoka-one";
 import { Nunito_500Medium } from "@expo-google-fonts/nunito/500Medium";
+import { Nunito_600SemiBold } from "@expo-google-fonts/nunito/600SemiBold";
 import { Nunito_700Bold } from "@expo-google-fonts/nunito/700Bold";
 import { Nunito_900Black } from "@expo-google-fonts/nunito/900Black";
 import { useFonts } from "expo-font";
@@ -33,6 +34,7 @@ import {
   isPurchasesAvailable,
   purchaseLifetime,
   purchaseWeekly,
+  purchaseYearly,
   restorePurchases,
 } from "@/services/revenuecat";
 
@@ -63,6 +65,7 @@ export default function RootLayout() {
 
   const [fontsLoaded] = useFonts({
     Nunito_500Medium,
+    Nunito_600SemiBold,
     Nunito_700Bold,
     Nunito_900Black,
     FredokaOne_400Regular,
@@ -72,8 +75,10 @@ export default function RootLayout() {
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [paywallWeeklyPrice, setPaywallWeeklyPrice] = useState("$1.00");
+  const [paywallYearlyPrice, setPaywallYearlyPrice] = useState("$10.00");
   const [paywallLifetimePrice, setPaywallLifetimePrice] = useState("$30.00");
   const [paywallLoadingWeekly, setPaywallLoadingWeekly] = useState(false);
+  const [paywallLoadingYearly, setPaywallLoadingYearly] = useState(false);
   const [paywallLoadingLifetime, setPaywallLoadingLifetime] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
   const [showPremiumThanks, setShowPremiumThanks] = useState(false);
@@ -117,11 +122,13 @@ export default function RootLayout() {
         const s = await getPremiumState();
         if (!cancelled) {
           setPaywallWeeklyPrice(s.weeklyPrice);
+          setPaywallYearlyPrice(s.yearlyPrice);
           setPaywallLifetimePrice(s.lifetimePrice);
         }
       } catch {
         if (!cancelled) {
           setPaywallWeeklyPrice("$1.00");
+          setPaywallYearlyPrice("$10.00");
           setPaywallLifetimePrice("$30.00");
         }
       }
@@ -158,6 +165,24 @@ export default function RootLayout() {
       }
     } finally {
       setPaywallLoadingWeekly(false);
+    }
+  };
+
+  const handlePurchaseYearly = async () => {
+    setPaywallLoadingYearly(true);
+    try {
+      const { success } = await purchaseYearly();
+      if (success) {
+        await refreshPremiumState();
+        celebrateUnlock();
+      } else if (!(await isPurchasesAvailable())) {
+        Alert.alert(
+          "Purchases unavailable",
+          "In-app purchases need a development build. In Expo Go the RevenueCat SDK isn't available.\n\nRun 'npx expo run:ios' or 'npx expo run:android' to create a dev build, then test purchases with the Test Store."
+        );
+      }
+    } finally {
+      setPaywallLoadingYearly(false);
     }
   };
 
@@ -252,10 +277,13 @@ export default function RootLayout() {
             onClose={handlePaywallClose}
             onContinueFree={handlePaywallClose}
             weeklyPrice={paywallWeeklyPrice}
+            yearlyPrice={paywallYearlyPrice}
             lifetimePrice={paywallLifetimePrice}
             loadingWeekly={paywallLoadingWeekly}
+            loadingYearly={paywallLoadingYearly}
             loadingLifetime={paywallLoadingLifetime}
             onPurchaseWeekly={handlePurchaseWeekly}
+            onPurchaseYearly={handlePurchaseYearly}
             onPurchaseLifetime={handlePurchaseLifetime}
             onRestore={handleRestore}
           />

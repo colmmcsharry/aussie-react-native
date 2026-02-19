@@ -37,11 +37,15 @@ type PaywallModalProps = {
   onContinueFree: () => void;
   /** Weekly product price string from RevenueCat (e.g. "$1.00/week") */
   weeklyPrice?: string;
+  /** Yearly product price string from RevenueCat (e.g. "$10.00/year") */
+  yearlyPrice?: string;
   /** Lifetime product price string from RevenueCat (e.g. "$30.00") */
   lifetimePrice?: string;
   loadingWeekly?: boolean;
+  loadingYearly?: boolean;
   loadingLifetime?: boolean;
   onPurchaseWeekly?: () => void;
+  onPurchaseYearly?: () => void;
   onPurchaseLifetime?: () => void;
   onRestore?: () => void;
 };
@@ -60,10 +64,13 @@ export function PaywallModal({
   onClose,
   onContinueFree,
   weeklyPrice = "$1.00",
+  yearlyPrice = "$10.00",
   lifetimePrice = "$30.00",
   loadingWeekly = false,
+  loadingYearly = false,
   loadingLifetime = false,
   onPurchaseWeekly,
+  onPurchaseYearly,
   onPurchaseLifetime,
   onRestore,
 }: PaywallModalProps) {
@@ -184,53 +191,75 @@ export function PaywallModal({
                 ))}
               </View>
 
-              <View style={styles.buttonRow}>
+              <View style={styles.plansRow}>
                 <Pressable
                   onPress={onPurchaseWeekly}
                   style={({ pressed }) => [
-                    styles.planButton,
-                    styles.planButtonRow,
+                    styles.planCard,
                     { opacity: loadingWeekly ? 0.7 : pressed ? 0.9 : 1 },
                   ]}
                   disabled={loadingWeekly}
                 >
-                  <View style={styles.planButtonLeft}>
-                    <View style={styles.planButtonTitleRow}>
-                      <Text style={styles.planLabelInline}>Weekly</Text>
-                      <Image
-                        source={require("@/assets/dollar.png")}
-                        style={styles.planButtonIconInline}
-                        resizeMode="contain"
-                      />
+                  <View style={styles.planCardContent}>
+                    <Image
+                      source={require("@/assets/dollar.png")}
+                      style={styles.planCardIcon}
+                      resizeMode="contain"
+                    />
+                    <Text style={styles.planCardLabel}>Weekly</Text>
+                    <View style={styles.planCardTrialSlot}>
+                      <Text style={styles.planCardTrialSpacer}> </Text>
                     </View>
+                    <Text style={styles.planCardPrice}>
+                      {loadingWeekly ? "..." : weeklyPrice}
+                    </Text>
                   </View>
-                  <Text style={styles.planPrice}>
-                    {loadingWeekly ? "Loading..." : weeklyPrice}
-                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={onPurchaseYearly}
+                  style={({ pressed }) => [
+                    styles.planCard,
+                    { opacity: loadingYearly ? 0.7 : pressed ? 0.9 : 1 },
+                  ]}
+                  disabled={loadingYearly}
+                >
+                  <View style={styles.planCardContent}>
+                    <Image
+                      source={require("@/assets/pint.png")}
+                      style={styles.planCardIcon}
+                      resizeMode="contain"
+                    />
+                    <Text style={styles.planCardLabel}>Yearly</Text>
+                    <View style={styles.planCardTrialSlot}>
+                      <Text style={styles.planCardTrial}>7 days free</Text>
+                    </View>
+                    <Text style={styles.planCardPrice}>
+                      {loadingYearly ? "..." : yearlyPrice}
+                    </Text>
+                  </View>
                 </Pressable>
                 <Pressable
                   onPress={onPurchaseLifetime}
                   style={({ pressed }) => [
-                    styles.planButton,
-                    styles.planButtonRow,
+                    styles.planCard,
                     { opacity: loadingLifetime ? 0.7 : pressed ? 0.9 : 1 },
                   ]}
                   disabled={loadingLifetime}
                 >
-                  <View style={styles.planButtonLeft}>
-                    <View style={styles.planButtonTitleRow}>
-                      <Text style={styles.planLabelInline}>Lifetime</Text>
-                      <Image
-                        source={require("@/assets/pitcher.png")}
-                        style={styles.planButtonIconInline}
-                        resizeMode="contain"
-                      />
+                  <View style={styles.planCardContent}>
+                    <Image
+                      source={require("@/assets/pitcher.png")}
+                      style={styles.planCardIcon}
+                      resizeMode="contain"
+                    />
+                    <Text style={styles.planCardLabel}>Lifetime</Text>
+                    <View style={styles.planCardTrialSlot}>
+                      <Text style={styles.planCardTrialSpacer}> </Text>
                     </View>
-                    <Text style={styles.planTrialText}>7 days free</Text>
+                    <Text style={styles.planCardPrice}>
+                      {loadingLifetime ? "..." : lifetimePrice}
+                    </Text>
                   </View>
-                  <Text style={styles.planPrice}>
-                    {loadingLifetime ? "Loading..." : lifetimePrice}
-                  </Text>
                 </Pressable>
               </View>
               <Text style={styles.terms}>
@@ -347,7 +376,7 @@ const styles = StyleSheet.create({
   premiumUnderline: {
     top: -3,
     left: 2,
-    width: 114,
+    width: 120,
     height: 14,
   },
   tableWrap: {
@@ -386,54 +415,56 @@ const styles = StyleSheet.create({
     flex: 1,
     color: "#fff",
   },
-  buttonRow: {
-    flexDirection: "column",
-    gap: 14,
-    marginBottom: 12,
-  },
-  planButton: {
-    backgroundColor: "#eef6ff",
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderRadius: 13,
-    alignItems: "center",
-    justifyContent: "space-between",
-    minHeight: 66,
-  },
-  planButtonRow: {
+  plansRow: {
     flexDirection: "row",
-  },
-  planButtonLeft: {
-    flex: 1,
+    gap: 10,
+    marginBottom: 12,
     justifyContent: "center",
   },
-  planButtonTitleRow: {
-    flexDirection: "row",
+  planCard: {
+    flex: 1,
+    backgroundColor: "#eef6ff",
+    borderRadius: 13,
+    paddingVertical: 14,
+    paddingHorizontal: 8,
     alignItems: "center",
-    gap: 10,
+    justifyContent: "center",
+    minHeight: 100,
   },
-  planLabelInline: {
+  planCardContent: {
+    alignItems: "center",
+  },
+  planCardIcon: {
+    width: 36,
+    height: 36,
+    marginBottom: 6,
+  },
+  planCardLabel: {
     fontFamily: ButtonFont,
-    fontSize: 16,
+    fontSize: 14,
     color: "#333",
   },
-  planButtonIconInline: {
-    width: 32,
-    height: 32,
+  planCardTrialSlot: {
+    minHeight: 0,
+    marginTop: 1,
+    marginBottom: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  planTrialText: {
+  planCardTrial: {
     fontFamily: BodyFont,
-    fontSize: 11,
-    color: "#999",
-    marginTop: 4,
-    position: "absolute",
-    bottom: -7,
-    left: 0,
+    fontSize: 10,
+    color: "#919191",
   },
-  planPrice: {
+  planCardTrialSpacer: {
+    fontSize: 10,
+    opacity: 0,
+  },
+  planCardPrice: {
     fontFamily: ButtonFont,
-    fontSize: 16,
+    fontSize: 13,
     color: "#333",
+    marginTop: 4,
   },
   restoreButton: {
     alignSelf: "center",

@@ -1,16 +1,19 @@
 {
   "expo": {
-    "name": "aussie-react",
-    "slug": "aussie-react",
+    "name": "Oz Speak",
+    "slug": "oz-speak",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "aussiereact",
+    "scheme": "ozspeak",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.aussiereact"
+      "bundleIdentifier": "com.anonymous.ozspeak",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -26,7 +29,7 @@
         "android.permission.MODIFY_AUDIO_SETTINGS",
         "android.permission.ACTIVITY_RECOGNITION"
       ],
-      "package": "com.anonymous.aussiereact"
+      "package": "com.anonymous.ozspeak"
     },
     "web": {
       "output": "static",
@@ -71,6 +74,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "bebd79ea-0ca0-4c67-8391-818e85d58c80"
+      }
     }
   }
 }

@@ -121,15 +121,15 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   gameTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontFamily: HeadingFont,
     color: '#11181C',
     marginBottom: 4,
   },
   gameDescription: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: BodyFont,
-    color: '#687076',
-    lineHeight: 20,
+    color: '#4f5559',
+    lineHeight: 22,
   },
 });

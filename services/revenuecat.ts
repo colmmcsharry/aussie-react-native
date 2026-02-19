@@ -27,8 +27,10 @@ const USE_TEST_STORE = true;
 export type PremiumState = {
   isPremium: boolean;
   weeklyPrice: string;
+  yearlyPrice: string;
   lifetimePrice: string;
   weeklyPackage: unknown | null;
+  yearlyPackage: unknown | null;
   lifetimePackage: unknown | null;
 };
 
@@ -84,8 +86,10 @@ export async function getPremiumState(): Promise<PremiumState> {
   const fallback: PremiumState = {
     isPremium: false,
     weeklyPrice: "$1.00",
+    yearlyPrice: "$10.00",
     lifetimePrice: "$30.00",
     weeklyPackage: null,
+    yearlyPackage: null,
     lifetimePackage: null,
   };
 
@@ -104,6 +108,13 @@ export async function getPremiumState(): Promise<PremiumState> {
         (p: { packageType: string }) => p.packageType === "WEEKLY",
       ) ??
       null;
+    const yearlyPkg =
+      current.annual ??
+      current.availablePackages.find(
+        (p: { packageType: string }) =>
+          p.packageType === "ANNUAL" || p.packageType === "YEARLY",
+      ) ??
+      null;
     const lifetimePkg =
       current.lifetime ??
       current.availablePackages.find(
@@ -112,6 +123,7 @@ export async function getPremiumState(): Promise<PremiumState> {
       null;
 
     const weeklyPrice = weeklyPkg?.product?.priceString ?? fallback.weeklyPrice;
+    const yearlyPrice = yearlyPkg?.product?.priceString ?? fallback.yearlyPrice;
     const lifetimePrice =
       lifetimePkg?.product?.priceString ?? fallback.lifetimePrice;
 
@@ -121,8 +133,10 @@ export async function getPremiumState(): Promise<PremiumState> {
     return {
       isPremium,
       weeklyPrice,
+      yearlyPrice,
       lifetimePrice,
       weeklyPackage: weeklyPkg,
+      yearlyPackage: yearlyPkg,
       lifetimePackage: lifetimePkg,
     };
   } catch (e) {
@@ -155,6 +169,35 @@ export async function purchaseWeekly(): Promise<{ success: boolean }> {
     const err = e as { code?: string };
     if (err?.code === "PURCHASE_CANCELLED_ERROR") return { success: false };
     console.warn("Purchase weekly failed:", e);
+    return { success: false };
+  }
+}
+
+export async function purchaseYearly(): Promise<{ success: boolean }> {
+  const Purchases = await getPurchases();
+  if (!Purchases) return { success: false };
+  try {
+    await configureRevenueCat();
+    const offerings = await Purchases.getOfferings();
+    const pkg =
+      offerings.current?.annual ??
+      offerings.current?.availablePackages?.find(
+        (p: { packageType: string }) =>
+          p.packageType === "ANNUAL" || p.packageType === "YEARLY",
+      );
+    if (!pkg) {
+      console.warn("Yearly package not found");
+      return { success: false };
+    }
+    const result = await Purchases.purchasePackage(pkg);
+    const isPremium =
+      result.customerInfo &&
+      Object.keys(result.customerInfo.entitlements.active).length > 0;
+    return { success: !!isPremium };
+  } catch (e: unknown) {
+    const err = e as { code?: string };
+    if (err?.code === "PURCHASE_CANCELLED_ERROR") return { success: false };
+    console.warn("Purchase yearly failed:", e);
     return { success: false };
   }
 }

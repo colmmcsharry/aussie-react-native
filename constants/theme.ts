@@ -57,7 +57,7 @@ export const FontSizes = {
   /** Card titles, headings */
   title: 18,
   /** Large display (e.g. featured slang term) */
-  display: 30,
+  display: 33,
 } as const;
 
 export const Fonts = Platform.select({
@@ -98,7 +98,7 @@ export const HeadingFont = "Nunito_900Black";
 export const BodyFont = "Nunito_500Medium";
 /** Button text – Nunito Bold. Load in root layout. */
 export const ButtonFont = "Nunito_700Bold";
-/** Card body text (explanation, notes, examples) – Nunito Medium, no 400 in cards. Load in root layout. */
-export const CardBodyFont = "Nunito_500Medium";
+/** Card body text (explanation, notes, examples) – Nunito SemiBold. Load in root layout. */
+export const CardBodyFont = "Nunito_600SemiBold";
 /** Slang phrases only (e.g. "G'day", "How ya goin'?") – Fredoka One. Load in root layout. */
 export const SlangDisplayFont = "FredokaOne_400Regular";
