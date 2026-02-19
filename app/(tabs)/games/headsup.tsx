@@ -723,6 +723,14 @@ export default function HeadsUpGameScreen() {
             { paddingBottom: insets.bottom + 32 },
           ]}
         >
+          <TouchableOpacity
+            onPress={backToMenu}
+            style={[styles.backBtnFloating, { top: insets.top + 12 }]}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="chevron-back" size={24} color="#11181C" />
+          </TouchableOpacity>
           <Text style={styles.scorePhrase}>{scorePhrase}</Text>
           <Text style={styles.finalScore}>{score}</Text>
           <View style={styles.resultsRow}>
@@ -1227,7 +1235,7 @@ const styles = StyleSheet.create({
   },
   resultTitleSkipped: {
     backgroundColor: "rgb(237, 180, 180)",
-    color: "rgb(117, 48, 48)",
+    color: "rgb(141, 58, 58)",
   },
   resultItem: {
     fontFamily: ButtonFont,
@@ -1243,7 +1251,7 @@ const styles = StyleSheet.create({
     minWidth: 200,
     paddingHorizontal: 24,
     paddingVertical: 14,
-    backgroundColor: "fff",
+    backgroundColor: "#fff",
     borderRadius: 12,
     marginTop: 8,
     alignSelf: "center",
