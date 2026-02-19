@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image as ExpoImage } from "expo-image";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   Image,
   Modal,
@@ -50,6 +50,17 @@ type PaywallModalProps = {
   onRestore?: () => void;
 };
 
+function doubledPrice(priceStr: string): string {
+  const match = priceStr.match(/[\d.,]+/);
+  if (!match) return "";
+  const num = parseFloat(match[0].replace(",", "."));
+  if (isNaN(num)) return "";
+  const doubled = num * 2;
+  const prefix = priceStr.match(/^[^\d]*/)?.[0] ?? "";
+  const suffix = priceStr.replace(/^[^\d]*[\d.,]+/, "");
+  return `${prefix}${doubled.toFixed(2)}${suffix}`.trim();
+}
+
 const FEATURES = [
   { label: "All Quizzes, Games & Videos", premium: true, free: false },
   { label: "Access to Rude/X-Rated slang", premium: true, free: false },
@@ -89,6 +100,14 @@ export function PaywallModal({
   const closeButtonStyle = useAnimatedStyle(() => ({
     opacity: closeOpacity.value,
   }));
+
+  const launchOfferEndDate = useMemo(() => {
+    const next = new Date();
+    next.setMonth(next.getMonth() + 1);
+    next.setDate(1);
+    const month = next.toLocaleString("en-AU", { month: "long" });
+    return `1st ${month}`;
+  }, []);
 
   if (!visible) return null;
 
@@ -191,6 +210,13 @@ export function PaywallModal({
                 ))}
               </View>
 
+              <View style={styles.launchOfferBanner}>
+                <Text style={styles.launchOfferText}>
+                  🔥 Launch offer – 50% off all plans until {launchOfferEndDate},
+                  subscribe now, keep that price forever!
+                </Text>
+              </View>
+
               <View style={styles.plansRow}>
                 <Pressable
                   onPress={onPurchaseWeekly}
@@ -210,9 +236,16 @@ export function PaywallModal({
                     <View style={styles.planCardTrialSlot}>
                       <Text style={styles.planCardTrialSpacer}> </Text>
                     </View>
-                    <Text style={styles.planCardPrice}>
-                      {loadingWeekly ? "..." : weeklyPrice}
-                    </Text>
+                    <View>
+                      {!loadingWeekly && weeklyPrice && (
+                        <Text style={styles.planCardStrikethrough}>
+                          {doubledPrice(weeklyPrice)}
+                        </Text>
+                      )}
+                      <Text style={styles.planCardPrice}>
+                        {loadingWeekly ? "..." : weeklyPrice}
+                      </Text>
+                    </View>
                   </View>
                 </Pressable>
                 <Pressable
@@ -231,11 +264,18 @@ export function PaywallModal({
                     />
                     <Text style={styles.planCardLabel}>Yearly</Text>
                     <View style={styles.planCardTrialSlot}>
-                      <Text style={styles.planCardTrial}>7 days free</Text>
+                      <Text style={styles.planCardTrial}>7 days free,</Text>
                     </View>
-                    <Text style={styles.planCardPrice}>
-                      {loadingYearly ? "..." : yearlyPrice}
-                    </Text>
+                    <View>
+                      {!loadingYearly && yearlyPrice && (
+                        <Text style={styles.planCardStrikethrough}>
+                          {doubledPrice(yearlyPrice)}
+                        </Text>
+                      )}
+                      <Text style={styles.planCardPrice}>
+                        {loadingYearly ? "..." : yearlyPrice}
+                      </Text>
+                    </View>
                   </View>
                 </Pressable>
                 <Pressable
@@ -256,16 +296,23 @@ export function PaywallModal({
                     <View style={styles.planCardTrialSlot}>
                       <Text style={styles.planCardTrialSpacer}> </Text>
                     </View>
-                    <Text style={styles.planCardPrice}>
-                      {loadingLifetime ? "..." : lifetimePrice}
-                    </Text>
+                    <View>
+                      {!loadingLifetime && lifetimePrice && (
+                        <Text style={styles.planCardStrikethrough}>
+                          {doubledPrice(lifetimePrice)}
+                        </Text>
+                      )}
+                      <Text style={styles.planCardPrice}>
+                        {loadingLifetime ? "..." : lifetimePrice}
+                      </Text>
+                    </View>
                   </View>
                 </Pressable>
               </View>
               <Text style={styles.terms}>
                 You'll get a reminder before your trial ends.
               </Text>
-
+                      
               {onRestore && (
                 <Pressable onPress={onRestore} style={styles.restoreButton}>
                   <Text style={styles.restoreText}>Restore Purchase</Text>
@@ -415,6 +462,20 @@ const styles = StyleSheet.create({
     flex: 1,
     color: "#fff",
   },
+  launchOfferBanner: {
+    backgroundColor: "rgba(255,255,255,0.2)",
+    borderRadius: 28,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    marginBottom: 14,
+    alignItems: "center",
+  },
+  launchOfferText: {
+    fontFamily: ButtonFont,
+    fontSize: 14,
+    color: "#fff",
+    textAlign: "center",
+  },
   plansRow: {
     flexDirection: "row",
     gap: 10,
@@ -455,6 +516,12 @@ const styles = StyleSheet.create({
     fontFamily: BodyFont,
     fontSize: 10,
     color: "#919191",
+  },
+  planCardStrikethrough: {
+    fontFamily: BodyFont,
+    fontSize: 11,
+    color: "#999",
+    textDecorationLine: "line-through",
   },
   planCardTrialSpacer: {
     fontSize: 10,
