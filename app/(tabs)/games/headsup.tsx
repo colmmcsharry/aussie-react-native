@@ -30,7 +30,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   ButtonFont,
   ContentBg,
-  HeadingFont
+  HeadingFont,
+  mainAussieBlue,
 } from "@/constants/theme";
 import {
   HEADSUP_EASY_WORDS,
@@ -149,6 +150,8 @@ export default function HeadsUpGameScreen() {
   const [motionPermissionError, setMotionPermissionError] = useState<
     string | null
   >(null);
+  const [correctScrolledToBottom, setCorrectScrolledToBottom] = useState(false);
+  const [skippedScrolledToBottom, setSkippedScrolledToBottom] = useState(false);
 
   const wordPool = useRef<string[]>([]);
   const hasTiltedDown = useRef(false);
@@ -308,6 +311,14 @@ export default function HeadsUpGameScreen() {
     };
   }, [gameStarted, gameOver]);
 
+  // Reset scroll hints when showing new game results
+  useEffect(() => {
+    if (gameOver) {
+      setCorrectScrolledToBottom(false);
+      setSkippedScrolledToBottom(false);
+    }
+  }, [gameOver]);
+
   // Tilt detection: neutral -90°, tilt up (skip) → -2°, tilt down (point) → -180° (trigger ~-120)
   useEffect(() => {
     if (!gameStarted || gameOver || !currentWord) return;
@@ -385,7 +396,7 @@ export default function HeadsUpGameScreen() {
   const topicIds: HeadsUpTopicId[] = ["easy", "hard", "xxx"];
 
   const scorePhrase = useMemo(() => {
-    if (score === 0) return "RUBBISH! 💩";
+    if (score === 0) return "DRONGO! 💩";
     if (score < 5) return "NOT BAD 🙂";
     if (score < 10) return "GOOD ON YA! 🦘";
     return "LEGEND! 🇦🇺";
@@ -694,7 +705,7 @@ export default function HeadsUpGameScreen() {
               onPress={endAndReset}
               style={[
                 styles.backBtnInRotated,
-                { left: 16 + insets.top + 40, top: 12, zIndex: 10 },
+                { left: 16, top: insets.top + 16, zIndex: 10 },
               ]}
               hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
               activeOpacity={0.7}
@@ -722,6 +733,19 @@ export default function HeadsUpGameScreen() {
                 contentContainerStyle={styles.resultScrollContent}
                 showsVerticalScrollIndicator={true}
                 persistentScrollbar={true}
+                scrollEventThrottle={100}
+                onScroll={({
+                  nativeEvent: {
+                    contentOffset,
+                    contentSize,
+                    layoutMeasurement,
+                  },
+                }) => {
+                  const atBottom =
+                    contentOffset.y + layoutMeasurement.height >=
+                    contentSize.height - 10;
+                  if (atBottom) setCorrectScrolledToBottom(true);
+                }}
               >
                 {correctWords.map((w, i) => (
                   <Text key={i} style={styles.resultItem}>
@@ -729,7 +753,7 @@ export default function HeadsUpGameScreen() {
                   </Text>
                 ))}
               </ScrollView>
-              {correctWords.length > 15 && (
+              {correctWords.length > 15 && !correctScrolledToBottom && (
                 <Text style={styles.resultScrollHint}>↓ Scroll to see all</Text>
               )}
             </View>
@@ -742,6 +766,19 @@ export default function HeadsUpGameScreen() {
                 contentContainerStyle={styles.resultScrollContent}
                 showsVerticalScrollIndicator={true}
                 persistentScrollbar={true}
+                scrollEventThrottle={100}
+                onScroll={({
+                  nativeEvent: {
+                    contentOffset,
+                    contentSize,
+                    layoutMeasurement,
+                  },
+                }) => {
+                  const atBottom =
+                    contentOffset.y + layoutMeasurement.height >=
+                    contentSize.height - 10;
+                  if (atBottom) setSkippedScrolledToBottom(true);
+                }}
               >
                 {skippedWords.map((w, i) => (
                   <Text key={i} style={styles.resultItem}>
@@ -749,15 +786,15 @@ export default function HeadsUpGameScreen() {
                   </Text>
                 ))}
               </ScrollView>
-              {skippedWords.length > 15 && (
+              {skippedWords.length > 15 && !skippedScrolledToBottom && (
                 <Text style={styles.resultScrollHint}>↓ Scroll to see all</Text>
               )}
             </View>
           </View>
           <TouchableOpacity onPress={backToMenu} style={styles.backToMenuBtn}>
             <Ionicons
-              name="arrow-back"
-              size={22}
+              name="chevron-back"
+              size={34}
               color="#fff"
               style={styles.backToMenuIcon}
             />
@@ -1182,15 +1219,15 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "900",
     textAlign: "center",
-    padding: 4,
+    padding: 6,
     borderRadius: 42,
     backgroundColor: "rgb(180, 237, 206)",
     color: "rgb(48, 117, 79)",
-    marginBottom: 12,
+    marginBottom: 20,
   },
   resultTitleSkipped: {
     backgroundColor: "rgb(237, 180, 180)",
-    color: "rgb(117, 48, 48)"
+    color: "rgb(117, 48, 48)",
   },
   resultItem: {
     fontFamily: ButtonFont,
@@ -1203,16 +1240,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: ACCENT_BLUE,
+    minWidth: 200,
+    paddingHorizontal: 24,
     paddingVertical: 14,
+    backgroundColor: "fff",
     borderRadius: 12,
     marginTop: 8,
+    alignSelf: "center",
   },
   backToMenuIcon: {
     marginRight: 8,
+    color: mainAussieBlue,
   },
   backToMenuText: {
-    color: "#fff",
+    color: mainAussieBlue,
     fontSize: 20,
     fontWeight: "700",
   },
