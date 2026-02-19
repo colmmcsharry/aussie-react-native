@@ -1,0 +1,43 @@
+diff --git a/node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios/ReactCommon/RCTTurboModule.mm b/node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios/ReactCommon/RCTTurboModule.mm
+index 2a67797..26e4c8d 100644
+--- a/node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios/ReactCommon/RCTTurboModule.mm
++++ b/node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios/ReactCommon/RCTTurboModule.mm
+@@ -9,6 +9,7 @@
+ 
+ #import <React/RCTBridgeModule.h>
+ #import <React/RCTConvert.h>
++#import <React/RCTLog.h>
+ #import <React/RCTCxxConvert.h>
+ #import <React/RCTManagedPointer.h>
+ #import <React/RCTModuleMethod.h>
+@@ -366,13 +367,12 @@ id convertJSIValueToObjCObject(
+     @try {
+       [inv invokeWithTarget:strongModule];
+     } @catch (NSException *exception) {
+-      if (isSync) {
+-        // We can only convert NSException to JSError in sync method calls.
+-        // See https://github.com/reactwg/react-native-new-architecture/discussions/276#discussioncomment-12567155
+-        throw convertNSExceptionToJSError(runtime, exception, std::string{moduleName}, methodNameStr);
+-      } else {
+-        @throw exception;
+-      }
++      // Never rethrow: causes SIGABRT on iOS 26. Log and swallow.
++      // See https://github.com/facebook/react-native/issues/54859
++      RCTLogError(@"TurboModule %s.%s (non-void) threw: %@", moduleName, methodName, exception);
++      [retainedObjectsForInvocation removeAllObjects];
++      if (isSync) result = nil;
++      return;
+     } @finally {
+       [retainedObjectsForInvocation removeAllObjects];
+     }
+@@ -435,7 +435,9 @@ TraceSection s(
+     @try {
+       [inv invokeWithTarget:strongModule];
+     } @catch (NSException *exception) {
+-      throw convertNSExceptionToJSError(runtime, exception, std::string{moduleName}, methodNameStr);
++      // Never rethrow: causes SIGABRT on iOS 26. Log and swallow instead.
++      // See https://github.com/facebook/react-native/issues/54859
++      RCTLogError(@"TurboModule %s.%s threw: %@", moduleName, methodName, exception);
+     } @finally {
+       [retainedObjectsForInvocation removeAllObjects];
+     }

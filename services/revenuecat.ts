@@ -18,11 +18,11 @@ import { Platform } from "react-native";
 const REVENUECAT_TEST_STORE_API_KEY = "test_gpAvCaoiAbataLnyLICagJBGBZn";
 
 // Production keys (replace before release; then use USE_TEST_STORE = false)
-const REVENUECAT_API_KEY_IOS = "appl_YOUR_IOS_API_KEY";
+const REVENUECAT_API_KEY_IOS = "appl_PEDSjuygnUDVBVqMMvVjSFRnIMq";
 const REVENUECAT_API_KEY_ANDROID = "goog_YOUR_ANDROID_API_KEY";
 
 /** Set to true to use Test Store for dev/testing. Must be false for App Store / Play Store builds. */
-const USE_TEST_STORE = true;
+const USE_TEST_STORE = false;
 
 export type PremiumState = {
   isPremium: boolean;

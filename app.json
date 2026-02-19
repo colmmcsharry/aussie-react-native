@@ -8,6 +8,7 @@
     "scheme": "ozspeak",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "jsEngine": "hermes",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.ozspeak",
@@ -69,7 +70,15 @@
           "sounds": []
         }
       ],
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "buildReactNativeFromSource": true
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

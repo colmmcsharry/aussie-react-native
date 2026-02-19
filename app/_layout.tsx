@@ -44,7 +44,7 @@ export const unstable_settings = {
 
 /** When true, show onboarding every time (for testing). Use ?show_onboarding=1 in the URL. */
 function getForceOnboarding(): boolean {
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && window.location?.search) {
     const params = new URLSearchParams(window.location.search);
     return (
       params.get("show_onboarding") === "1" ||
@@ -97,7 +97,9 @@ export default function RootLayout() {
   }, []);
 
   useEffect(() => {
-    refreshPremiumState();
+    // Defer RevenueCat/premium check to avoid Turbo Module crash on cold launch (TestFlight)
+    const t = setTimeout(refreshPremiumState, 500);
+    return () => clearTimeout(t);
   }, [refreshPremiumState]);
 
   useEffect(() => {
