@@ -19,7 +19,7 @@ const REVENUECAT_TEST_STORE_API_KEY = "test_gpAvCaoiAbataLnyLICagJBGBZn";
 
 // Production keys (replace before release; then use USE_TEST_STORE = false)
 const REVENUECAT_API_KEY_IOS = "appl_PEDSjuygnUDVBVqMMvVjSFRnIMq";
-const REVENUECAT_API_KEY_ANDROID = "goog_YOUR_ANDROID_API_KEY";
+const REVENUECAT_API_KEY_ANDROID = "goog_nEyMCxKKEZKcaaXMWlcWQOMuMnB";
 
 /** Set to true to use Test Store for dev/testing. Must be false for App Store / Play Store builds. */
 const USE_TEST_STORE = false;
@@ -51,7 +51,7 @@ async function getPurchases(): Promise<
         "[RevenueCat] Native module not available:",
         e instanceof Error ? e.message : e,
         "| executionEnvironment:",
-        env
+        env,
       );
     }
     return null;
@@ -73,7 +73,10 @@ export async function configureRevenueCat(): Promise<void> {
       : Platform.OS === "ios"
         ? REVENUECAT_API_KEY_IOS
         : REVENUECAT_API_KEY_ANDROID;
-    if (!USE_TEST_STORE && (apiKey.startsWith("appl_YOUR_") || apiKey.startsWith("goog_YOUR_")))
+    if (
+      !USE_TEST_STORE &&
+      (apiKey.startsWith("appl_YOUR_") || apiKey.startsWith("goog_YOUR_"))
+    )
       return;
     Purchases.configure({ apiKey });
     configured = true;
