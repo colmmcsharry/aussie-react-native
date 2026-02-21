@@ -49,6 +49,7 @@ interface StandaloneVideoItem {
   youtubeId: string;
   title: string;
   date?: string;
+  releaseDate?: string;
   channelName?: string;
   channelLink?: string;
   description?: string;
@@ -57,72 +58,74 @@ interface StandaloneVideoItem {
 interface TeachersFormatResponse {
   teachers: Record<string, TeacherConfig>;
   /** Standalone videos (no teacher card). Only appear in Latest. */
-  videos?: StandaloneVideoItem[];
-}
-
-function parseReleaseDate(
-  item: TeacherVideoItem,
-  index: number,
-  teacherConfig: TeacherConfig
-): string | undefined {
-  if (item.releaseDate) return item.releaseDate;
-  if (item.date) return item.date;
-  const { startDate, intervalDays } = teacherConfig;
-  if (startDate && intervalDays != null) {
-    const d = new Date(startDate);
-    if (!Number.isNaN(d.getTime())) {
-      d.setDate(d.getDate() + index * intervalDays);
-      return d.toISOString().slice(0, 10);
-    }
-  }
-  return undefined;
+  standaloneVideos?: StandaloneVideoItem[];
+  /** Global drip-feed: first video in list = newest date, last = oldest. New videos (appended) appear at top of Latest. */
+  startDate?: string;
+  intervalDays?: number;
 }
 
 function flattenTeachersFormat(data: TeachersFormatResponse): YouTubeVideoEntry[] {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const todayTime = today.getTime();
+  const startDate = data.startDate ?? '2026-01-01';
+  const intervalDays = data.intervalDays ?? 2;
 
-  const result: YouTubeVideoEntry[] = [];
+  type Pending = {
+    item: TeacherVideoItem | StandaloneVideoItem;
+    teacherKey?: string;
+    channelName?: string;
+    channelLink?: string;
+    description?: string;
+  };
+
+  const pending: Pending[] = [];
   for (const [teacherKey, config] of Object.entries(data.teachers ?? {})) {
-    const videos = config?.videos ?? [];
-    for (let i = 0; i < videos.length; i++) {
-      const item = videos[i];
-      const releaseDateStr = parseReleaseDate(item, i, config);
-      if (releaseDateStr) {
-        const releaseDate = new Date(releaseDateStr);
-        releaseDate.setHours(0, 0, 0, 0);
-        if (releaseDate.getTime() > todayTime) continue; // drip-feed: skip future videos
-      }
-      result.push({
-        title: item.title,
-        youtubeId: item.youtubeId,
-        date: item.date ?? releaseDateStr,
+    for (const item of config?.videos ?? []) {
+      pending.push({
+        item,
+        teacherKey,
         channelName: config.channelName,
         channelLink: config.channelLink,
         description: config.description,
-        category: 'aussieslang',
-        teacher: teacherKey,
       });
     }
   }
-  for (const item of data.videos ?? []) {
-    const releaseStr = item.date;
-    if (releaseStr) {
-      const d = new Date(releaseStr);
+  for (const item of data.standaloneVideos ?? []) {
+    pending.push({ item, channelName: item.channelName, channelLink: item.channelLink, description: item.description });
+  }
+
+  const total = pending.length;
+  const result: YouTubeVideoEntry[] = [];
+
+  pending.forEach((p, globalIndex) => {
+    const item = p.item;
+    const releaseDateStr = item.releaseDate ?? item.date ?? (() => {
+      const dateIndex = total - 1 - globalIndex;
+      const d = new Date(startDate);
+      if (Number.isNaN(d.getTime())) return undefined;
+      d.setDate(d.getDate() + dateIndex * intervalDays);
+      return d.toISOString().slice(0, 10);
+    })();
+
+    if (releaseDateStr) {
+      const d = new Date(releaseDateStr);
       d.setHours(0, 0, 0, 0);
-      if (d.getTime() > todayTime) continue;
+      if (d.getTime() > todayTime) return;
     }
+
     result.push({
       title: item.title,
       youtubeId: item.youtubeId,
-      date: item.date,
-      channelName: item.channelName,
-      channelLink: item.channelLink,
-      description: item.description,
+      date: item.date ?? releaseDateStr,
+      channelName: p.channelName,
+      channelLink: p.channelLink,
+      description: p.description,
       category: 'aussieslang',
+      teacher: p.teacherKey,
     });
-  }
+  });
+
   return result;
 }
 

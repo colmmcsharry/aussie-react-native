@@ -1,25 +1,15 @@
 {
+  "startDate": "2026-01-01",
+  "intervalDays": 2,
   "teachers": {
     "candice": {
       "channelName": "Candice Moll",
       "channelLink": "https://www.youtube.com/@candicemoll8386",
       "description": "Candice Moll is an Australian Youtuber with many vids teaching slang.",
       "videos": [
-        {
-          "youtubeId": "406bbThn2JE",
-          "title": "General Australian Slang",
-          "date": "5 July 2025"
-        },
-        {
-          "youtubeId": "eegKWCYExzc",
-          "title": "Australian accent tips",
-          "date": "5 July 2025"
-        },
-        {
-          "youtubeId": "SkzN9yHzZw0",
-          "title": "Australian Drinking Culture",
-          "date": "21 Feb 2026"
-        }
+        { "youtubeId": "406bbThn2JE", "title": "General Australian Slang" },
+        { "youtubeId": "eegKWCYExzc", "title": "Australian accent tips" },
+        { "youtubeId": "SkzN9yHzZw0", "title": "Australian Drinking Culture" }
       ]
     },
     "aussieenglish": {
@@ -27,26 +17,10 @@
       "channelLink": "https://www.youtube.com/@AussieEnglish",
       "description": "Pete from Aussie English teaches essential Australian slang words and phrases. This channel is fantastic for learning authentic Australian English and culture.",
       "videos": [
-        {
-          "youtubeId": "Ei7230KxvCg",
-          "title": "Australian Slang Words You Need to Know",
-          "date": "8 Jan 2025"
-        },
-        {
-          "youtubeId": "DHQRZXM-4xI",
-          "title": "Australian Slang - Fair Dinkum Phrases",
-          "date": "8 Jan 2025"
-        },
-        {
-          "youtubeId": "FZOmG4qcnpQ",
-          "title": "Dirty Australian Slang",
-          "date": "8 Jan 2025"
-        },
-        {
-          "youtubeId": "yDb_WsAt_Z0",
-          "title": "How Australians Really Talk - Slang Guide",
-          "date": "8 Jan 2025"
-        }
+        { "youtubeId": "Ei7230KxvCg", "title": "Australian Slang Words You Need to Know" },
+        { "youtubeId": "DHQRZXM-4xI", "title": "Australian Slang - Fair Dinkum Phrases" },
+        { "youtubeId": "FZOmG4qcnpQ", "title": "Dirty Australian Slang" },
+        { "youtubeId": "yDb_WsAt_Z0", "title": "How Australians Really Talk - Slang Guide" }
       ]
     },
     "ozziemcguire": {
@@ -54,42 +28,25 @@
       "channelLink": "https://www.youtube.com/@ozziemcguire",
       "description": "Ozzie McGuire is an Australian Youtuber with many vids teaching slang.",
       "videos": [
-        {
-          "youtubeId": "WDnkSrB5lMI",
-          "title": "How to Speak Australian",
-          "date": "12 Feb 2026"
-        },
-        {
-          "youtubeId": "aT345UY7Urw",
-          "title": "20 Australian words you have to know",
-          "date": "12 Feb 2026"
-        }
+        { "youtubeId": "WDnkSrB5lMI", "title": "How to Speak Australian" },
+        { "youtubeId": "aT345UY7Urw", "title": "20 Australian words you have to know" }
       ]
     },
     "amanda": {
       "videos": [
-        {
-          "youtubeId": "HT82zn4nTGA",
-          "title": "Aussie Slang Words People Get Wrong",
-          "date": "20 Feb 2026"
-        }
+        { "youtubeId": "HT82zn4nTGA", "title": "Aussie Slang Words People Get Wrong" }
       ]
     },
     "your-aussie-uncle": {
       "videos": [
-        {
-          "youtubeId": "V3LunHCra5M",
-          "title": "5 Phrases To Use In Work",
-          "date": "21 Feb 2026"
-        }
+        { "youtubeId": "V3LunHCra5M", "title": "5 Phrases To Use In Work" }
       ]
     }
   },
-  "videos": [
+  "standaloneVideos": [
     {
       "youtubeId": "DjMWueTP_tI",
       "title": "Guide to Australian Slang",
-      "date": "14 Feb 2026",
       "channelName": "Side Business Bloke",
       "channelLink": "https://www.youtube.com/@sidebusinessbloke",
       "description": "A 12 minute guide from an Englishman in Oz"
