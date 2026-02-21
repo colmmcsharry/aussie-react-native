@@ -118,6 +118,60 @@ export function getTeacherKeyFromVideo(video: VimeoVideo): string | null {
   return tag ? tag.name.replace('teacher-', '') : null;
 }
 
+/**
+ * Parse social links from text. Looks for Instagram, YouTube, TikTok URLs.
+ * Paste URLs anywhere in the description (e.g. "Bio text... https://instagram.com/... https://youtube.com/@...").
+ */
+export function parseSocialLinksFromText(text: string | null | undefined): {
+  instagram?: string;
+  youtube?: string;
+  tiktok?: string;
+} {
+  if (!text || !text.trim()) return {};
+  const urlRegex = /https?:\/\/[^\s]+/g;
+  const matches = text.match(urlRegex) ?? [];
+  const result: { instagram?: string; youtube?: string; tiktok?: string } = {};
+  for (const url of matches) {
+    const lower = url.toLowerCase();
+    if (lower.includes('instagram.com') && !result.instagram) result.instagram = url;
+    else if ((lower.includes('youtube.com') || lower.includes('youtu.be')) && !result.youtube) result.youtube = url;
+    else if (lower.includes('tiktok.com') && !result.tiktok) result.tiktok = url;
+  }
+  return result;
+}
+
+/**
+ * Get teacher bio from the first video with a description.
+ * Strips lines that are only URLs (so the bio text stays clean; URLs become social buttons).
+ */
+export function getTeacherBioFromVideos(videos: VimeoVideo[]): string | null {
+  const first = videos.find((v) => v.description && v.description.trim().length > 0);
+  if (!first?.description?.trim()) return null;
+  const lines = first.description.trim().split(/\r?\n/);
+  const bioLines = lines
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0 && !/^https?:\/\//i.test(l));
+  return bioLines.length > 0 ? bioLines.join('\n') : null;
+}
+
+/** Get social links from the first video with a description (for dynamic teachers). */
+export function getTeacherSocialLinksFromVideos(videos: VimeoVideo[]): {
+  instagram?: string;
+  youtube?: string;
+  tiktok?: string;
+} {
+  const first = videos.find((v) => v.description && v.description.trim().length > 0);
+  return parseSocialLinksFromText(first?.description ?? null);
+}
+
+/** Format teacher key as display name (e.g. "jem" -> "Jem", "ozzie-mcguire" -> "Ozzie Mcguire"). */
+export function formatTeacherKeyAsName(key: string): string {
+  return key
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(' ');
+}
+
 /** Group Vimeo videos by teacher key. Videos without a teacher tag are omitted. */
 export function groupVimeoVideosByTeacher(videos: VimeoVideo[]): Record<string, VimeoVideo[]> {
   const byTeacher: Record<string, VimeoVideo[]> = {};

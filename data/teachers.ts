@@ -9,6 +9,8 @@ export interface TeacherYouTubeVideo {
   type: 'youtube';
   youtubeId: string;
   name: string;
+  /** Upload date for display (e.g. from Gist). */
+  date?: string;
 }
 
 export interface TeacherProfile {

@@ -39,7 +39,7 @@ import {
 } from "@/constants/theme";
 import { useOpenSlangFromNotification } from "@/context/OpenSlangFromNotificationContext";
 import { quizImageMap } from "@/data/quiz-assets";
-import { quizzes, type QuizQuestion } from "@/data/quiz-data";
+import { quizzes } from "@/data/quiz-data";
 import { getCategories, getSlangOfTheDayForDate } from "@/data/slang";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { loadFavourites, toggleFavourite } from "@/services/favourites";
@@ -350,6 +350,7 @@ export default function FeedScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <TabHeader title="Feed" />
+      {/* Preview onboarding button */}
       {/* <Pressable
         style={({ pressed }) => [
           styles.previewOnboardingBanner,
@@ -359,6 +360,7 @@ export default function FeedScreen() {
       >
         <Text style={styles.previewOnboardingText}>Preview onboarding</Text>
       </Pressable> */}
+      {/* End preview onboarding button */}
       <SlangDetailModal
         visible={showSlangModal}
         entry={slangOfTheDay}
@@ -771,7 +773,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderRadius: 12,
-    borderWidth: 2
+    borderWidth: 2,
   },
   optionSelected: {
     borderColor: ACCENT_BLUE,

@@ -16,6 +16,8 @@ export interface YouTubeVideoEntry {
   cc_load_policy?: number;
   isNew?: boolean;
   date?: string;
+  /** Teacher key (e.g. "amanda") to show in that teacher's video section. */
+  teacher?: string;
 }
 
 export interface YouTubeGistResponse {
@@ -29,6 +31,33 @@ export async function fetchAussieYouTubeVideos(): Promise<YouTubeVideoEntry[]> {
   }
   const data: YouTubeGistResponse = await res.json();
   return data.videos ?? [];
+}
+
+/** Get teacher profile from Gist videos (for teachers with only YouTube, no Vimeo). */
+export function getTeacherProfileFromGistVideos(
+  videos: YouTubeVideoEntry[],
+  teacherKey: string
+): { name: string; bio: string; instagram?: string; youtube?: string; tiktok?: string } | null {
+  const forTeacher = videos.filter((v) => v.teacher === teacherKey);
+  if (forTeacher.length === 0) return null;
+  const first = forTeacher.find((v) => v.description?.trim()) ?? forTeacher[0];
+  const name = first.channelName?.trim() || teacherKey.split('-').map((p) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()).join(' ');
+  const desc = first.description?.trim() ?? '';
+  const urlRegex = /^https?:\/\//i;
+  const bioLines = desc.split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !urlRegex.test(l));
+  const bio = bioLines.length > 0 ? bioLines.join('\n') : '';
+  const urlMatches = desc.match(/https?:\/\/[^\s]+/g) ?? [];
+  const socials: { instagram?: string; youtube?: string; tiktok?: string } = {};
+  for (const url of urlMatches) {
+    const lower = url.toLowerCase();
+    if (lower.includes('instagram.com') && !socials.instagram) socials.instagram = url;
+    else if ((lower.includes('youtube.com') || lower.includes('youtu.be')) && !socials.youtube) socials.youtube = url;
+    else if (lower.includes('tiktok.com') && !socials.tiktok) socials.tiktok = url;
+  }
+  if (!socials.youtube && first.channelLink?.trim()) {
+    socials.youtube = first.channelLink.trim();
+  }
+  return { name, bio, ...socials };
 }
 
 /** YouTube thumbnail URL (medium quality). For Shorts use maxresdefault or hqdefault. */

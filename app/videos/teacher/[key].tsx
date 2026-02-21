@@ -17,7 +17,7 @@ import { TabHeader } from "@/components/tab-header";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { usePaywall } from "@/context/PaywallContext";
-import { BodyFont, ButtonFont, HeadingFont } from "@/constants/theme";
+import { BodyFont, ButtonFont, ContentBg, HeadingFont } from "@/constants/theme";
 import {
   getTeacherByKey,
   PREMIUM_TEACHER_KEYS,
@@ -28,22 +28,39 @@ import {
   fetchProjectVideos,
   formatDuration,
   getEmbedUrl,
+  getTeacherBioFromVideos,
+  getTeacherSocialLinksFromVideos,
   getThumbnail,
   getVideoId,
+  formatTeacherKeyAsName,
   groupVimeoVideosByTeacher,
   type VimeoVideo,
 } from "@/services/vimeo";
 import {
+  fetchAussieYouTubeVideos,
+  getTeacherProfileFromGistVideos,
   getYouTubeProxyEmbedUrl,
   getYouTubeThumbnail,
 } from "@/services/youtube-gist";
+import { getSortableTimestamp } from "@/utils/date";
+
+function formatUploadDate(dateStr: string | undefined): string {
+  if (!dateStr || !dateStr.trim()) return "";
+  const d = new Date(dateStr);
+  if (!Number.isNaN(d.getTime())) {
+    return d.toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" });
+  }
+  const trimmed = dateStr.trim();
+  if (/\d/.test(trimmed) && trimmed.length >= 4) return trimmed;
+  return "";
+}
 
 const LIST_THUMB_WIDTH = 160;
 const LIST_THUMB_HEIGHT = 120;
 
 type TeacherVideoItem =
-  | { type: "vimeo"; video: VimeoVideo }
-  | { type: "youtube"; entry: TeacherYouTubeVideo };
+  | { type: "vimeo"; video: VimeoVideo; sortKey: number }
+  | { type: "youtube"; entry: TeacherYouTubeVideo; sortKey: number };
 
 export default function TeacherDetailScreen() {
   const { key } = useLocalSearchParams<{ key: string }>();
@@ -54,18 +71,48 @@ export default function TeacherDetailScreen() {
     "icon",
   );
 
-  const profile = useMemo(() => getTeacherByKey(key ?? ""), [key]);
   const [vimeoVideos, setVimeoVideos] = useState<VimeoVideo[]>([]);
+  const [gistYouTubeVideos, setGistYouTubeVideos] = useState<
+    Awaited<ReturnType<typeof fetchAussieYouTubeVideos>>
+  >([]);
   const [loading, setLoading] = useState(true);
+
+  const profile = useMemo(() => {
+    const staticProfile = getTeacherByKey(key ?? "");
+    if (staticProfile) return staticProfile;
+    if (vimeoVideos.length > 0) {
+      const socials = getTeacherSocialLinksFromVideos(vimeoVideos);
+      return {
+        key: key ?? "",
+        name: formatTeacherKeyAsName(key ?? ""),
+        bio: getTeacherBioFromVideos(vimeoVideos) ?? "",
+        youtubeVideos: [] as TeacherYouTubeVideo[],
+        ...socials,
+      };
+    }
+    const gistProfile = getTeacherProfileFromGistVideos(gistYouTubeVideos ?? [], key ?? "");
+    if (gistProfile) {
+      return {
+        key: key ?? "",
+        ...gistProfile,
+        youtubeVideos: [] as TeacherYouTubeVideo[],
+      };
+    }
+    return undefined;
+  }, [key, vimeoVideos, gistYouTubeVideos]);
 
   useEffect(() => {
     if (!key) return;
     let cancelled = false;
-    fetchProjectVideos(1, 100)
-      .then((res) => {
+    Promise.all([
+      fetchProjectVideos(1, 100),
+      fetchAussieYouTubeVideos(),
+    ])
+      .then(([vimeoRes, gistVideos]) => {
         if (cancelled) return;
-        const byTeacher = groupVimeoVideosByTeacher(res.data);
+        const byTeacher = groupVimeoVideosByTeacher(vimeoRes.data);
         setVimeoVideos(byTeacher[key] ?? []);
+        setGistYouTubeVideos(gistVideos);
         setLoading(false);
       })
       .catch(() => {
@@ -78,12 +125,30 @@ export default function TeacherDetailScreen() {
 
   const videoList = useMemo((): TeacherVideoItem[] => {
     const list: TeacherVideoItem[] = [];
-    vimeoVideos.forEach((video) => list.push({ type: "vimeo", video }));
-    (profile?.youtubeVideos ?? []).forEach((entry) =>
-      list.push({ type: "youtube", entry }),
+    vimeoVideos.forEach((video) =>
+      list.push({ type: "vimeo", video, sortKey: getSortableTimestamp(video.created_time) })
     );
+    (profile?.youtubeVideos ?? []).forEach((entry) =>
+      list.push({ type: "youtube", entry, sortKey: 0 })
+    );
+    (gistYouTubeVideos ?? [])
+      .filter((e) => e.teacher === key)
+      .forEach((e) =>
+        list.push({
+          type: "youtube",
+          entry: {
+            id: `gist-${e.youtubeId}`,
+            type: "youtube",
+            youtubeId: e.youtubeId,
+            name: e.title,
+            date: e.date,
+          },
+          sortKey: getSortableTimestamp(e.date),
+        })
+      );
+    list.sort((a, b) => b.sortKey - a.sortKey);
     return list;
-  }, [vimeoVideos, profile?.youtubeVideos]);
+  }, [vimeoVideos, profile?.youtubeVideos, gistYouTubeVideos, key]);
 
   const { openPaywall, isPremium } = usePaywall();
   const openLink = useCallback((url: string) => {
@@ -121,7 +186,7 @@ export default function TeacherDetailScreen() {
     [router],
   );
 
-  if (!profile) {
+  if (!profile && !loading) {
     return (
       <ThemedView style={styles.centered}>
         <ThemedText style={styles.errorTitle}>Teacher not found</ThemedText>
@@ -132,8 +197,18 @@ export default function TeacherDetailScreen() {
     );
   }
 
+  if (!profile && loading) {
+    return (
+      <ThemedView style={styles.centered}>
+        <ActivityIndicator size="large" color="#194F89" />
+      </ThemedView>
+    );
+  }
+
+  if (!profile) return null;
+
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={[styles.container, { backgroundColor: ContentBg }]}>
       <TabHeader
         title={profile.name}
         left={
@@ -152,6 +227,7 @@ export default function TeacherDetailScreen() {
       >
         <View style={styles.profileCard}>
           <ThemedText style={styles.profileName}>{profile.name}</ThemedText>
+          {(profile.instagram || profile.youtube || profile.tiktok || profile.spotify) && (
           <View style={styles.socialsRow}>
             {profile.instagram && (
               <Pressable
@@ -186,6 +262,7 @@ export default function TeacherDetailScreen() {
               </Pressable>
             )}
           </View>
+          )}
           <ThemedText style={[styles.bio, { color: subtextColor }]}>
             {profile.bio}
           </ThemedText>
@@ -245,10 +322,11 @@ export default function TeacherDetailScreen() {
                     <ThemedText style={styles.title} numberOfLines={2}>
                       {video.name}
                     </ThemedText>
-                    <ThemedText style={[styles.meta, { color: subtextColor }]}>
-                      {video.stats.plays}{" "}
-                      {video.stats.plays === 1 ? "view" : "views"}
-                    </ThemedText>
+                    {formatUploadDate(video.created_time) ? (
+                      <ThemedText style={[styles.meta, { color: subtextColor }]}>
+                        {formatUploadDate(video.created_time)}
+                      </ThemedText>
+                    ) : null}
                     {showLock && (
                       <View style={styles.premiumCrownBadge}>
                         <PremiumCrown size={22} />
@@ -279,6 +357,11 @@ export default function TeacherDetailScreen() {
                   <ThemedText style={styles.title} numberOfLines={2}>
                     {entry.name}
                   </ThemedText>
+                  {formatUploadDate(entry.date) ? (
+                    <ThemedText style={[styles.meta, { color: subtextColor }]}>
+                      {formatUploadDate(entry.date)}
+                    </ThemedText>
+                  ) : null}
                 </View>
               </Pressable>
             );
@@ -297,8 +380,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 24,
   },
-  scroll: { flex: 1 },
-  scrollContent: { paddingHorizontal: 16, paddingTop: 16 },
+  scroll: { flex: 1, backgroundColor: ContentBg },
+  scrollContent: { paddingHorizontal: 16, paddingTop: 16, backgroundColor: ContentBg },
   errorTitle: { fontSize: 18, fontFamily: HeadingFont, marginBottom: 16 },
   backBtn: {
     paddingVertical: 12,

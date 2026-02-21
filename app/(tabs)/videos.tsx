@@ -21,6 +21,7 @@ import { ThemedView } from '@/components/themed-view';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import {
   fetchAussieYouTubeVideos,
+  getTeacherProfileFromGistVideos,
   getYouTubeProxyEmbedUrl,
   getYouTubeThumbnail,
   type YouTubeVideoEntry,
@@ -29,9 +30,12 @@ import {
   fetchProjectVideos,
   formatDuration,
   getEmbedUrl,
+  getTeacherBioFromVideos,
   getTeacherKeyFromVideo,
+  getTeacherSocialLinksFromVideos,
   getThumbnail,
   getVideoId,
+  formatTeacherKeyAsName,
   groupVimeoVideosByTeacher,
   type VimeoVideo,
 } from '@/services/vimeo';
@@ -345,21 +349,50 @@ export default function VideosScreen() {
           ]}
           showsVerticalScrollIndicator={false}
         >
-          {TEACHER_KEYS.map((key) => {
-            const profile = teachers[key];
-            const teacherVideos = vimeoByTeacher[key] ?? [];
-            const youtubeCount = profile.youtubeVideos?.length ?? 0;
-            const hasVideos = teacherVideos.length > 0 || youtubeCount > 0;
-            if (!hasVideos) return null;
-
-            const thumbIndex = Math.min(
-              profile.thumbnailFromVimeoIndex ?? 0,
-              Math.max(0, teacherVideos.length - 1)
+          {(() => {
+            const staticKeys = TEACHER_KEYS.filter((k) => {
+              const v = vimeoByTeacher[k] ?? [];
+              const yt = teachers[k]?.youtubeVideos?.length ?? 0;
+              const gistForTeacher = (youtubeVideos ?? []).filter((e) => e.teacher === k);
+              return v.length > 0 || yt > 0 || gistForTeacher.length > 0;
+            });
+            const dynamicFromVimeo = Object.keys(vimeoByTeacher).filter(
+              (k) => !TEACHER_KEYS.includes(k as (typeof TEACHER_KEYS)[number])
             );
-            const thumbnailUri =
-              teacherVideos.length > 0
-                ? getThumbnail(teacherVideos[thumbIndex], 400)
-                : null;
+            const dynamicFromGist = [
+              ...new Set((youtubeVideos ?? []).map((v) => v.teacher).filter((t): t is string => !!t)),
+            ].filter((k) => !TEACHER_KEYS.includes(k as (typeof TEACHER_KEYS)[number]) && !dynamicFromVimeo.includes(k));
+            const allKeys = [...staticKeys, ...dynamicFromVimeo, ...dynamicFromGist];
+            return allKeys.map((key) => {
+              const teacherVideos = vimeoByTeacher[key] ?? [];
+              const gistForTeacher = (youtubeVideos ?? []).filter((e) => e.teacher === key);
+              const profile =
+                teachers[key as (typeof TEACHER_KEYS)[number]] ??
+                (teacherVideos.length > 0
+                  ? {
+                      name: formatTeacherKeyAsName(key),
+                      bio: getTeacherBioFromVideos(teacherVideos) ?? '',
+                      youtubeVideos: [],
+                      ...getTeacherSocialLinksFromVideos(teacherVideos),
+                    }
+                  : getTeacherProfileFromGistVideos(youtubeVideos ?? [], key)
+                    ? { ...getTeacherProfileFromGistVideos(youtubeVideos ?? [], key)!, youtubeVideos: [] }
+                    : null);
+              if (!profile) return null;
+              const staticYtCount = profile.youtubeVideos?.length ?? 0;
+              const hasVideos = teacherVideos.length > 0 || staticYtCount > 0 || gistForTeacher.length > 0;
+              if (!hasVideos) return null;
+
+              const thumbIndex = Math.min(
+                profile.thumbnailFromVimeoIndex ?? 0,
+                Math.max(0, teacherVideos.length - 1)
+              );
+              const thumbnailUri =
+                teacherVideos.length > 0
+                  ? getThumbnail(teacherVideos[thumbIndex], 400)
+                  : gistForTeacher.length > 0
+                    ? getYouTubeThumbnail(gistForTeacher[0].youtubeId)
+                    : null;
             return (
               <Pressable
                 key={key}
@@ -382,6 +415,7 @@ export default function VideosScreen() {
                   </View>
                   <View style={styles.teacherInfo}>
                     <ThemedText style={styles.teacherName}>{profile.name}</ThemedText>
+                    {(profile.instagram || profile.youtube || profile.tiktok || profile.spotify) && (
                     <View style={styles.socialsRow}>
                       {profile.instagram && (
                         <Pressable
@@ -416,6 +450,7 @@ export default function VideosScreen() {
                         </Pressable>
                       )}
                     </View>
+                    )}
                     <ThemedText
                       style={[styles.teacherBio, { color: subtextColor }]}
                       numberOfLines={3}
@@ -424,7 +459,7 @@ export default function VideosScreen() {
                     </ThemedText>
                     <View style={styles.teacherVideosRow}>
                       <ThemedText style={styles.teacherVideosCount}>
-                        {teacherVideos.length + (profile.youtubeVideos?.length ?? 0)} video{(teacherVideos.length + (profile.youtubeVideos?.length ?? 0)) === 1 ? '' : 's'}
+                        {teacherVideos.length + (profile.youtubeVideos?.length ?? 0) + gistForTeacher.length} video{(teacherVideos.length + (profile.youtubeVideos?.length ?? 0) + gistForTeacher.length) === 1 ? '' : 's'}
                       </ThemedText>
                       <Ionicons name="chevron-forward" size={20} color="#194F89" />
                     </View>
@@ -432,7 +467,8 @@ export default function VideosScreen() {
                 </View>
               </Pressable>
             );
-          })}
+            });
+          })()}
         </ScrollView>
       )}
     </View>

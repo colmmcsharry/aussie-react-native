@@ -39,6 +39,7 @@ import {
 // Lottie assets (copied from slang-src/assets)
 const LottieGroupHello = require("../assets/lottie/grouphello.json");
 const FloralWreath = require("../assets/floral-wreath.png");
+const FiveStars = require("../assets/slang-images/5stars.png");
 const LottieConfused = require("../assets/lottie/confused.json");
 const LottieBrain = require("../assets/lottie/brain.json");
 
@@ -57,14 +58,14 @@ const TESTIMONIALS = [
     id: 1,
     heading: "Really fun app!",
     testi:
-      "This is a really fun app, and educational too! I learned lots of new slang words. Had some craic with the games and quizzes too.",
+      "This is a really fun app, and educational too! I learned lots of new Aussie slang words. Enjoyed playing the Heads Up game with friends too.",
     author: "Sally Keogh, Beta Tester",
   },
   {
     id: 2,
-    heading: "Great, excellent value!",
+    heading: "Great, so much helpful content!",
     testi:
-      "Excellent value! I speak just a little natively, and watch a lot of Aussie TV yet the slang always gets me when I visit. This is great! 👍🏼",
+      "Excellent app! I moved to Oz recently, and watch a lot of Aussie TV yet the slang always gets me when I chat with locals. This is great! 👍🏼",
     author: "Rachel Carr, Beta Tester",
   },
   {
@@ -678,6 +679,11 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
                         },
                       ]}
                     >
+                      <Image
+                        source={FiveStars}
+                        style={styles.testimonialStars}
+                        resizeMode="contain"
+                      />
                       <Text
                         style={[
                           styles.testimonialHeading,
@@ -1014,6 +1020,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     padding: 16,
     borderRadius: 12,
+  },
+  testimonialStars: {
+    width: 80,
+    height: 20,
+    alignSelf: "center",
+    marginBottom: 8,
   },
   paginationDots: {
     flexDirection: "row",
