@@ -57,10 +57,10 @@ interface StandaloneVideoItem {
 
 interface TeachersFormatResponse {
   teachers: Record<string, TeacherConfig>;
-  /** Standalone videos (no teacher card). Only appear in Latest. */
   standaloneVideos?: StandaloneVideoItem[];
-  /** Global drip-feed: first video in list = newest date, last = oldest. New videos (appended) appear at top of Latest. */
-  startDate?: string;
+  /** First N videos visible at launch. Rest drip in every intervalDays. */
+  launchBacklogCount?: number;
+  /** Days between drip releases. Default 2. */
   intervalDays?: number;
 }
 
@@ -68,8 +68,8 @@ function flattenTeachersFormat(data: TeachersFormatResponse): YouTubeVideoEntry[
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const todayTime = today.getTime();
-  const startDate = data.startDate ?? '2026-01-01';
   const intervalDays = data.intervalDays ?? 2;
+  const backlog = data.launchBacklogCount ?? 15;
 
   type Pending = {
     item: TeacherVideoItem | StandaloneVideoItem;
@@ -95,16 +95,17 @@ function flattenTeachersFormat(data: TeachersFormatResponse): YouTubeVideoEntry[
     pending.push({ item, channelName: item.channelName, channelLink: item.channelLink, description: item.description });
   }
 
-  const total = pending.length;
   const result: YouTubeVideoEntry[] = [];
 
   pending.forEach((p, globalIndex) => {
     const item = p.item;
     const releaseDateStr = item.releaseDate ?? item.date ?? (() => {
-      const dateIndex = total - 1 - globalIndex;
-      const d = new Date(startDate);
-      if (Number.isNaN(d.getTime())) return undefined;
-      d.setDate(d.getDate() + dateIndex * intervalDays);
+      const d = new Date(today);
+      if (globalIndex < backlog) {
+        d.setDate(d.getDate() - (backlog - 1 - globalIndex) * intervalDays);
+      } else {
+        d.setDate(d.getDate() + (globalIndex - backlog) * intervalDays);
+      }
       return d.toISOString().slice(0, 10);
     })();
 
