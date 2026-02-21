@@ -39,7 +39,11 @@
     },
     "your-aussie-uncle": {
       "videos": [
-        { "youtubeId": "V3LunHCra5M", "title": "5 Phrases To Use In Work" }
+        { "youtubeId": "V3LunHCra5M", "title": "5 Phrases To Use In Work" },
+        { "youtubeId": "0d-XTuYORJg", "title": "How Aussies Tell the Time" },
+        { "youtubeId": "PpaJOQeNap0", "title": "8 phrases for 'Very'" },
+        { "youtubeId": "711mlxbhe3g", "title": "The Aussie slang word 'Cruisy'" },
+        { "youtubeId": "lgot2Gai4NI", "title": "Wassup with you?" }
       ]
     }
   },
