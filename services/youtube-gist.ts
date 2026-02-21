@@ -17,7 +17,6 @@ export interface YouTubeVideoEntry {
   channelName?: string;
   channelLink?: string;
   category: string;
-  isNew?: boolean;
   date?: string;
   /** Teacher key (e.g. "amanda") to show in that teacher's video section. */
   teacher?: string;
@@ -31,7 +30,6 @@ interface TeacherVideoItem {
   youtubeId: string;
   title: string;
   date?: string;
-  isNew?: boolean;
   /** Override computed release date when drip-feeding. */
   releaseDate?: string;
 }
@@ -47,8 +45,19 @@ interface TeacherConfig {
   videos: TeacherVideoItem[];
 }
 
+interface StandaloneVideoItem {
+  youtubeId: string;
+  title: string;
+  date?: string;
+  channelName?: string;
+  channelLink?: string;
+  description?: string;
+}
+
 interface TeachersFormatResponse {
   teachers: Record<string, TeacherConfig>;
+  /** Standalone videos (no teacher card). Only appear in Latest. */
+  videos?: StandaloneVideoItem[];
 }
 
 function parseReleaseDate(
@@ -89,7 +98,6 @@ function flattenTeachersFormat(data: TeachersFormatResponse): YouTubeVideoEntry[
         title: item.title,
         youtubeId: item.youtubeId,
         date: item.date ?? releaseDateStr,
-        isNew: item.isNew,
         channelName: config.channelName,
         channelLink: config.channelLink,
         description: config.description,
@@ -97,6 +105,23 @@ function flattenTeachersFormat(data: TeachersFormatResponse): YouTubeVideoEntry[
         teacher: teacherKey,
       });
     }
+  }
+  for (const item of data.videos ?? []) {
+    const releaseStr = item.date;
+    if (releaseStr) {
+      const d = new Date(releaseStr);
+      d.setHours(0, 0, 0, 0);
+      if (d.getTime() > todayTime) continue;
+    }
+    result.push({
+      title: item.title,
+      youtubeId: item.youtubeId,
+      date: item.date,
+      channelName: item.channelName,
+      channelLink: item.channelLink,
+      description: item.description,
+      category: 'aussieslang',
+    });
   }
   return result;
 }
