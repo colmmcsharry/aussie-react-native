@@ -1,8 +1,12 @@
 /**
- * Fetches Aussie Slang YouTube video list from the GitHub Gist.
- * @see https://gist.github.com/colmmcsharry/1aef7754495a1c64e31a16e50ebc6e5d
+ * Fetches Aussie Slang YouTube video list.
+ * Primary: data/youtube-videos.json via raw GitHub (edit locally, push to update).
+ * Fallback: Gist (when repo file not yet pushed).
+ * @see https://github.com/colmmcsharry/aussie-react-native/blob/main/data/youtube-videos.json
  */
 
+const REPO_RAW_URL =
+  'https://raw.githubusercontent.com/colmmcsharry/aussie-react-native/main/data/youtube-videos.json';
 const GIST_RAW_URL =
   'https://gist.githubusercontent.com/colmmcsharry/1aef7754495a1c64e31a16e50ebc6e5d/raw/aussie-youtube.json';
 
@@ -13,7 +17,6 @@ export interface YouTubeVideoEntry {
   channelName?: string;
   channelLink?: string;
   category: string;
-  cc_load_policy?: number;
   isNew?: boolean;
   date?: string;
   /** Teacher key (e.g. "amanda") to show in that teacher's video section. */
@@ -24,13 +27,100 @@ export interface YouTubeGistResponse {
   videos: YouTubeVideoEntry[];
 }
 
-export async function fetchAussieYouTubeVideos(): Promise<YouTubeVideoEntry[]> {
-  const res = await fetch(GIST_RAW_URL);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch YouTube list: ${res.status}`);
+interface TeacherVideoItem {
+  youtubeId: string;
+  title: string;
+  date?: string;
+  isNew?: boolean;
+  /** Override computed release date when drip-feeding. */
+  releaseDate?: string;
+}
+
+interface TeacherConfig {
+  channelName?: string;
+  channelLink?: string;
+  description?: string;
+  /** First video releases on this date. Used with intervalDays for drip-feed. */
+  startDate?: string;
+  /** Days between releases. Videos get releaseDate = startDate + (index * intervalDays). */
+  intervalDays?: number;
+  videos: TeacherVideoItem[];
+}
+
+interface TeachersFormatResponse {
+  teachers: Record<string, TeacherConfig>;
+}
+
+function parseReleaseDate(
+  item: TeacherVideoItem,
+  index: number,
+  teacherConfig: TeacherConfig
+): string | undefined {
+  if (item.releaseDate) return item.releaseDate;
+  if (item.date) return item.date;
+  const { startDate, intervalDays } = teacherConfig;
+  if (startDate && intervalDays != null) {
+    const d = new Date(startDate);
+    if (!Number.isNaN(d.getTime())) {
+      d.setDate(d.getDate() + index * intervalDays);
+      return d.toISOString().slice(0, 10);
+    }
   }
-  const data: YouTubeGistResponse = await res.json();
-  return data.videos ?? [];
+  return undefined;
+}
+
+function flattenTeachersFormat(data: TeachersFormatResponse): YouTubeVideoEntry[] {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayTime = today.getTime();
+
+  const result: YouTubeVideoEntry[] = [];
+  for (const [teacherKey, config] of Object.entries(data.teachers ?? {})) {
+    const videos = config?.videos ?? [];
+    for (let i = 0; i < videos.length; i++) {
+      const item = videos[i];
+      const releaseDateStr = parseReleaseDate(item, i, config);
+      if (releaseDateStr) {
+        const releaseDate = new Date(releaseDateStr);
+        releaseDate.setHours(0, 0, 0, 0);
+        if (releaseDate.getTime() > todayTime) continue; // drip-feed: skip future videos
+      }
+      result.push({
+        title: item.title,
+        youtubeId: item.youtubeId,
+        date: item.date ?? releaseDateStr,
+        isNew: item.isNew,
+        channelName: config.channelName,
+        channelLink: config.channelLink,
+        description: config.description,
+        category: 'aussieslang',
+        teacher: teacherKey,
+      });
+    }
+  }
+  return result;
+}
+
+export async function fetchAussieYouTubeVideos(): Promise<YouTubeVideoEntry[]> {
+  try {
+    const res = await fetch(REPO_RAW_URL);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.teachers != null) {
+      return flattenTeachersFormat(data as TeachersFormatResponse);
+    }
+    if (Array.isArray(data.videos)) {
+      return data.videos as YouTubeVideoEntry[];
+    }
+    return [];
+  } catch {
+    const res = await fetch(GIST_RAW_URL);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch YouTube list: ${res.status}`);
+    }
+    const data: YouTubeGistResponse = await res.json();
+    return data.videos ?? [];
+  }
 }
 
 /** Get teacher profile from Gist videos (for teachers with only YouTube, no Vimeo). */
@@ -73,11 +163,10 @@ export function getYouTubeEmbedUrl(youtubeId: string): string {
 /**
  * Proxy embed URL to avoid YouTube Error 153 in WebView/Capacitor.
  * Loads a page on your domain that embeds YouTube (e.g. irishslang.ie/yt.html).
- * Use this for in-app playback instead of getYouTubeEmbedUrl.
+ * Use this in-app playback instead of getYouTubeEmbedUrl.
  */
 const YT_PROXY_BASE = 'https://irishslang.ie/yt.html';
-export function getYouTubeProxyEmbedUrl(youtubeId: string, params?: { cc_load_policy?: number }): string {
+export function getYouTubeProxyEmbedUrl(youtubeId: string): string {
   const search = new URLSearchParams({ v: youtubeId });
-  if (params?.cc_load_policy) search.set('cc_load_policy', String(params.cc_load_policy));
   return `${YT_PROXY_BASE}?${search.toString()}`;
 }

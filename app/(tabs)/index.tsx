@@ -338,9 +338,7 @@ export default function FeedScreen() {
       params: {
         id: videoOfTheDay.youtubeId,
         title: videoOfTheDay.title,
-        embedUrl: getYouTubeProxyEmbedUrl(videoOfTheDay.youtubeId, {
-          cc_load_policy: videoOfTheDay.cc_load_policy,
-        }),
+        embedUrl: getYouTubeProxyEmbedUrl(videoOfTheDay.youtubeId),
         isPortrait: "0",
         source: "youtube",
       },

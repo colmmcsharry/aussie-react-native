@@ -165,9 +165,7 @@ export default function VideosScreen() {
         params: {
           id: entry.youtubeId,
           title: entry.title,
-          embedUrl: getYouTubeProxyEmbedUrl(entry.youtubeId, {
-            cc_load_policy: entry.cc_load_policy,
-          }),
+          embedUrl: getYouTubeProxyEmbedUrl(entry.youtubeId),
           isPortrait: '0',
           source: 'youtube',
         },
