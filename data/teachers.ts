@@ -23,7 +23,13 @@ export interface TeacherProfile {
   spotify?: string;
   /** Teacher-specific YouTube shorts (separate from main gist list). */
   youtubeVideos: TeacherYouTubeVideo[];
-  /** Use this Vimeo video index (0-based) for the teacher card thumbnail. Default 0. */
+  /**
+   * When true, use the oldest Vimeo video for the thumbnail. Stays fixed as you add new videos.
+   */
+  thumbnailUseOldestVideo?: boolean;
+  /** Vimeo video ID (e.g. "123456" from vimeo.com/123456). When set, thumbnail stays fixed. */
+  thumbnailFromVimeoId?: string;
+  /** 0-based index (newest first). Used when thumbnailUseOldestVideo/thumbnailFromVimeoId not set. */
   thumbnailFromVimeoIndex?: number;
 }
 
@@ -37,6 +43,7 @@ export const teachers: Record<TeacherKey, TeacherProfile> = {
   aussieslanggang: {
     key: 'aussieslanggang',
     name: 'Aussie Slang Gang',
+    thumbnailUseOldestVideo: true,
     bio: 'Aussie Slang Gang post funny and educational videos about Australian slang. Follow on Instagram and Youtube for more!',
     instagram: 'https://www.instagram.com/aussie.slang.gang',
     youtube: 'https://www.youtube.com/@aussieslanggang',
@@ -55,7 +62,7 @@ export const teachers: Record<TeacherKey, TeacherProfile> = {
     instagram: 'https://www.instagram.com/aussie.english.with.amanda',
     youtube: 'https://www.youtube.com/@aussie.english.with.amanda',
     tiktok: 'https://www.tiktok.com/@aussieenglishwithamanda',
-    thumbnailFromVimeoIndex: 1,
+    thumbnailUseOldestVideo: true,
     youtubeVideos: [
       { id: 'amanda-youtube-1', type: 'youtube', youtubeId: 'Ml4o4l_SLZo', name: 'Pissed' },
       { id: 'amanda-youtube-2', type: 'youtube', youtubeId: 'NfEX2dz7mQ8', name: 'Bloody oath' },
@@ -66,6 +73,7 @@ export const teachers: Record<TeacherKey, TeacherProfile> = {
   aussieenglish: {
     key: 'aussieenglish',
     name: 'Aussie English',
+    thumbnailUseOldestVideo: true,
     bio: 'Aussie English is a channel that makes videos and podcasts about Australian English. Follow on Instagram, Youtube, or Spotify for more!',
     instagram: 'https://www.instagram.com/aussieenglish',
     youtube: 'https://www.youtube.com/@aussieenglish',

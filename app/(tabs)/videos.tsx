@@ -383,16 +383,19 @@ export default function VideosScreen() {
               const hasVideos = teacherVideos.length > 0 || staticYtCount > 0 || gistForTeacher.length > 0;
               if (!hasVideos) return null;
 
-              const thumbIndex = Math.min(
-                profile.thumbnailFromVimeoIndex ?? 0,
-                Math.max(0, teacherVideos.length - 1)
-              );
-              const thumbnailUri =
-                teacherVideos.length > 0
-                  ? getThumbnail(teacherVideos[thumbIndex], 400)
-                  : gistForTeacher.length > 0
-                    ? getYouTubeThumbnail(gistForTeacher[0].youtubeId)
-                    : null;
+              let thumbnailUri: string | null = null;
+              if (teacherVideos.length > 0) {
+                let thumbVideo = profile.thumbnailFromVimeoId
+                  ? teacherVideos.find((v) => getVideoId(v) === profile.thumbnailFromVimeoId)
+                  : null;
+                if (!thumbVideo && profile.thumbnailUseOldestVideo) {
+                  thumbVideo = teacherVideos[teacherVideos.length - 1] ?? null;
+                }
+                const videoToUse = thumbVideo ?? teacherVideos[Math.min(profile.thumbnailFromVimeoIndex ?? 0, teacherVideos.length - 1)];
+                thumbnailUri = getThumbnail(videoToUse, 400);
+              } else if (gistForTeacher.length > 0) {
+                thumbnailUri = getYouTubeThumbnail(gistForTeacher[0].youtubeId);
+              }
             return (
               <Pressable
                 key={key}
