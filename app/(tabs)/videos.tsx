@@ -24,6 +24,7 @@ import {
   ContentBg,
   HeadingFont,
   mainAussieBlue,
+  MAX_CONTENT_WIDTH,
 } from "@/constants/theme";
 import { usePaywall } from "@/context/PaywallContext";
 import { PREMIUM_TEACHER_KEYS, TEACHER_KEYS, teachers } from "@/data/teachers";
@@ -395,6 +396,7 @@ export default function VideosScreen() {
         </Pressable>
       </View>
 
+      <View style={styles.contentWrapper}>
       {viewMode === "latest" ? (
         <FlatList
           ref={listRef}
@@ -642,6 +644,7 @@ export default function VideosScreen() {
           })()}
         </ScrollView>
       )}
+      </View>
     </View>
   );
 }
@@ -736,6 +739,12 @@ const styles = StyleSheet.create({
     fontFamily: ButtonFont,
   },
   toggleTextActive: { color: "#fff" },
+  contentWrapper: {
+    flex: 1,
+    width: "100%",
+    maxWidth: MAX_CONTENT_WIDTH,
+    alignSelf: "center",
+  },
   scroll: { flex: 1 },
   listContent: { paddingHorizontal: 16, backgroundColor: ContentBg },
   headerSubtitle: { fontSize: 15, marginBottom: 16, fontFamily: BodyFont },

@@ -48,6 +48,9 @@ export const CardLayout = {
 /** Pale blue content background used on Games, Videos, Quotes, etc. */
 export const ContentBg = "#e0ebf6";
 
+/** Max width for main content on tablet/desktop – cards and feed never grow beyond this */
+export const MAX_CONTENT_WIDTH = 600;
+
 /** Standard font sizes – small: 14, body and up: 16+ */
 export const FontSizes = {
   /** Small text (hints, meta, attribution) – minimum size */

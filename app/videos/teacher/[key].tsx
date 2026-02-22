@@ -21,6 +21,7 @@ import {
   ButtonFont,
   ContentBg,
   HeadingFont,
+  MAX_CONTENT_WIDTH,
 } from "@/constants/theme";
 import { usePaywall } from "@/context/PaywallContext";
 import {
@@ -234,10 +235,11 @@ export default function TeacherDetailScreen() {
         style={styles.scroll}
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingBottom: insets.bottom + 24 },
+          { paddingBottom: insets.bottom + 24, alignItems: "center" },
         ]}
         showsVerticalScrollIndicator={false}
       >
+        <View style={styles.contentMaxWidth}>
         <View style={styles.profileCard}>
           <ThemedText style={styles.profileName}>{profile.name}</ThemedText>
           {(profile.instagram ||
@@ -403,6 +405,7 @@ export default function TeacherDetailScreen() {
             );
           })
         )}
+        </View>
       </ScrollView>
     </ThemedView>
   );
@@ -421,6 +424,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     backgroundColor: ContentBg,
+  },
+  contentMaxWidth: {
+    width: "100%",
+    maxWidth: MAX_CONTENT_WIDTH,
   },
   errorTitle: { fontSize: 18, fontFamily: HeadingFont, marginBottom: 16 },
   backBtn: {

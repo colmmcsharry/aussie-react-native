@@ -35,6 +35,7 @@ import {
   Colors,
   FontSizes,
   HeadingFont,
+  MAX_CONTENT_WIDTH,
   SlangDisplayFont,
 } from "@/constants/theme";
 import { useOpenSlangFromNotification } from "@/context/OpenSlangFromNotificationContext";
@@ -432,10 +433,11 @@ export default function FeedScreen() {
         style={styles.scroll}
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingBottom: insets.bottom + 40 },
+          { paddingBottom: insets.bottom + 40, alignItems: "center" },
         ]}
         showsVerticalScrollIndicator={false}
       >
+        <View style={styles.contentMaxWidth}>
         {/* Slang of the Day */}
         <View style={styles.cardWrapper}>
           <View style={[styles.card, styles.slangCard]}>
@@ -641,6 +643,7 @@ export default function FeedScreen() {
             </View>
           </View>
         </View>
+        </View>
       </ScrollView>
     </View>
   );
@@ -656,6 +659,11 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 16,
     paddingTop: 24,
+    gap: 20,
+  },
+  contentMaxWidth: {
+    width: "100%",
+    maxWidth: MAX_CONTENT_WIDTH,
     gap: 20,
   },
   previewOnboardingBanner: {

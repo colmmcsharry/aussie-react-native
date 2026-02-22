@@ -6,7 +6,7 @@ import { Image } from 'expo-image';
 
 import { PremiumCrown } from '@/components/PremiumCrown';
 import { usePaywall } from '@/context/PaywallContext';
-import { BodyFont, ContentBg, HeadingFont } from '@/constants/theme';
+import { BodyFont, ContentBg, HeadingFont, MAX_CONTENT_WIDTH } from '@/constants/theme';
 import { TabHeader } from '@/components/tab-header';
 
 const GAME_IMAGES = {
@@ -52,10 +52,11 @@ export default function GamesScreen() {
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingTop: 40, paddingBottom: insets.bottom + 30 },
+          { paddingTop: 40, paddingBottom: insets.bottom + 30, alignItems: "center" },
         ]}
         showsVerticalScrollIndicator={false}
       >
+        <View style={styles.contentMaxWidth}>
         {GAMES.map((game) => (
           <TouchableOpacity
             key={game.id}
@@ -73,6 +74,7 @@ export default function GamesScreen() {
             </View>
           </TouchableOpacity>
         ))}
+        </View>
       </ScrollView>
     </View>
   );
@@ -84,6 +86,10 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 16,
+  },
+  contentMaxWidth: {
+    width: "100%",
+    maxWidth: MAX_CONTENT_WIDTH,
   },
   gameCard: {
     backgroundColor: '#fff',

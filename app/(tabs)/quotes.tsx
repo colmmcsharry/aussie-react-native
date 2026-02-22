@@ -27,6 +27,7 @@ import {
   FontSizes,
   HeadingFont,
   mainAussieBlue,
+  MAX_CONTENT_WIDTH,
   SlangDisplayFont,
 } from "@/constants/theme";
 import { usePaywall } from "@/context/PaywallContext";
@@ -45,6 +46,7 @@ import { loadFavourites, toggleFavourite } from "@/services/favourites";
 const ACCENT_BLUE = "#194F89"; // Australian blue
 const GRID_GAP = 12;
 const GRID_HORIZ_PADDING = 32; // content padding 16*2 only – grid card has no horizontal padding
+const GRID_MAX_WIDTH = 600; // cap icon grid width so it doesn't keep growing on large screens
 const NUM_COLUMNS = 3;
 
 // ---------- SlangCard (expanded by default when in category view) ----------
@@ -312,10 +314,11 @@ export default function QuotesScreen() {
     const iconScale = isNarrowAndroid ? 0.36 : 0.42;
     const labelScale = isNarrowAndroid ? 0.12 : 0.14;
     // On Android use measured width so 3 columns always fit; on iOS use original formula so look is unchanged
-    const availableWidth =
+    const rawWidth =
       Platform.OS === "android" && gridContainerWidth > 0
         ? gridContainerWidth
         : screenWidth - (isNarrowAndroid ? 64 : GRID_HORIZ_PADDING);
+    const availableWidth = Math.min(rawWidth, GRID_MAX_WIDTH);
     const cell = Math.floor(
       (availableWidth - GRID_GAP * (NUM_COLUMNS - 1)) / NUM_COLUMNS,
     );
@@ -715,6 +718,9 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 16,
+    width: "100%",
+    maxWidth: MAX_CONTENT_WIDTH,
+    alignSelf: "center",
   },
   contentGridCentered: {
     justifyContent: "center",
@@ -726,6 +732,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     overflow: "hidden",
     width: "100%",
+    maxWidth: GRID_MAX_WIDTH,
+    alignSelf: "center",
   },
   gridCardAndroidTight: {
     marginHorizontal: 0,

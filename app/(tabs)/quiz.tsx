@@ -16,7 +16,7 @@ import { PremiumCrown } from '@/components/PremiumCrown';
 import { usePaywall } from '@/context/PaywallContext';
 import { TabHeader } from '@/components/tab-header';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Colors, BodyFont, CardPalette, HeadingFont } from '@/constants/theme';
+import { Colors, BodyFont, CardPalette, HeadingFont, MAX_CONTENT_WIDTH } from '@/constants/theme';
 import { quizzes } from '@/data/quiz-data';
 import { getAllScores, getScoreColor } from '@/services/quiz-scores';
 
@@ -65,10 +65,11 @@ export default function QuizMenuScreen() {
         ref={scrollRef}
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingTop: 28, paddingBottom: insets.bottom + 90 },
+          { paddingTop: 28, paddingBottom: insets.bottom + 90, alignItems: "center" },
         ]}
         showsVerticalScrollIndicator={false}
       >
+        <View style={styles.contentMaxWidth}>
         {/* Progress */}
         <View style={styles.progressSection}>
           <View style={[styles.progressBar, { backgroundColor: colors.icon + '20' }]}>
@@ -211,6 +212,7 @@ export default function QuizMenuScreen() {
             );
           })}
         </View>
+        </View>
       </ScrollView>
     </View>
   );
@@ -222,6 +224,10 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 16,
+  },
+  contentMaxWidth: {
+    width: "100%",
+    maxWidth: MAX_CONTENT_WIDTH,
   },
   progressSection: {
     alignItems: 'center',
