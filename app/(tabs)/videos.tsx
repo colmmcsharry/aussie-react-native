@@ -42,7 +42,7 @@ import {
 import { PremiumCrown } from '@/components/PremiumCrown';
 import { usePaywall } from '@/context/PaywallContext';
 import { teachers, TEACHER_KEYS, PREMIUM_TEACHER_KEYS } from '@/data/teachers';
-import { getSortableTimestamp } from '@/utils/date';
+import { getSortableTimestamp, isDateToday } from '@/utils/date';
 
 const LIST_THUMB_WIDTH = 160;
 const LIST_THUMB_HEIGHT = 120;
@@ -198,7 +198,14 @@ export default function VideosScreen() {
                 />
               </View>
               <View style={styles.info}>
-                <ThemedText style={styles.title} numberOfLines={2}>{entry.title}</ThemedText>
+                <View style={styles.titleRow}>
+                  <ThemedText style={styles.title} numberOfLines={2}>{entry.title}</ThemedText>
+                  {isDateToday(entry.date) && (
+                    <View style={styles.addedTodayBadge}>
+                      <ThemedText style={styles.addedTodayText}>Added today!</ThemedText>
+                    </View>
+                  )}
+                </View>
                 {formatUploadDate(entry.date) ? (
                   <ThemedText style={[styles.meta, { color: subtextColor }]}>
                     {formatUploadDate(entry.date)}
@@ -238,7 +245,14 @@ export default function VideosScreen() {
               )}
             </View>
             <View style={styles.info}>
-              <ThemedText style={styles.title} numberOfLines={2}>{video.name}</ThemedText>
+              <View style={styles.titleRow}>
+                <ThemedText style={styles.title} numberOfLines={2}>{video.name}</ThemedText>
+                {isDateToday(video.created_time) && (
+                  <View style={styles.addedTodayBadge}>
+                    <ThemedText style={styles.addedTodayText}>Added today!</ThemedText>
+                  </View>
+                )}
+              </View>
               {formatUploadDate(video.created_time) ? (
                 <ThemedText style={[styles.meta, { color: subtextColor }]}>
                   {formatUploadDate(video.created_time)}
@@ -586,7 +600,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   info: { flex: 1, marginLeft: 14, paddingTop: 2 },
-  title: { fontSize: 16, lineHeight: 22, fontFamily: ButtonFont },
+  titleRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 8 },
+  title: { fontSize: 16, lineHeight: 22, fontFamily: ButtonFont, flex: 1, minWidth: 0 },
+  addedTodayBadge: {
+    backgroundColor: '#194F89',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  addedTodayText: { color: '#fff', fontSize: 11, fontWeight: '600', fontFamily: ButtonFont },
   meta: { fontSize: 13, marginTop: 4, fontFamily: BodyFont },
   premiumCrownBadge: {
     width: 32,

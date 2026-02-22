@@ -40,6 +40,21 @@ export function getSortableTimestamp(dateStr: string | undefined): number {
 }
 
 /**
+ * Returns true if the given date string (ISO or parseable) matches today's calendar date.
+ */
+export function isDateToday(dateStr: string | undefined): boolean {
+  if (!dateStr || !dateStr.trim()) return false;
+  const d = new Date(dateStr.trim());
+  if (Number.isNaN(d.getTime())) return false;
+  const today = new Date();
+  return (
+    d.getFullYear() === today.getFullYear() &&
+    d.getMonth() === today.getMonth() &&
+    d.getDate() === today.getDate()
+  );
+}
+
+/**
  * Deterministic "item of the day" based on calendar date.
  * Same date = same item for everyone. Uses same seed logic as slang of the day.
  */

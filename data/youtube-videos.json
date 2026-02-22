@@ -1,27 +1,74 @@
 {
-  "launchBacklogCount": 15,
-  "intervalDays": 2,
   "teachers": {
     "candice": {
       "channelName": "Candice Moll",
       "channelLink": "https://www.youtube.com/@candicemoll8386",
       "description": "Candice Moll is an Australian Youtuber with many vids teaching slang.",
       "videos": [
-        { "youtubeId": "406bbThn2JE", "title": "General Australian Slang" },
-        { "youtubeId": "eegKWCYExzc", "title": "Australian accent tips" },
-        { "youtubeId": "SkzN9yHzZw0", "title": "Australian Drinking Culture" },
-        { "youtubeId": "MftJNtg2sww", "title": "Australian Slang Phrases 2" },
-        { "youtubeId": "aRtuKKlzo7U", "title": "Australian Accent Tips 2" },
-        { "youtubeId": "J_0BuGVv-Hw", "title": "Australian Slang Phrases 3" },
-        { "youtubeId": "xsIueSOM5tM", "title": "Driving in Australia" },
-        { "youtubeId": "BECZZOUb4Fg", "title": "Aussie vs Kiwi Speech 1" },
-        { "youtubeId": "ISKKzpNJ5AY", "title": "Aussie vs Kiwi Speech 2" },
-        { "youtubeId": "-R8jKvcJgHU", "title": "Aussie vs Kiwi Speech 3" },
-        { "youtubeId": "YIrBKUkVk80", "title": "Aussie Accent Q&A" },
-        { "youtubeId": "P0p7OXmWebc", "title": "The Australian Alphabet" },
+        {
+          "youtubeId": "406bbThn2JE",
+          "title": "General Australian Slang",
+          "releaseDate": "2026-01-20"
+        },
+        {
+          "youtubeId": "eegKWCYExzc",
+          "title": "Australian accent tips",
+          "releaseDate": "2026-01-25"
+        },
+        {
+          "youtubeId": "SkzN9yHzZw0",
+          "title": "Australian Drinking Culture",
+          "releaseDate": "2026-01-30"
+        },
+        {
+          "youtubeId": "MftJNtg2sww",
+          "title": "Australian Slang Phrases 2",
+          "releaseDate": "2026-02-03"
+        },
+        {
+          "youtubeId": "aRtuKKlzo7U",
+          "title": "Australian Accent Tips 2",
+          "releaseDate": "2026-02-07"
+        },
+        {
+          "youtubeId": "J_0BuGVv-Hw",
+          "title": "Australian Slang Phrases 3",
+          "releaseDate": "2026-02-11"
+        },
+        {
+          "youtubeId": "xsIueSOM5tM",
+          "title": "Driving in Australia",
+          "releaseDate": "2026-02-15"
+        },
+        {
+          "youtubeId": "BECZZOUb4Fg",
+          "title": "Aussie vs Kiwi Speech 1",
+          "releaseDate": "2026-02-19"
+        },
+        {
+          "youtubeId": "ISKKzpNJ5AY",
+          "title": "Aussie vs Kiwi Speech 2",
+          "releaseDate": "2026-02-23"
+        },
+        {
+          "youtubeId": "-R8jKvcJgHU",
+          "title": "Aussie vs Kiwi Speech 3",
+          "releaseDate": "2026-02-27"
+        },
+        {
+          "youtubeId": "YIrBKUkVk80",
+          "title": "Aussie Accent Q&A",
+          "releaseDate": "2026-03-03"
+        },
+        {
+          "youtubeId": "P0p7OXmWebc",
+          "title": "The Australian Alphabet",
+          "releaseDate": "2026-03-07"
+        },
         {
           "youtubeId": "yQKDZDVE2jE",
-          "title": "How to Pronounce Numbers and Dates in Oz"
+          "title": "How to Pronounce Numbers and Dates in Oz",
+          "releaseDate": "2026-03-11"
         }
       ]
     },
@@ -32,137 +79,238 @@
       "videos": [
         {
           "youtubeId": "Ei7230KxvCg",
-          "title": "Australian Slang Words You Need to Know"
+          "title": "Australian Slang Words You Need to Know",
+          "releaseDate": "2026-01-21"
         },
         {
           "youtubeId": "DHQRZXM-4xI",
-          "title": "Australian Slang - Fair Dinkum Phrases"
+          "title": "Australian Slang - Fair Dinkum Phrases",
+          "releaseDate": "2026-01-26"
         },
-        { "youtubeId": "FZOmG4qcnpQ", "title": "Dirty Australian Slang" },
+        {
+          "youtubeId": "FZOmG4qcnpQ",
+          "title": "Dirty Australian Slang",
+          "releaseDate": "2026-01-31"
+        },
         {
           "youtubeId": "yDb_WsAt_Z0",
-          "title": "How Australians Really Talk - Slang Guide"
+          "title": "How Australians Really Talk - Slang Guide",
+          "releaseDate": "2026-02-04"
         },
-        { "youtubeId": "1ZUWmchD0-8", "title": "Use phrases Like a Native" },
-        { "youtubeId": "Cd33A-VQKVk", "title": "21 Ways to Greet Someone" },
+        {
+          "youtubeId": "1ZUWmchD0-8",
+          "title": "Use phrases Like a Native",
+          "releaseDate": "2026-02-08"
+        },
+        {
+          "youtubeId": "Cd33A-VQKVk",
+          "title": "21 Ways to Greet Someone",
+          "releaseDate": "2026-02-12"
+        },
         {
           "youtubeId": "u7rVbGDKut4",
-          "title": "What to Say when Someone Sneezes"
+          "title": "What to Say when Someone Sneezes",
+          "releaseDate": "2026-02-16"
         },
         {
           "youtubeId": "qf8ckF5oLNM",
-          "title": "5 Expressions to Sound More Aussie"
+          "title": "5 Expressions to Sound More Aussie",
+          "releaseDate": "2026-02-20"
         },
         {
           "youtubeId": "82TXkAVQuXo",
-          "title": "Improve Your Aussie English Vocabulary"
+          "title": "Improve Your Aussie English Vocabulary",
+          "releaseDate": "2026-02-24"
         },
         {
           "youtubeId": "Cck8khg2_VI",
-          "title": "Improve Your Aussie English Vocabulary 2"
+          "title": "Improve Your Aussie English Vocabulary 2",
+          "releaseDate": "2026-02-28"
         },
         {
           "youtubeId": "5aA2yEvYzk0",
-          "title": "Australian-isms others Don't Understand"
+          "title": "Australian-isms others Don't Understand",
+          "releaseDate": "2026-03-04"
         },
         {
           "youtubeId": "2fGZ3SbLK1I",
-          "title": "5 Expressions to Sound More Aussie"
+          "title": "5 Expressions to Sound More Aussie",
+          "releaseDate": "2026-03-08"
         },
         {
           "youtubeId": "F6hMo-5pBs0",
-          "title": "16 Aussie Slang Terms. Do I Use Them?"
+          "title": "16 Aussie Slang Terms. Do I Use Them?",
+          "releaseDate": "2026-03-12"
         },
         {
           "youtubeId": "Y1-lI-itBKI",
-          "title": "28 Aussie Slang Words Foreigners Don't Understand"
+          "title": "28 Aussie Slang Words Foreigners Don't Understand",
+          "releaseDate": "2026-03-15"
         },
-        { "youtubeId": "qGTbF1HbwhA", "title": "Stop Saying I Don't Know" },
+        {
+          "youtubeId": "qGTbF1HbwhA",
+          "title": "Stop Saying I Don't Know",
+          "releaseDate": "2026-03-18"
+        },
         {
           "youtubeId": "9Zt0qzuFgio",
-          "title": "Aussie Soldiers ORDERED NOT to Use SLANG with Americans"
+          "title": "Aussie Soldiers ORDERED NOT to Use SLANG with Americans",
+          "releaseDate": "2026-03-21"
         },
         {
           "youtubeId": "POzzSq9KyGQ",
-          "title": "12 Aussie Slang Terms to Know"
+          "title": "12 Aussie Slang Terms to Know",
+          "releaseDate": "2026-03-24"
         },
         {
           "youtubeId": "jDKraB0C8sQ",
-          "title": "Live Class - Slang Words Ending with 'O'"
+          "title": "Live Class - Slang Words Ending with 'O'",
+          "releaseDate": "2026-03-27"
         },
-        { "youtubeId": "BV2vfx48rwQ", "title": "Stop saying 'I'm Happy'" },
+        {
+          "youtubeId": "BV2vfx48rwQ",
+          "title": "Stop saying 'I'm Happy'",
+          "releaseDate": "2026-03-29"
+        },
         {
           "youtubeId": "X0Aw35FiQPo",
-          "title": "Live Class - 40+ Aussie Slang Words"
+          "title": "Live Class - 40+ Aussie Slang Words",
+          "releaseDate": "2026-04-01"
         },
         {
           "youtubeId": "8R4aAqHAKSU",
-          "title": "18 AUSTRALIAN Words that Confuse AMERICANS "
+          "title": "18 AUSTRALIAN Words that Confuse AMERICANS ",
+          "releaseDate": "2026-04-04"
         },
         {
           "youtubeId": "_g2DVVc4UqE",
-          "title": "30 Aussie slang words ending with 'O'"
+          "title": "30 Aussie slang words ending with 'O'",
+          "releaseDate": "2026-04-07"
         },
-        { "youtubeId": "8VSLJG41TqA", "title": "25+ Aussie Slang Words" },
+        {
+          "youtubeId": "8VSLJG41TqA",
+          "title": "25+ Aussie Slang Words",
+          "releaseDate": "2026-04-10"
+        },
         {
           "youtubeId": "qf8ckF5oLNM",
-          "title": "5 Expressions to Sound More Aussie"
+          "title": "5 Expressions to Sound More Aussie",
+          "releaseDate": "2026-04-13"
         },
-        { "youtubeId": "NIpPpsw6DXU", "title": "Aussie Slang Ending in -IE/Y" },
+        {
+          "youtubeId": "NIpPpsw6DXU",
+          "title": "Aussie Slang Ending in -IE/Y",
+          "releaseDate": "2026-04-16"
+        },
         {
           "youtubeId": "WwGx4qHzrmg",
-          "title": "DIRTY AUSTRALIAN SLANG - 20 Words & Phrases to NEVER SAY"
+          "title": "DIRTY AUSTRALIAN SLANG - 20 Words & Phrases to NEVER SAY",
+          "releaseDate": "2026-04-19"
         },
-        { "youtubeId": "h9bHXK97kaI", "title": "Fancy a Cuppa?" },
+        {
+          "youtubeId": "h9bHXK97kaI",
+          "title": "Fancy a Cuppa?",
+          "releaseDate": "2026-04-22"
+        },
         {
           "youtubeId": "oe5Rll19bWQ",
-          "title": "75+ Commonly Shortened Words in English"
+          "title": "75+ Commonly Shortened Words in English",
+          "releaseDate": "2026-04-25"
         },
         {
           "youtubeId": "UAzzWISUGLY",
-          "title": "STOP Saying 'I'm SCARED' | Advanced English Vocabulary"
+          "title": "STOP Saying 'I'm SCARED' | Advanced English Vocabulary",
+          "releaseDate": "2026-04-28"
         },
         {
           "youtubeId": "P0Mf9l-VFG8",
-          "title": "How to Talk about SURFING in English "
+          "title": "How to Talk about SURFING in English ",
+          "releaseDate": "2026-05-01"
         },
-        { "youtubeId": "TLPhxMeRi5I", "title": "The Aussie Salute" },
-        { "youtubeId": "iLfFooh2jAs", "title": "Aussie Slang: Ay" },
-        { "youtubeId": "ob1HTOO5oAY", "title": "What does 'Barbie' mean?" },
-        { "youtubeId": "kUTtDlfUaCE", "title": "Aussie Slang: Avo" },
+        {
+          "youtubeId": "TLPhxMeRi5I",
+          "title": "The Aussie Salute",
+          "releaseDate": "2026-05-04"
+        },
+        {
+          "youtubeId": "iLfFooh2jAs",
+          "title": "Aussie Slang: Ay",
+          "releaseDate": "2026-05-07"
+        },
+        {
+          "youtubeId": "ob1HTOO5oAY",
+          "title": "What does 'Barbie' mean?",
+          "releaseDate": "2026-05-10"
+        },
+        {
+          "youtubeId": "kUTtDlfUaCE",
+          "title": "Aussie Slang: Avo",
+          "releaseDate": "2026-05-13"
+        },
         {
           "youtubeId": "O5P2J0YPNu8",
-          "title": "Aussie Slang: The term 'Aussie'"
+          "title": "Aussie Slang: The term 'Aussie'",
+          "releaseDate": "2026-05-16"
         },
-        { "youtubeId": "fvFYqEhz3rM", "title": "Aussie Slang: All Smiles" },
-        { "youtubeId": "X8yQlyqdIP4", "title": "Aussie Slang: Airy Fairy" },
-        { "youtubeId": "bIowCRLyA", "title": "Aussie Slang: Aggro" },
+        {
+          "youtubeId": "fvFYqEhz3rM",
+          "title": "Aussie Slang: All Smiles",
+          "releaseDate": "2026-05-19"
+        },
+        {
+          "youtubeId": "X8yQlyqdIP4",
+          "title": "Aussie Slang: Airy Fairy",
+          "releaseDate": "2026-05-22"
+        },
+        {
+          "youtubeId": "bIowCRLyA",
+          "title": "Aussie Slang: Aggro",
+          "releaseDate": "2026-05-24"
+        },
         {
           "youtubeId": "w1clIsmGZko",
-          "title": "Don't Make This Mistake in English: SH*T vs THE SH*T"
+          "title": "Don't Make This Mistake in English: SH*T vs THE SH*T",
+          "releaseDate": "2026-05-26"
         },
         {
           "youtubeId": "tReArxYahSU",
-          "title": "What's Your Favourite Aussie Slang Term?"
+          "title": "What's Your Favourite Aussie Slang Term?",
+          "releaseDate": "2026-05-28"
         },
-        { "youtubeId": "fQsuCRL0N60", "title": "Aussie Slang: All Ears" },
-        { "youtubeId": "xbwjSZAgd8I", "title": "To Make A Quid" },
-        { "youtubeId": "7NApBOnVkho", "title": "To Hit The Piss/Turps" },
+        {
+          "youtubeId": "fQsuCRL0N60",
+          "title": "Aussie Slang: All Ears",
+          "releaseDate": "2026-05-30"
+        },
+        {
+          "youtubeId": "xbwjSZAgd8I",
+          "title": "To Make A Quid",
+          "releaseDate": "2026-06-01"
+        },
+        {
+          "youtubeId": "7NApBOnVkho",
+          "title": "To Hit The Piss/Turps",
+          "releaseDate": "2026-06-03"
+        },
         {
           "youtubeId": "8NglJ5QUk5U",
-          "title": "Top 10 Aussie Movies Every English Learner Needs to Watch!"
+          "title": "Top 10 Aussie Movies Every English Learner Needs to Watch!",
+          "releaseDate": "2026-06-05"
         },
         {
           "youtubeId": "tKHLWgj9hv4",
-          "title": "16 Different Ways to Say YES in Australian English"
+          "title": "16 Different Ways to Say YES in Australian English",
+          "releaseDate": "2026-06-07"
         },
         {
           "youtubeId": "f-nNWHZWD9k",
-          "title": "Piss-Up at the Pub | Learn Australian English with a Short Story"
+          "title": "Piss-Up at the Pub | Learn Australian English with a Short Story",
+          "releaseDate": "2026-06-09"
         },
         {
           "youtubeId": "Bay5MFvOFyk",
-          "title": "Slang for The Middle of Nowhere"
+          "title": "Slang for The Middle of Nowhere",
+          "releaseDate": "2026-06-11"
         }
       ]
     },
@@ -171,10 +319,15 @@
       "channelLink": "https://www.youtube.com/@ozziemcguire",
       "description": "Ozzie McGuire is an Australian Youtuber with many vids teaching slang.",
       "videos": [
-        { "youtubeId": "WDnkSrB5lMI", "title": "How to Speak Australian" },
+        {
+          "youtubeId": "WDnkSrB5lMI",
+          "title": "How to Speak Australian",
+          "releaseDate": "2026-01-22"
+        },
         {
           "youtubeId": "aT345UY7Urw",
-          "title": "20 Australian words you have to know"
+          "title": "20 Australian words you have to know",
+          "releaseDate": "2026-01-27"
         }
       ]
     },
@@ -182,213 +335,463 @@
       "videos": [
         {
           "youtubeId": "HT82zn4nTGA",
-          "title": "Aussie Slang Words People Get Wrong"
+          "title": "Aussie Slang Words People Get Wrong",
+          "releaseDate": "2026-01-23"
         },
         {
           "youtubeId": "yJk2NSeEU_8",
-          "title": "The Truth About Aussie Accents"
+          "title": "The Truth About Aussie Accents",
+          "releaseDate": "2026-01-28"
         },
         {
           "youtubeId": "1dB1EPzPKcE",
-          "title": "10 Aussie Slang Words You're Saying Wrong"
+          "title": "10 Aussie Slang Words You're Saying Wrong",
+          "releaseDate": "2026-02-01"
         },
         {
           "youtubeId": "tF28Sh8wcYQ",
-          "title": "Understand the Aussie Accent in 5 Steps"
+          "title": "Understand the Aussie Accent in 5 Steps",
+          "releaseDate": "2026-02-05"
         },
         {
           "youtubeId": "7xQxax7ogIo",
-          "title": "Aussie Slang with the word 'Get'"
+          "title": "Aussie Slang with the word 'Get'",
+          "releaseDate": "2026-02-09"
         },
-        { "youtubeId": "0HSbvYuOwm0", "title": "Chuck a U-Turn" },
-        { "youtubeId": "8Fqajy5j5I0", "title": "Chuck a Sickie" },
-        { "youtubeId": "RiiIuU1fXc4", "title": "Slang for Sleeping" },
+        {
+          "youtubeId": "0HSbvYuOwm0",
+          "title": "Chuck a U-Turn",
+          "releaseDate": "2026-02-13"
+        },
+        {
+          "youtubeId": "8Fqajy5j5I0",
+          "title": "Chuck a Sickie",
+          "releaseDate": "2026-02-17"
+        },
+        {
+          "youtubeId": "RiiIuU1fXc4",
+          "title": "Slang for Sleeping",
+          "releaseDate": "2026-02-21"
+        },
         {
           "youtubeId": "o1LOKm2QKzI",
-          "title": "Slang for talking about The Air"
+          "title": "Slang for talking about The Air",
+          "releaseDate": "2026-02-25"
         },
-        { "youtubeId": "1CaQtj905oM", "title": "How to Say 'Very Tired'" },
-        { "youtubeId": "WnUYdEdAZd8", "title": "How to Order Coffee" },
-        { "youtubeId": "bR9euNpCxP8", "title": "How to say You're Hungry" },
+        {
+          "youtubeId": "1CaQtj905oM",
+          "title": "How to Say 'Very Tired'",
+          "releaseDate": "2026-03-01"
+        },
+        {
+          "youtubeId": "WnUYdEdAZd8",
+          "title": "How to Order Coffee",
+          "releaseDate": "2026-03-05"
+        },
+        {
+          "youtubeId": "bR9euNpCxP8",
+          "title": "How to say You're Hungry",
+          "releaseDate": "2026-03-09"
+        },
         {
           "youtubeId": "LDi10jwbjZU",
-          "title": "English Phrases for Making Coffee"
+          "title": "English Phrases for Making Coffee",
+          "releaseDate": "2026-03-13"
         },
-        { "youtubeId": "VrAqLlBwLDI", "title": "Everyday Aussie Vocabulary" },
+        {
+          "youtubeId": "VrAqLlBwLDI",
+          "title": "Everyday Aussie Vocabulary",
+          "releaseDate": "2026-03-16"
+        },
         {
           "youtubeId": "hyuTGhjqmsM",
-          "title": "American vs Aussie Ways of Ordering Food"
+          "title": "American vs Aussie Ways of Ordering Food",
+          "releaseDate": "2026-03-19"
         },
-        { "youtubeId": "kkBFKE_OiZo", "title": "English Idioms in Oz" },
-        { "youtubeId": "MjinK597RGA", "title": "Ordering Coffee in Australia" },
-        { "youtubeId": "fCZIZkxG7LM", "title": "The word Bloody" },
-        { "youtubeId": "sCJu7w9n7ZI", "title": "Ways of Saying Go Away" },
-        { "youtubeId": "eEEz2XLEmMo", "title": "How to say it's Very Hot" },
+        {
+          "youtubeId": "kkBFKE_OiZo",
+          "title": "English Idioms in Oz",
+          "releaseDate": "2026-03-22"
+        },
+        {
+          "youtubeId": "MjinK597RGA",
+          "title": "Ordering Coffee in Australia",
+          "releaseDate": "2026-03-25"
+        },
+        {
+          "youtubeId": "fCZIZkxG7LM",
+          "title": "The word Bloody",
+          "releaseDate": "2026-03-28"
+        },
+        {
+          "youtubeId": "sCJu7w9n7ZI",
+          "title": "Ways of Saying Go Away",
+          "releaseDate": "2026-03-30"
+        },
+        {
+          "youtubeId": "eEEz2XLEmMo",
+          "title": "How to say it's Very Hot",
+          "releaseDate": "2026-04-02"
+        },
         {
           "youtubeId": "0fykovi9qPI",
-          "title": "How to respond to Everyday Phrases"
+          "title": "How to respond to Everyday Phrases",
+          "releaseDate": "2026-04-05"
         },
         {
           "youtubeId": "mk0vWYPgxqs",
-          "title": "10 Aussie Ways of saying Very Drunk"
+          "title": "10 Aussie Ways of saying Very Drunk",
+          "releaseDate": "2026-04-08"
         },
         {
           "youtubeId": "rABJ1o-GIKY",
-          "title": "Ways of saying it's Very Cold"
+          "title": "Ways of saying it's Very Cold",
+          "releaseDate": "2026-04-11"
         },
-        { "youtubeId": "NbNFiGyEjUw", "title": "Intensifiers in Aussie Slang" },
-        { "youtubeId": "F10mUESDToI", "title": "Chips or Crisps?" },
-        { "youtubeId": "YEtpTus_9Aw", "title": "Hack to Sound More Aussie" },
+        {
+          "youtubeId": "NbNFiGyEjUw",
+          "title": "Intensifiers in Aussie Slang",
+          "releaseDate": "2026-04-14"
+        },
+        {
+          "youtubeId": "F10mUESDToI",
+          "title": "Chips or Crisps?",
+          "releaseDate": "2026-04-17"
+        },
+        {
+          "youtubeId": "YEtpTus_9Aw",
+          "title": "Hack to Sound More Aussie",
+          "releaseDate": "2026-04-20"
+        },
         {
           "youtubeId": "DpVk9k4hnHo",
-          "title": "3 ways Native Speakers ask How Are You?"
+          "title": "3 ways Native Speakers ask How Are You?",
+          "releaseDate": "2026-04-23"
         },
         {
           "youtubeId": "6h5brorKWuM",
-          "title": "Aussie Accent Listening Practice"
+          "title": "Aussie Accent Listening Practice",
+          "releaseDate": "2026-04-26"
         },
         {
           "youtubeId": "JeQUWKdzXSU",
-          "title": "Stop repeating 'How Ya Garn?'"
+          "title": "Stop repeating 'How Ya Garn?'",
+          "releaseDate": "2026-04-29"
         },
         {
           "youtubeId": "8LUW-VxI-Xc",
-          "title": "Improve your Aussie Pronunciation with this Trick"
+          "title": "Improve your Aussie Pronunciation with this Trick",
+          "releaseDate": "2026-05-02"
         },
-        { "youtubeId": "m4zPH3JiwlA", "title": "Say Water like an Aussie" },
+        {
+          "youtubeId": "m4zPH3JiwlA",
+          "title": "Say Water like an Aussie",
+          "releaseDate": "2026-05-05"
+        },
         {
           "youtubeId": "2XDR58LctDc",
-          "title": "The 3 Aussie Accents are a Myth"
+          "title": "The 3 Aussie Accents are a Myth",
+          "releaseDate": "2026-05-08"
         },
-        { "youtubeId": "YmJD7Un6GqQ", "title": "The word 'Servo'" },
-        { "youtubeId": "sDdCqvCdQWM", "title": "Tip to Sound More Aussie" },
-        { "youtubeId": "StzSlaHo_yI", "title": "Aussie English Q & A" },
+        {
+          "youtubeId": "YmJD7Un6GqQ",
+          "title": "The word 'Servo'",
+          "releaseDate": "2026-05-11"
+        },
+        {
+          "youtubeId": "sDdCqvCdQWM",
+          "title": "Tip to Sound More Aussie",
+          "releaseDate": "2026-05-14"
+        },
+        {
+          "youtubeId": "StzSlaHo_yI",
+          "title": "Aussie English Q & A",
+          "releaseDate": "2026-05-17"
+        },
         {
           "youtubeId": "fUklbZ_BO6w",
-          "title": "The REAL Difference between Aussie and American English"
+          "title": "The REAL Difference between Aussie and American English",
+          "releaseDate": "2026-05-20"
         }
       ]
     },
     "your-aussie-uncle": {
       "videos": [
-        { "youtubeId": "V3LunHCra5M", "title": "5 Phrases To Use In Work" },
-        { "youtubeId": "m0ryR9GeYMI", "title": "Top 10 Aussie Slang Terms" },
-        { "youtubeId": "0d-XTuYORJg", "title": "How Aussies Tell the Time" },
-        { "youtubeId": "PpaJOQeNap0", "title": "8 phrases for 'Very'" },
+        {
+          "youtubeId": "V3LunHCra5M",
+          "title": "5 Phrases To Use In Work",
+          "releaseDate": "2026-01-24"
+        },
+        {
+          "youtubeId": "m0ryR9GeYMI",
+          "title": "Top 10 Aussie Slang Terms",
+          "releaseDate": "2026-01-29"
+        },
+        {
+          "youtubeId": "0d-XTuYORJg",
+          "title": "How Aussies Tell the Time",
+          "releaseDate": "2026-02-02"
+        },
+        {
+          "youtubeId": "PpaJOQeNap0",
+          "title": "8 phrases for 'Very'",
+          "releaseDate": "2026-02-06"
+        },
         {
           "youtubeId": "711mlxbhe3g",
-          "title": "The Aussie slang word 'Cruisy'"
+          "title": "The Aussie slang word 'Cruisy'",
+          "releaseDate": "2026-02-10"
         },
-        { "youtubeId": "lgot2Gai4NI", "title": "Wassup with you?" },
+        {
+          "youtubeId": "lgot2Gai4NI",
+          "title": "Wassup with you?",
+          "releaseDate": "2026-02-14"
+        },
         {
           "youtubeId": "YJprb62Mmgc",
-          "title": "How to say 'a lot of' in Aussie"
+          "title": "How to say 'a lot of' in Aussie",
+          "releaseDate": "2026-02-18"
         },
         {
           "youtubeId": "6V0KJjwY6m4",
-          "title": "How to ask for the bill in Aussie"
+          "title": "How to ask for the bill in Aussie",
+          "releaseDate": "2026-02-22"
         },
         {
           "youtubeId": "3I6XraIPqCw",
-          "title": "Aussie Slang and McDonald's Orders = Chaos!"
+          "title": "Aussie Slang and McDonald's Orders = Chaos!",
+          "releaseDate": "2026-02-26"
         },
         {
           "youtubeId": "iFQZk2C8Xyc",
-          "title": "Bugger - 3 Aussie meanings for it"
+          "title": "Bugger - 3 Aussie meanings for it",
+          "releaseDate": "2026-03-02"
         },
-        { "youtubeId": "1QKgGrWaFh0", "title": "Ways of saying 'I disagree" },
+        {
+          "youtubeId": "1QKgGrWaFh0",
+          "title": "Ways of saying 'I disagree",
+          "releaseDate": "2026-03-06"
+        },
         {
           "youtubeId": "uEXWfLjchnY",
-          "title": "What 'full on' means in Aussie"
+          "title": "What 'full on' means in Aussie",
+          "releaseDate": "2026-03-10"
         },
         {
           "youtubeId": "4BF60nbliT8",
-          "title": "ways of saying goodbye in Aussie"
+          "title": "ways of saying goodbye in Aussie",
+          "releaseDate": "2026-03-14"
         },
-        { "youtubeId": "4ob7y8Fu6u0", "title": "Duck in, Duck Out, Duck Off" },
+        {
+          "youtubeId": "4ob7y8Fu6u0",
+          "title": "Duck in, Duck Out, Duck Off",
+          "releaseDate": "2026-03-17"
+        },
         {
           "youtubeId": "4UB0EycEuUs",
-          "title": "5 Aussie replies to 'How's it going?'"
+          "title": "5 Aussie replies to 'How's it going?'",
+          "releaseDate": "2026-03-20"
         },
-        { "youtubeId": "Y8AveAQJMso", "title": "5 replies to G'day mate" },
-        { "youtubeId": "z1kiVkuL1RE", "title": "The Aussie word 'Deadset'" },
+        {
+          "youtubeId": "Y8AveAQJMso",
+          "title": "5 replies to G'day mate",
+          "releaseDate": "2026-03-23"
+        },
+        {
+          "youtubeId": "z1kiVkuL1RE",
+          "title": "The Aussie word 'Deadset'",
+          "releaseDate": "2026-03-26"
+        },
         {
           "youtubeId": "1RhYvZAGabA",
-          "title": "Aussies Don't Say 'Expensive'"
+          "title": "Aussies Don't Say 'Expensive'",
+          "releaseDate": "2026-03-29"
         },
-        { "youtubeId": "VnHrk9DWnS8", "title": "Spot On" },
-        { "youtubeId": "h3Olz4yqq9k", "title": "Pop In" },
-        { "youtubeId": "9IT05H0y134", "title": "Pop Around" },
-        { "youtubeId": "LACed78W2fU", "title": "Or WHat Not" },
+        {
+          "youtubeId": "VnHrk9DWnS8",
+          "title": "Spot On",
+          "releaseDate": "2026-03-31"
+        },
+        {
+          "youtubeId": "h3Olz4yqq9k",
+          "title": "Pop In",
+          "releaseDate": "2026-04-03"
+        },
+        {
+          "youtubeId": "9IT05H0y134",
+          "title": "Pop Around",
+          "releaseDate": "2026-04-06"
+        },
+        {
+          "youtubeId": "LACed78W2fU",
+          "title": "Or WHat Not",
+          "releaseDate": "2026-04-09"
+        },
         {
           "youtubeId": "m-Ixqhkwga0",
-          "title": "Responding to 'Long Time No See'"
+          "title": "Responding to 'Long Time No See'",
+          "releaseDate": "2026-04-12"
         },
-        { "youtubeId": "kBEDH-8ClkI", "title": "In the Bush" },
-        { "youtubeId": "9fgp49nVY0g", "title": "How Aussies say Very Tired" },
-        { "youtubeId": "Gsv26d7dcsY", "title": "Bob's Your Uncle" },
-        { "youtubeId": "w85HDuiCbbA", "title": "The Aussie word 'Chockers'" },
-        { "youtubeId": "ISxkAdDJklo", "title": "Stop saying 'Hoe Are You?'" },
+        {
+          "youtubeId": "kBEDH-8ClkI",
+          "title": "In the Bush",
+          "releaseDate": "2026-04-15"
+        },
+        {
+          "youtubeId": "9fgp49nVY0g",
+          "title": "How Aussies say Very Tired",
+          "releaseDate": "2026-04-18"
+        },
+        {
+          "youtubeId": "Gsv26d7dcsY",
+          "title": "Bob's Your Uncle",
+          "releaseDate": "2026-04-21"
+        },
+        {
+          "youtubeId": "w85HDuiCbbA",
+          "title": "The Aussie word 'Chockers'",
+          "releaseDate": "2026-04-24"
+        },
+        {
+          "youtubeId": "ISxkAdDJklo",
+          "title": "Stop saying 'Hoe Are You?'",
+          "releaseDate": "2026-04-27"
+        },
         {
           "youtubeId": "iGjLWatHaOg",
-          "title": "The Aussie expression 'Flat Out'"
+          "title": "The Aussie expression 'Flat Out'",
+          "releaseDate": "2026-04-30"
         },
-        { "youtubeId": "1oBzsvsEnJY", "title": "The phrase 'Bring a Plate'" },
-        { "youtubeId": "_QoMgFSsNVA", "title": "Stop saying 'You're Welcome'" },
-        { "youtubeId": "Xmjiw1KUNqk", "title": "Way's the say 'That's Funny'" },
-        { "youtubeId": "YxZ3uTuuYGU", "title": "The word 'Reckon'" },
-        { "youtubeId": "TFqP5hJ-rz0", "title": "Aussie Sarcasm Detector" },
+        {
+          "youtubeId": "1oBzsvsEnJY",
+          "title": "The phrase 'Bring a Plate'",
+          "releaseDate": "2026-05-03"
+        },
+        {
+          "youtubeId": "_QoMgFSsNVA",
+          "title": "Stop saying 'You're Welcome'",
+          "releaseDate": "2026-05-06"
+        },
+        {
+          "youtubeId": "Xmjiw1KUNqk",
+          "title": "Way's the say 'That's Funny'",
+          "releaseDate": "2026-05-09"
+        },
+        {
+          "youtubeId": "YxZ3uTuuYGU",
+          "title": "The word 'Reckon'",
+          "releaseDate": "2026-05-12"
+        },
+        {
+          "youtubeId": "TFqP5hJ-rz0",
+          "title": "Aussie Sarcasm Detector",
+          "releaseDate": "2026-05-15"
+        },
         {
           "youtubeId": "ygqyvO4bJ-A",
-          "title": "Aussie ways of saying 'angry'"
+          "title": "Aussie ways of saying 'angry'",
+          "releaseDate": "2026-05-18"
         },
         {
           "youtubeId": "BOZessFwMF4",
-          "title": "Aussie ways of saying 'Thanks'"
+          "title": "Aussie ways of saying 'Thanks'",
+          "releaseDate": "2026-05-21"
         },
         {
           "youtubeId": "bC2nWksKNDQ",
-          "title": "Aussie ways of saying 'very hot'"
+          "title": "Aussie ways of saying 'very hot'",
+          "releaseDate": "2026-05-23"
         },
         {
           "youtubeId": "sDtfPLEC8Ro",
-          "title": "Aussie Workplace Vibe Explained"
+          "title": "Aussie Workplace Vibe Explained",
+          "releaseDate": "2026-05-25"
         },
         {
           "youtubeId": "GCNC3yoRZOo",
-          "title": "Aussie Ways of saying 'Very Old"
+          "title": "Aussie Ways of saying 'Very Old",
+          "releaseDate": "2026-05-27"
         },
-        { "youtubeId": "ZOsdw1N-Ylw", "title": "Aussie Greeting Explained" },
-        { "youtubeId": "sFdeYASks4E", "title": "Ordering at Maccas" },
-        { "youtubeId": "OrQ6UBMnBD4", "title": "Your Aussie Boss's feedback" },
-        { "youtubeId": "8N-VBwSn8mg", "title": "How to Cancel Plans" },
+        {
+          "youtubeId": "ZOsdw1N-Ylw",
+          "title": "Aussie Greeting Explained",
+          "releaseDate": "2026-05-29"
+        },
+        {
+          "youtubeId": "sFdeYASks4E",
+          "title": "Ordering at Maccas",
+          "releaseDate": "2026-05-31"
+        },
+        {
+          "youtubeId": "OrQ6UBMnBD4",
+          "title": "Your Aussie Boss's feedback",
+          "releaseDate": "2026-06-02"
+        },
+        {
+          "youtubeId": "8N-VBwSn8mg",
+          "title": "How to Cancel Plans",
+          "releaseDate": "2026-06-04"
+        },
         {
           "youtubeId": "PRNPePJv5L8",
-          "title": "More Ways of saying Very Tired"
+          "title": "More Ways of saying Very Tired",
+          "releaseDate": "2026-06-06"
         },
-        { "youtubeId": "2RhV3RIw93k", "title": "Ways of saying Very Busy" },
-        { "youtubeId": "8ar1rmC98KA", "title": "How to say Very Cold" },
+        {
+          "youtubeId": "2RhV3RIw93k",
+          "title": "Ways of saying Very Busy",
+          "releaseDate": "2026-06-08"
+        },
+        {
+          "youtubeId": "8ar1rmC98KA",
+          "title": "How to say Very Cold",
+          "releaseDate": "2026-06-10"
+        },
         {
           "youtubeId": "e1m9PKNONeE",
-          "title": "How to say the Weather is Nice"
+          "title": "How to say the Weather is Nice",
+          "releaseDate": "2026-06-12"
         },
-        { "youtubeId": "rh9Nv9J91zc", "title": "Saying That's a Good Idea" },
+        {
+          "youtubeId": "rh9Nv9J91zc",
+          "title": "Saying That's a Good Idea",
+          "releaseDate": "2026-06-13"
+        },
         {
           "youtubeId": "vwdBk-JjCCU",
-          "title": "How to Ask Someone to Explain Something"
+          "title": "How to Ask Someone to Explain Something",
+          "releaseDate": "2026-06-14"
         },
         {
           "youtubeId": "PxBs-3hJw68",
-          "title": "How to say Something is Poor Quality"
+          "title": "How to say Something is Poor Quality",
+          "releaseDate": "2026-06-15"
         },
         {
           "youtubeId": "wqs9754mXx8",
-          "title": "Having a Look Around the Shops"
+          "title": "Having a Look Around the Shops",
+          "releaseDate": "2026-06-16"
         },
-        { "youtubeId": "K0Dp5JCDVmA", "title": "Saying No to Your Boss" },
-        { "youtubeId": "OjmwbU0r2t0", "title": "Friday Arvo Small Talk" },
-        { "youtubeId": "LZOXDRAIehY", "title": "How to Respond to an Apology" },
-        { "youtubeId": "fZY5oV26xWE", "title": "How to Say It's Your Turn" }
+        {
+          "youtubeId": "K0Dp5JCDVmA",
+          "title": "Saying No to Your Boss",
+          "releaseDate": "2026-06-17"
+        },
+        {
+          "youtubeId": "OjmwbU0r2t0",
+          "title": "Friday Arvo Small Talk",
+          "releaseDate": "2026-06-18"
+        },
+        {
+          "youtubeId": "LZOXDRAIehY",
+          "title": "How to Respond to an Apology",
+          "releaseDate": "2026-06-19"
+        },
+        {
+          "youtubeId": "fZY5oV26xWE",
+          "title": "How to Say It's Your Turn",
+          "releaseDate": "2026-06-20"
+        }
       ]
     }
   },
@@ -398,7 +801,8 @@
       "title": "Guide to Australian Slang",
       "channelName": "Side Business Bloke",
       "channelLink": "https://www.youtube.com/@sidebusinessbloke",
-      "description": "A 12 minute guide from an Englishman in Oz"
+      "description": "A 12 minute guide from an Englishman in Oz",
+      "releaseDate": "2026-06-21"
     }
   ]
 }
