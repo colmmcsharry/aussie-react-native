@@ -16,23 +16,28 @@ import { PremiumCrown } from "@/components/PremiumCrown";
 import { TabHeader } from "@/components/tab-header";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import {
+  BodyFont,
+  ButtonFont,
+  ContentBg,
+  HeadingFont,
+} from "@/constants/theme";
 import { usePaywall } from "@/context/PaywallContext";
-import { BodyFont, ButtonFont, ContentBg, HeadingFont } from "@/constants/theme";
 import {
   getTeacherByKey,
   PREMIUM_TEACHER_KEYS,
-  type TeacherYouTubeVideo
+  type TeacherYouTubeVideo,
 } from "@/data/teachers";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import {
   fetchProjectVideos,
   formatDuration,
+  formatTeacherKeyAsName,
   getEmbedUrl,
   getTeacherBioFromVideos,
   getTeacherSocialLinksFromVideos,
   getThumbnail,
   getVideoId,
-  formatTeacherKeyAsName,
   groupVimeoVideosByTeacher,
   type VimeoVideo,
 } from "@/services/vimeo";
@@ -48,7 +53,11 @@ function formatUploadDate(dateStr: string | undefined): string {
   if (!dateStr || !dateStr.trim()) return "";
   const d = new Date(dateStr);
   if (!Number.isNaN(d.getTime())) {
-    return d.toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" });
+    return d.toLocaleDateString("en-AU", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
   }
   const trimmed = dateStr.trim();
   if (/\d/.test(trimmed) && trimmed.length >= 4) return trimmed;
@@ -90,7 +99,10 @@ export default function TeacherDetailScreen() {
         ...socials,
       };
     }
-    const gistProfile = getTeacherProfileFromGistVideos(gistYouTubeVideos ?? [], key ?? "");
+    const gistProfile = getTeacherProfileFromGistVideos(
+      gistYouTubeVideos ?? [],
+      key ?? "",
+    );
     if (gistProfile) {
       return {
         key: key ?? "",
@@ -104,10 +116,7 @@ export default function TeacherDetailScreen() {
   useEffect(() => {
     if (!key) return;
     let cancelled = false;
-    Promise.all([
-      fetchProjectVideos(1, 100),
-      fetchAussieYouTubeVideos(),
-    ])
+    Promise.all([fetchProjectVideos(1, 100), fetchAussieYouTubeVideos()])
       .then(([vimeoRes, gistVideos]) => {
         if (cancelled) return;
         const byTeacher = groupVimeoVideosByTeacher(vimeoRes.data);
@@ -126,10 +135,14 @@ export default function TeacherDetailScreen() {
   const videoList = useMemo((): TeacherVideoItem[] => {
     const list: TeacherVideoItem[] = [];
     vimeoVideos.forEach((video) =>
-      list.push({ type: "vimeo", video, sortKey: getSortableTimestamp(video.created_time) })
+      list.push({
+        type: "vimeo",
+        video,
+        sortKey: getSortableTimestamp(video.created_time),
+      }),
     );
     (profile?.youtubeVideos ?? []).forEach((entry) =>
-      list.push({ type: "youtube", entry, sortKey: 0 })
+      list.push({ type: "youtube", entry, sortKey: 0 }),
     );
     (gistYouTubeVideos ?? [])
       .filter((e) => e.teacher === key)
@@ -144,7 +157,7 @@ export default function TeacherDetailScreen() {
             date: e.date,
           },
           sortKey: getSortableTimestamp(e.date),
-        })
+        }),
       );
     list.sort((a, b) => b.sortKey - a.sortKey);
     return list;
@@ -227,41 +240,44 @@ export default function TeacherDetailScreen() {
       >
         <View style={styles.profileCard}>
           <ThemedText style={styles.profileName}>{profile.name}</ThemedText>
-          {(profile.instagram || profile.youtube || profile.tiktok || profile.spotify) && (
-          <View style={styles.socialsRow}>
-            {profile.instagram && (
-              <Pressable
-                style={styles.socialBtn}
-                onPress={() => openLink(profile.instagram!)}
-              >
-                <Ionicons name="logo-instagram" size={26} color="#E4405F" />
-              </Pressable>
-            )}
-            {profile.youtube && (
-              <Pressable
-                style={styles.socialBtn}
-                onPress={() => openLink(profile.youtube!)}
-              >
-                <Ionicons name="logo-youtube" size={26} color="#FF0000" />
-              </Pressable>
-            )}
-            {profile.tiktok && (
-              <Pressable
-                style={styles.socialBtn}
-                onPress={() => openLink(profile.tiktok!)}
-              >
-                <Ionicons name="logo-tiktok" size={26} color="#000" />
-              </Pressable>
-            )}
-            {profile.spotify && (
-              <Pressable
-                style={styles.socialBtn}
-                onPress={() => openLink(profile.spotify!)}
-              >
-                <Ionicons name="musical-notes" size={26} color="#1DB954" />
-              </Pressable>
-            )}
-          </View>
+          {(profile.instagram ||
+            profile.youtube ||
+            profile.tiktok ||
+            profile.spotify) && (
+            <View style={styles.socialsRow}>
+              {profile.instagram && (
+                <Pressable
+                  style={styles.socialBtn}
+                  onPress={() => openLink(profile.instagram!)}
+                >
+                  <Ionicons name="logo-instagram" size={26} color="#E4405F" />
+                </Pressable>
+              )}
+              {profile.youtube && (
+                <Pressable
+                  style={styles.socialBtn}
+                  onPress={() => openLink(profile.youtube!)}
+                >
+                  <Ionicons name="logo-youtube" size={26} color="#FF0000" />
+                </Pressable>
+              )}
+              {profile.tiktok && (
+                <Pressable
+                  style={styles.socialBtn}
+                  onPress={() => openLink(profile.tiktok!)}
+                >
+                  <Ionicons name="logo-tiktok" size={26} color="#000" />
+                </Pressable>
+              )}
+              {profile.spotify && (
+                <Pressable
+                  style={styles.socialBtn}
+                  onPress={() => openLink(profile.spotify!)}
+                >
+                  <Ionicons name="musical-notes" size={26} color="#1DB954" />
+                </Pressable>
+              )}
+            </View>
           )}
           <ThemedText style={[styles.bio, { color: subtextColor }]}>
             {profile.bio}
@@ -319,21 +335,26 @@ export default function TeacherDetailScreen() {
                     )}
                   </View>
                   <View style={styles.info}>
-                    <View style={styles.titleRow}>
-                      <ThemedText style={styles.title} numberOfLines={2}>
-                        {video.name}
-                      </ThemedText>
-                      {isDateToday(video.created_time) && (
-                        <View style={styles.addedTodayBadge}>
-                          <ThemedText style={styles.addedTodayText}>Added today!</ThemedText>
-                        </View>
-                      )}
-                    </View>
+                    <ThemedText style={styles.title} numberOfLines={2}>
+                      {video.name}
+                    </ThemedText>
                     {formatUploadDate(video.created_time) ? (
-                      <ThemedText style={[styles.meta, { color: subtextColor }]}>
+                      <ThemedText
+                        style={[styles.meta, { color: subtextColor }]}
+                      >
                         {formatUploadDate(video.created_time)}
                       </ThemedText>
                     ) : null}
+                    {isDateToday(video.created_time) && (
+                      <View style={styles.addedTodayBadge}>
+                        <ThemedText style={styles.addedTodayEmoji}>
+                          🔥
+                        </ThemedText>
+                        <ThemedText style={styles.addedTodayText}>
+                          Added today!
+                        </ThemedText>
+                      </View>
+                    )}
                     {showLock && (
                       <View style={styles.premiumCrownBadge}>
                         <PremiumCrown size={22} />
@@ -361,21 +382,22 @@ export default function TeacherDetailScreen() {
                   />
                 </View>
                 <View style={styles.info}>
-                  <View style={styles.titleRow}>
-                    <ThemedText style={styles.title} numberOfLines={2}>
-                      {entry.name}
-                    </ThemedText>
-                    {isDateToday(entry.date) && (
-                      <View style={styles.addedTodayBadge}>
-                        <ThemedText style={styles.addedTodayText}>Added today!</ThemedText>
-                      </View>
-                    )}
-                  </View>
+                  <ThemedText style={styles.title} numberOfLines={2}>
+                    {entry.name}
+                  </ThemedText>
                   {formatUploadDate(entry.date) ? (
                     <ThemedText style={[styles.meta, { color: subtextColor }]}>
                       {formatUploadDate(entry.date)}
                     </ThemedText>
                   ) : null}
+                  {isDateToday(entry.date) && (
+                    <View style={styles.addedTodayBadge}>
+                      <ThemedText style={styles.addedTodayEmoji}>🔥</ThemedText>
+                      <ThemedText style={styles.addedTodayText}>
+                        Added today!
+                      </ThemedText>
+                    </View>
+                  )}
                 </View>
               </Pressable>
             );
@@ -395,7 +417,11 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   scroll: { flex: 1, backgroundColor: ContentBg },
-  scrollContent: { paddingHorizontal: 16, paddingTop: 16, backgroundColor: ContentBg },
+  scrollContent: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    backgroundColor: ContentBg,
+  },
   errorTitle: { fontSize: 18, fontFamily: HeadingFont, marginBottom: 16 },
   backBtn: {
     paddingVertical: 12,
@@ -462,15 +488,36 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   info: { flex: 1, marginLeft: 14 },
-  titleRow: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 },
-  title: { fontSize: 16, lineHeight: 22, fontFamily: ButtonFont, flex: 1, minWidth: 0 },
+  title: { fontSize: 16, lineHeight: 22, fontFamily: ButtonFont },
   addedTodayBadge: {
-    backgroundColor: "#194F89",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "#e8f5e9",
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingLeft: 8,
+    borderRadius: 20,
+    marginTop: 8,
   },
-  addedTodayText: { color: "#fff", fontSize: 11, fontWeight: "600", fontFamily: ButtonFont },
+  addedTodayIcon: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: "#78C57C",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  addedTodayEmoji: { fontSize: 12,
+    bottom: 2
+   },
+  addedTodayText: {
+    color: "#2e7d32",
+    fontSize: 12,
+    fontWeight: "600",
+    fontFamily: ButtonFont,
+  },
   meta: { fontSize: 13, marginTop: 4, fontFamily: BodyFont },
   premiumCrownBadge: {
     width: 32,
